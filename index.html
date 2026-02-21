@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#090e17">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>CISA D1: Info System Auditing Process</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #050810;
+            --bg-card: #111827;
+            --bg-card-elevated: #1e293b;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --warning: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            background-color: var(--bg-deep); 
+            color: var(--text-main); 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+        }
+
+        /* --- Header (Fixed) --- */
+        header {
+            background: rgba(5, 8, 16, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: max(15px, env(safe-area-inset-top)) 20px 15px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0; z-index: 50;
+        }
+        .logo { font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 12px; line-height: 1.2;}
+        .logo .icon-box { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px var(--primary-glow); color: white; font-size: 1.1rem; flex-shrink: 0;
+        }
+        .logo-text span { display: block; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
+
+        .streak-badge { 
+            display: flex; align-items: center; gap: 6px; font-size: 0.95rem; font-weight: 800; color: #f97316; 
+            background: rgba(249, 115, 22, 0.1); padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(249, 115, 22, 0.2);
+            box-shadow: 0 4px 10px rgba(249, 115, 22, 0.1);
+        }
+
+        /* --- Main Scrollable Area --- */
+        .main-content {
+            flex: 1; overflow-y: auto; overflow-x: hidden;
+            padding: 20px 20px calc(30px + env(safe-area-inset-bottom));
+            -webkit-overflow-scrolling: touch;
+        }
+        .main-content::-webkit-scrollbar { display: none; }
+
+        .view { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .view.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- UI Components --- */
+        h2.section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 15px; color: white; display: flex; align-items: center; gap: 10px; }
+        h2.section-title i { color: var(--primary); }
+        
+        .card { 
+            background: var(--bg-card); border: 1px solid var(--border); 
+            border-radius: var(--radius-lg); padding: 24px; margin-bottom: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        /* --- Premium Dashboard Journey --- */
+        .mastery-header { text-align: center; margin-bottom: 25px; }
+        .mastery-header h3 { font-size: 2.2rem; font-weight: 800; background: linear-gradient(90deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .mastery-header p { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+        .journey-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .j-box { background: var(--bg-card-elevated); padding: 15px 10px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .j-box h4 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; }
+        .j-box span { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+        
+        .j-mastered h4 { color: var(--success); text-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .j-lost h4 { color: var(--danger); text-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+        .j-untouched h4 { color: var(--primary); text-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+
+        .progress-track { width: 100%; height: 14px; background: rgba(255,255,255,0.05); border-radius: 20px; display: flex; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+        .track-mastered { background: linear-gradient(90deg, #059669, #10b981); transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .track-lost { background: linear-gradient(90deg, #e11d48, #f43f5e); transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        /* --- Deep Lessons Scroller (Dashboard) --- */
+        .lessons-scroller {
+            display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; margin-bottom: 10px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        }
+        .lessons-scroller::-webkit-scrollbar { display: none; }
+        .lesson-card { 
+            background: linear-gradient(145deg, var(--bg-card-elevated), var(--bg-card)); 
+            border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-md); 
+            min-width: 280px; scroll-snap-align: start; flex-shrink: 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden; cursor: pointer; transition: transform 0.2s;
+        }
+        .lesson-card:active { transform: scale(0.97); }
+        .lesson-card i.watermark { position: absolute; right: -15px; bottom: -15px; font-size: 6rem; opacity: 0.03; color: white; pointer-events: none; }
+        .lesson-card h4 { color: var(--primary); font-size: 1.05rem; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;}
+        .lesson-card ul { margin: 0; padding-left: 20px; color: var(--text-main); font-size: 0.9rem; line-height: 1.6; pointer-events: none; }
+        .lesson-card li { margin-bottom: 8px; }
+        .lesson-card li strong { color: var(--secondary); }
+        .tap-to-read { position: absolute; top: 15px; right: 15px; font-size: 0.7rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 20px; font-weight: bold;}
+
+        /* --- Quick Play Grid --- */
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 10px; margin-bottom: 20px; perspective: 1000px; }
+        .grid-item {
+            aspect-ratio: 1; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(4px);
+            border-radius: 12px; display: flex; justify-content: center; align-items: center;
+            font-size: 0.95rem; font-weight: 700; color: #e2e8f0;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .grid-item:active { transform: scale(0.85); }
+        .grid-item.mastered { background: rgba(16, 185, 129, 0.2); color: var(--success); border-color: rgba(16, 185, 129, 0.5); }
+        .grid-item.lost { background: rgba(244, 63, 94, 0.2); color: var(--danger); border-color: rgba(244, 63, 94, 0.5); }
+        .grid-item.highlight { 
+            border-color: var(--secondary); color: white; 
+            transform: scale(1.25) translateZ(10px); z-index: 10; 
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            box-shadow: 0 0 20px var(--secondary), 0 0 10px var(--primary);
+        }
+
+        /* --- Buttons --- */
+        .btn-main {
+            width: 100%; background: var(--primary); color: white; border: none; padding: 18px;
+            border-radius: var(--radius-md); font-size: 1.05rem; font-weight: 700; cursor: pointer; 
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 4px 15px var(--primary-glow); transition: 0.2s;
+        }
+        .btn-main:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-main.danger { background: transparent; border: 1px solid rgba(244, 63, 94, 0.3); color: var(--danger); box-shadow: none; padding: 15px;}
+        .btn-main.danger:active { background: rgba(244, 63, 94, 0.1); }
+        .btn-main.success { background: var(--success); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+
+        .btn-spin-grid {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white; border: none; padding: 16px; border-radius: 50px; width: 100%;
+            font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-bottom: 25px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 8px 25px var(--primary-glow); transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .btn-spin-grid:active { transform: scale(0.96); }
+        .btn-spin-grid::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg); animation: gridShine 3s infinite;
+        }
+        @keyframes gridShine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+
+        /* --- Simulator Menu --- */
+        .mode-btn {
+            width: 100%; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main);
+            padding: 20px; border-radius: var(--radius-md); margin-bottom: 15px; text-align: left; 
+            cursor: pointer; display: flex; flex-direction: column; gap: 8px; transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .mode-btn:active { transform: scale(0.98); border-color: var(--primary); }
+        .mode-title { font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: var(--primary); }
+        .mode-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+        /* --- Quiz Engine Active UI --- */
+        .quiz-container { display: none; }
+        .quiz-container.active { display: block; }
+        .quiz-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .quiz-timer { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        .quiz-timer.urgent { color: var(--danger); animation: pulseRed 1s infinite; }
+        @keyframes pulseRed { 50% { opacity: 0.5; } }
+        .quiz-counter { background: rgba(255,255,255,0.08); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; }
+        
+        .topic-tag { display: inline-block; font-size: 0.75rem; color: var(--secondary); background: rgba(99, 102, 241, 0.15); padding: 6px 10px; border-radius: 8px; margin-bottom: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;}
+        
+        .mindset-alert { 
+            display: none; background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); 
+            color: var(--warning); padding: 12px 15px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; 
+            margin-bottom: 20px; align-items: center; gap: 10px; animation: slideUp 0.3s;
+        }
+
+        .q-text { font-size: 1.15rem; line-height: 1.6; margin-bottom: 25px; font-weight: 600; color: white; }
+        
+        .option-btn {
+            width: 100%; background: var(--bg-deep); border: 2px solid var(--border); color: var(--text-main);
+            padding: 16px; border-radius: var(--radius-md); margin-bottom: 12px; text-align: left; font-size: 0.95rem;
+            cursor: pointer; transition: 0.2s; line-height: 1.5; font-weight: 500; display: flex; align-items: flex-start; gap: 12px;
+        }
+        .option-btn:active:not(:disabled) { transform: scale(0.98); border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.05); }
+        .option-btn.selected { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
+        .option-letter { font-weight: 800; color: var(--text-muted); font-size: 1rem; flex-shrink: 0; width: 24px; background: rgba(255,255,255,0.05); text-align: center; border-radius: 6px; padding: 2px 0;}
+        
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        .option-btn.correct { background: rgba(16, 185, 129, 0.15); border-color: var(--success); color: white; opacity: 1; }
+        .option-btn.correct .option-letter { color: var(--success); background: transparent;}
+        .option-btn.wrong { background: rgba(244, 63, 94, 0.15); border-color: var(--danger); opacity: 1; color: white; }
+        .option-btn.wrong .option-letter { color: var(--danger); background: transparent;}
+        
+        /* Confidence Tracker */
+        .confidence-panel { display: none; margin-top: 25px; animation: fadeIn 0.3s; background: var(--bg-deep); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border);}
+        .confidence-title { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; text-align: center; font-weight: 600; }
+        .conf-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .btn-conf { padding: 12px 5px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; color: white; font-size: 0.85rem;}
+        .btn-conf:active { transform: scale(0.95); }
+        .conf-high { background: var(--success); }
+        .conf-med { background: var(--warning); }
+        .conf-low { background: var(--danger); }
+
+        .explanation-box {
+            background: rgba(59, 130, 246, 0.08); border-left: 4px solid var(--primary);
+            padding: 20px; margin-top: 25px; border-radius: 0 var(--radius-md) var(--radius-md) 0; display: none; 
+            font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; animation: fadeIn 0.4s ease;
+        }
+        .explanation-box strong { color: white; display: block; margin-bottom: 8px; font-size: 1.05rem;}
+        .dynamic-rule { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px; border-radius: 10px; margin-top: 15px; font-size: 0.85rem; color: var(--warning); display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; font-weight: 500;}
+
+        /* --- Modals (Full Screen Overlay) --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 200; display: flex; justify-content: center; align-items: flex-end;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        @media(min-width: 600px) { .modal-overlay { align-items: center; } }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        
+        .modal-sheet {
+            background: var(--bg-card); border-top: 1px solid var(--border);
+            width: 100%; max-width: 600px; padding: 25px; border-radius: 30px 30px 0 0;
+            transform: translateY(100%); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding-bottom: max(25px, env(safe-area-inset-bottom));
+            max-height: 90vh; overflow-y: auto;
+        }
+        @media(min-width: 600px) { .modal-sheet { border-radius: 24px; } }
+        .modal-overlay.active .modal-sheet { transform: translateY(0); }
+
+        /* Document/Lesson Specific Modal Styles */
+        .doc-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .doc-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .doc-title { font-size: 1.3rem; font-weight: 800; color: white; line-height: 1.3; }
+        
+        .doc-content { font-size: 0.95rem; color: #cbd5e1; line-height: 1.7; }
+        .doc-content h4 { color: white; font-size: 1.1rem; margin: 20px 0 10px 0; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 20px; }
+        .doc-content li { margin-bottom: 10px; }
+        .doc-content strong { color: var(--secondary); }
+        
+        .isaca-trap {
+            background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 15px; border-radius: 12px; margin: 20px 0; color: var(--text-main);
+        }
+        .isaca-trap strong { display: block; color: var(--warning); margin-bottom: 8px; font-size: 1rem; }
+
+        /* --- Review Tab Rules Scroll --- */
+        .rules-scroller {
+            display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        }
+        .rules-scroller::-webkit-scrollbar { display: none; }
+        .rule-card { 
+            background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); 
+            padding: 15px; border-radius: var(--radius-md); min-width: 260px; scroll-snap-align: start; flex-shrink: 0;
+        }
+        .rule-card h3 { color: var(--warning); margin-bottom: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;}
+        .rule-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+        /* --- Error Log / Lost Questions --- */
+        .error-card { background: var(--bg-card-elevated); border: 1px solid rgba(244, 63, 94, 0.4); padding: 18px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .error-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.8rem; }
+        .err-q { font-size: 1rem; margin-bottom: 12px; font-weight: 600; line-height: 1.5; color: white;}
+        .err-ans { font-size: 0.9rem; color: var(--text-main); background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--danger);}
+        .err-cor { font-size: 0.9rem; color: var(--text-main); background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 8px; border-left: 3px solid var(--success);}
+
+        /* --- Navigation (Bottom Tab Bar) --- */
+        .nav-bar {
+            background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+            padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); 
+            flex-shrink: 0; z-index: 100; position: relative;
+        }
+        .nav-btn {
+            background: transparent; border: none; color: #64748b; font-size: 0.7rem; font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex: 1; transition: 0.2s;
+        }
+        .nav-btn i { font-size: 1.3rem; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .nav-btn:active { transform: scale(0.95); }
+        .nav-btn.active { color: var(--primary); }
+        .nav-btn.active i { transform: translateY(-4px) scale(1.15); text-shadow: 0 4px 15px var(--primary-glow); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Toast */
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-20px); background: white; color: var(--bg-deep); padding: 12px 24px; border-radius: 50px; font-weight: 800; font-size: 0.9rem; z-index: 1000; opacity: 0; transition: 0.3s; pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px;}
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Fixed Header -->
+    <header>
+        <div class="logo">
+            <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="logo-text">
+                <span>CISA Exam Weapon</span>
+                Domain 1: Auditing Process
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="streak-count">0</span></div>
+        </div>
+    </header>
+
+    <!-- Scrollable Content -->
+    <div class="main-content" id="main-scroll">
+        
+        <!-- ================= DASHBOARD (JOURNEY) VIEW ================= -->
+        <div id="view-dash" class="view active">
+            
+            <!-- Journey Tracker -->
+            <div class="card" style="padding-bottom: 30px;">
+                <div class="mastery-header">
+                    <h3 id="dash-pct">0%</h3>
+                    <p>Total Mastery</p>
+                </div>
+
+                <div class="journey-grid">
+                    <div class="j-box j-mastered">
+                        <h4 id="stat-mastered">0</h4>
+                        <span>Mastered</span>
+                    </div>
+                    <div class="j-box j-lost">
+                        <h4 id="stat-lost">0</h4>
+                        <span>Lost</span>
+                    </div>
+                    <div class="j-box j-untouched">
+                        <h4 id="stat-untouched">100</h4>
+                        <span>Untouched</span>
+                    </div>
+                </div>
+
+                <div class="progress-track">
+                    <div class="track-mastered" id="bar-mastered" style="width: 0%;"></div>
+                    <div class="track-lost" id="bar-lost" style="width: 0%;"></div>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 15px; line-height: 1.5;">
+                    Goal: Turn all 100 Domain 1 questions green. When you get a 'Lost' question correct on a retry, it upgrades to 'Mastered'.
+                </p>
+            </div>
+
+            <!-- Deep Lessons (ISACA Masterclass) -->
+            <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> Deep Lessons (D1)</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Tap any card to read the detailed ISACA conceptual document.</p>
+            
+            <div class="lessons-scroller">
+                
+                <div class="lesson-card" onclick="openLessonModal('charter')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-file-contract watermark"></i>
+                    <h4>1. The Audit Charter</h4>
+                    <ul>
+                        <li>Establishes role & authority.</li>
+                        <li>Approved by <strong>Board of Directors</strong>.</li>
+                        <li>It is a <strong>static document</strong>.</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-card" onclick="openLessonModal('risk')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-chart-line watermark"></i>
+                    <h4>2. Risk-Based Auditing</h4>
+                    <ul>
+                        <li><strong>Inherent Risk:</strong> Raw risk.</li>
+                        <li><strong>Detection Risk:</strong> Auditor misses error.</li>
+                        <li>FIRST step: Understand <strong>business</strong>.</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-card" onclick="openLessonModal('controls')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-shield-halved watermark"></i>
+                    <h4>3. Internal Controls</h4>
+                    <ul>
+                        <li><strong>Preventive:</strong> Stops error (SoD).</li>
+                        <li><strong>Detective:</strong> Finds error (Logs).</li>
+                        <li><strong>Compensating:</strong> Offsets weak control.</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-card" onclick="openLessonModal('evidence')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-magnifying-glass watermark"></i>
+                    <h4>4. Audit Evidence</h4>
+                    <ul>
+                        <li>Sufficient (Qty) & <strong>Appropriate</strong> (Qly).</li>
+                        <li>Best: <strong>Auditor observation</strong>.</li>
+                        <li>Worst: Oral statements.</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-card" onclick="openLessonModal('sampling')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-percent watermark"></i>
+                    <h4>5. Sampling Strategies</h4>
+                    <ul>
+                        <li><strong>Attribute:</strong> Compliance (Yes/No).</li>
+                        <li><strong>Variable:</strong> Substantive (Value/$).</li>
+                        <li><strong>Discovery:</strong> Fraud hunting (0 errors).</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Factory Reset -->
+            <button onclick="hardReset()" style="width:100%; padding:15px; background:transparent; border:1px solid rgba(244, 63, 94, 0.3); color:var(--danger); border-radius:var(--radius-md); font-weight:700; cursor:pointer; margin-top:20px; margin-bottom: 20px;">
+                <i class="fa-solid fa-rotate-right" style="margin-right:8px;"></i> Factory Reset Journey
+            </button>
+        </div>
+
+        <!-- ================= QUICK GRIND (GRID) VIEW ================= -->
+        <div id="view-quick" class="view">
+            <h2 class="section-title"><i class="fa-solid fa-bolt"></i> The 100 Q Grid</h2>
+            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px; line-height: 1.5;">
+                Tap a box to practice. <span style="color:var(--success); font-weight:700;">Green = Mastered.</span> <span style="color:var(--danger); font-weight:700;">Red = Lost.</span>
+            </p>
+            
+            <button class="btn-spin-grid" id="quickSpinBtn" onclick="triggerQuickSpin()">
+                <i class="fa-solid fa-dice"></i> Spin Random Unmastered
+            </button>
+
+            <div class="game-grid" id="quick-grid">
+                <!-- Grid Items Injected via JS -->
+            </div>
+        </div>
+
+        <!-- ================= PRACTICE/QUIZ VIEW ================= -->
+        <div id="view-quiz" class="view">
+            <div id="quiz-menu">
+                <h2 class="section-title"><i class="fa-solid fa-dumbbell"></i> The Simulator</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5;">
+                    Deep work sessions. Test your endurance.
+                </p>
+                
+                <div class="mode-btn" onclick="startQuiz('adaptive')">
+                    <div class="mode-title"><i class="fa-solid fa-truck-medical"></i> Grind "Lost" Questions</div>
+                    <div class="mode-desc">Automatically loads only the questions you've previously gotten wrong. Instant grading.</div>
+                </div>
+
+                <div class="mode-btn" onclick="startQuiz('practice')" style="border-color: rgba(16, 185, 129, 0.3);">
+                    <div class="mode-title" style="color: var(--success);"><i class="fa-solid fa-vial"></i> D1 Full Practice (20 Qs)</div>
+                    <div class="mode-desc">Randomly selects 20 questions. Untimed. Instant grading and detailed explanations.</div>
+                </div>
+
+                <div class="mode-btn" onclick="startQuiz('exam')" style="border-color: rgba(244, 63, 94, 0.4);">
+                    <div class="mode-title" style="color: var(--danger);"><i class="fa-solid fa-stopwatch"></i> Hardcore Exam Mode</div>
+                    <div class="mode-desc">All 100 questions. 1h 30m timer. No explanations. Grades everything at the end.</div>
+                </div>
+            </div>
+
+            <!-- ACTIVE QUIZ UI -->
+            <div id="quiz-engine" class="quiz-container">
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="quiz-top-bar">
+                        <span class="topic-tag" id="quiz-topic">Subtopic</span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span class="quiz-timer" id="session-timer"><i class="fa-regular fa-clock"></i> 00:00</span>
+                            <span class="quiz-counter" id="quiz-counter">1/100</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mindset-alert" id="mindset-alert">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span>MINDSET TRAP: "<strong>WORD</strong>"</span>
+                    </div>
+                    
+                    <div class="q-text" id="q-text">Loading question...</div>
+                    
+                    <!-- Options container -->
+                    <div id="options-container"></div>
+                    
+                    <div class="explanation-box" id="explanation"></div>
+                    
+                    <button class="btn-main" id="btn-next" onclick="nextQuestion()" style="display: none; margin-top: 20px;">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-main success" id="btn-finish" onclick="finishQuiz()" style="display: none; margin-top: 20px;"><i class="fa-solid fa-flag-checkered"></i> Finish Session</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= REVIEW & ERROR LOG VIEW ================= -->
+        <div id="view-review" class="view">
+            
+            <h2 class="section-title"><i class="fa-solid fa-scale-balanced"></i> ISACA Golden Rules</h2>
+            <div class="rules-scroller">
+                <div class="rule-card"><h3><i class="fa-solid fa-heart-pulse"></i> 1. Human Life is #1</h3><p>Evacuation and safety always supersede saving data or servers.</p></div>
+                <div class="rule-card"><h3><i class="fa-solid fa-user-tie"></i> 2. Auditors Don't Fix</h3><p>Report & recommend. Mgmt fixes. Fixing breaks independence.</p></div>
+                <div class="rule-card"><h3><i class="fa-solid fa-bullseye"></i> 3. FIRST Step = Business</h3><p>Identify assets/business goals before IT tech or risk assessments.</p></div>
+                <div class="rule-card"><h3><i class="fa-solid fa-shield-halved"></i> 4. Preventive > Detective</h3><p>Stopping an error (SoD, Access Controls) > Logging an error.</p></div>
+                <div class="rule-card"><h3><i class="fa-solid fa-gavel"></i> 5. Board Approves Charter</h3><p>The Audit Charter is static and approved by highest level (Board/Audit Comm).</p></div>
+            </div>
+
+            <h2 class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-book-skull"></i> Questions I Lost</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:20px;">These are the questions you got wrong. Study the explanations. Re-test them in the 'Quick Grid' or 'Adaptive Mode' to move them to Mastered.</p>
+            
+            <div id="error-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+    </div> <!-- End Main Content -->
+
+    <!-- ================= QUICK PLAY MODAL ================= -->
+    <div class="modal-overlay" id="quickModalOverlay" onclick="closeQuickModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <span class="topic-tag" id="qm-topic" style="margin:0;">Topic</span>
+                <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700; background:rgba(255,255,255,0.05); padding:4px 10px; border-radius:8px;" id="qm-num">Q #1</span>
+            </div>
+            
+            <div class="q-text" id="qm-text" style="font-size:1.1rem; margin-bottom:25px;">Question text</div>
+            
+            <!-- User MUST select an option to see the answer -->
+            <div id="qm-options-container" style="margin-bottom: 25px;"></div>
+            
+            <div class="explanation-box" id="qm-exp" style="display:none; border-radius: var(--radius-md); border-left: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: white; margin-top: 0; margin-bottom: 20px;">Explanation here</div>
+            
+            <button class="btn-main" id="qm-done-btn" onclick="closeQuickModal()" style="margin-top: 15px; background: var(--success); display: none;">
+                <i class="fa-solid fa-arrow-right"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= LESSON MODAL (DETAILED DOCUMENTS) ================= -->
+    <div class="modal-overlay" id="lessonModalOverlay" onclick="closeLessonModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()" style="max-height: 95vh;">
+            
+            <div class="doc-header">
+                <div class="doc-icon" id="lm-icon"><i class="fa-solid fa-file"></i></div>
+                <div class="doc-title" id="lm-title">Lesson Title</div>
+            </div>
+
+            <div class="doc-content" id="lm-content">
+                <!-- Content injected via JS -->
+            </div>
+
+            <button class="btn-main" onclick="closeLessonModal()" style="margin-top: 30px;">
+                <i class="fa-solid fa-check"></i> I Understand
+            </button>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Navigation Tab Bar -->
+    <nav class="nav-bar">
+        <button class="nav-btn active" onclick="switchView('dash')" id="nav-dash">
+            <i class="fa-solid fa-route"></i>
+            <span>Journey</span>
+        </button>
+        <button class="nav-btn" onclick="switchView('quick')" id="nav-quick">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Grid</span>
+        </button>
+        <button class="nav-btn" onclick="switchView('quiz')" id="nav-quiz">
+            <i class="fa-solid fa-laptop-code"></i>
+            <span>Simulate</span>
+        </button>
+        <button class="nav-btn" onclick="switchView('review')" id="nav-review">
+            <i class="fa-solid fa-clipboard-list"></i>
+            <span>Review</span>
+        </button>
+    </nav>
+
+    <script>
+        // ================= LESSONS DATA (BASED ON ISACA PDF) =================
+        const lessonsDB = {
+            'charter': {
+                title: "The IS Audit Charter",
+                icon: '<i class="fa-solid fa-file-contract"></i>',
+                content: `
+                    <p>The IS Audit Charter is the most important governance document for an auditor. It establishes the role, authority, and accountability of the IS audit function within the enterprise.</p>
+                    
+                    <h4>Key Concepts:</h4>
+                    <ul>
+                        <li><strong>Approval:</strong> It must be approved by the highest level of management (The Board of Directors or the Audit Committee).</li>
+                        <li><strong>Authority:</strong> It explicitly grants the auditor the right of access to systems, data, and personnel to conduct the audit.</li>
+                        <li><strong>Nature:</strong> It is a <strong>static</strong> document. It does not change yearly. It only changes if the fundamental purpose of the audit function changes.</li>
+                    </ul>
+
+                    <div class="isaca-trap">
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
+                        The charter does <b>NOT</b> contain the annual audit schedule, budget, project plans, or specific audit methodologies. If an exam question asks where the audit schedule is, the answer is the "Annual Audit Plan," not the Charter.
+                    </div>
+
+                    <h4>Independence & Objectivity</h4>
+                    <p>Auditors must be independent in both <em>fact</em> and <em>appearance</em>. They cannot audit their own work, and they should report directly to the Audit Committee, not to the IT Director or CFO.</p>
+                `
+            },
+            'risk': {
+                title: "Risk-Based Auditing",
+                icon: '<i class="fa-solid fa-chart-line"></i>',
+                content: `
+                    <p>ISACA expects you to always align IT with the Business. Therefore, a risk-based audit approach is used to assess risk and help an IS auditor decide which areas to audit first.</p>
+
+                    <h4>The Golden Rule of Planning:</h4>
+                    <p>The very <strong>FIRST</strong> step in any audit planning or risk assessment is to <strong>understand the business mission and objectives</strong>. You cannot protect an asset until you know its value to the business.</p>
+
+                    <h4>Types of Risk:</h4>
+                    <ul>
+                        <li><strong>Inherent Risk:</strong> The raw risk level of a process assuming there are NO internal controls in place.</li>
+                        <li><strong>Control Risk:</strong> The risk that a material error exists and the internal controls fail to prevent or detect it.</li>
+                        <li><strong>Detection Risk:</strong> The risk that the IS auditor's tests fail to find a material error. <em>(This is the ONLY risk the auditor can directly control by doing more testing).</em></li>
+                        <li><strong>Audit Risk:</strong> The overall risk that the auditor reaches an incorrect conclusion. (Inherent × Control × Detection).</li>
+                    </ul>
+
+                    <div class="isaca-trap">
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
+                        If a control costs more to implement than the value of the asset it protects, management should <strong>Accept the risk</strong>. The auditor does not force management to fix it.
+                    </div>
+                `
+            },
+            'controls': {
+                title: "Internal Controls & CSA",
+                icon: '<i class="fa-solid fa-shield-halved"></i>',
+                content: `
+                    <p>Internal controls are the mechanisms, rules, and procedures implemented by a company to ensure the integrity of financial and accounting information, promote accountability, and prevent fraud.</p>
+
+                    <h4>Control Classifications:</h4>
+                    <ul>
+                        <li><strong>Preventive:</strong> Stops the error or fraud before it occurs. (e.g., Segregation of Duties, Firewalls, Mantraps, Data Validation Edits).</li>
+                        <li><strong>Detective:</strong> Identifies the error after it has occurred. (e.g., Log reviews, Intrusion Detection Systems (IDS), Audits, CCTV).</li>
+                        <li><strong>Corrective:</strong> Fixes the damage after the error is detected. (e.g., Backups, Disaster Recovery Plans (DRP), Patching).</li>
+                        <li><strong>Compensating:</strong> An alternative control used when a primary control is too expensive or impossible to implement.</li>
+                    </ul>
+
+                    <div class="isaca-trap">
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
+                        ISACA highly prefers <strong>Preventive</strong> controls over Detective controls. It is always better to stop an error than to find it later.
+                    </div>
+
+                    <h4>Control Self-Assessment (CSA)</h4>
+                    <p>A methodology where management and staff evaluate the effectiveness of their own internal controls. The auditor's role in a CSA is strictly as a <strong>facilitator</strong>. Management owns the risk.</p>
+                `
+            },
+            'evidence': {
+                title: "Audit Evidence & Reliability",
+                icon: '<i class="fa-solid fa-magnifying-glass"></i>',
+                content: `
+                    <p>Audit evidence is the information used by the auditor to arrive at the conclusions on which the audit opinion is based. Evidence must be both <strong>Sufficient</strong> (enough of it) and <strong>Appropriate</strong> (reliable and relevant).</p>
+
+                    <h4>Hierarchy of Evidence Reliability (Best to Worst):</h4>
+                    <ol>
+                        <li><strong>Auditor's direct physical observation:</strong> (e.g., Auditor goes to the server room and checks the door lock themselves).</li>
+                        <li><strong>Independent Third-Party Confirmation:</strong> (e.g., A letter from a bank confirming a balance).</li>
+                        <li><strong>Internal system-generated reports:</strong> (Assuming IT general controls are strong).</li>
+                        <li><strong>Internal manual documents:</strong> (Invoices, signed papers).</li>
+                        <li><strong>Oral statements / Interviews:</strong> (The absolute weakest form of evidence. Never base a finding solely on what someone said).</li>
+                    </ol>
+
+                    <div class="isaca-trap">
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
+                        When given a scenario where an IT Manager promises that a system is patched, the auditor must <strong>independently verify</strong> the patch status. Trust, but verify.
+                    </div>
+                `
+            },
+            'sampling': {
+                title: "Sampling & Testing Tools",
+                icon: '<i class="fa-solid fa-percent"></i>',
+                content: `
+                    <p>Because auditors cannot test 100% of transactions, they use statistical sampling to draw conclusions about a population.</p>
+
+                    <h4>Types of Sampling:</h4>
+                    <ul>
+                        <li><strong>Attribute Sampling:</strong> Used for <em>Compliance Testing</em>. It deals with binary Yes/No questions. (e.g., Is the manager's signature on the invoice? Yes or No).</li>
+                        <li><strong>Variable Sampling:</strong> Used for <em>Substantive Testing</em>. It deals with numeric values, weights, or money. (e.g., Estimating the total dollar amount of payroll errors).</li>
+                        <li><strong>Discovery Sampling:</strong> Used when the expected error rate is 0%. If even <em>one</em> error is found, testing stops. Primarily used to hunt for <strong>Fraud</strong>.</li>
+                        <li><strong>Stop-and-Go Sampling:</strong> Used to minimize sample size when very few errors are expected.</li>
+                    </ul>
+
+                    <h4>Computer-Assisted Audit Techniques (CAATs):</h4>
+                    <ul>
+                        <li><strong>Generalized Audit Software (GAS):</strong> Allows auditors to query databases independently without relying on IT staff.</li>
+                        <li><strong>Integrated Test Facility (ITF):</strong> Creating a "dummy" entity in the live production system to run test transactions alongside real data. (Crucial: Dummy data must be removed!).</li>
+                    </ul>
+                `
+            }
+        };
+
+        function openLessonModal(lessonKey) {
+            haptic();
+            const data = lessonsDB[lessonKey];
+            if(!data) return;
+
+            document.getElementById('lm-icon').innerHTML = data.icon;
+            document.getElementById('lm-title').textContent = data.title;
+            document.getElementById('lm-content').innerHTML = data.content;
+
+            document.getElementById('lessonModalOverlay').classList.add('active');
+        }
+
+        function closeLessonModal(e) {
+            if (!e || e.target === document.getElementById('lessonModalOverlay')) {
+                document.getElementById('lessonModalOverlay').classList.remove('active');
+            }
+        }
+
+
+        // ================= CISA 100 QUESTIONS DATA =================
+        const isacaKeywords = /\b(FIRST|BEST|MOST|PRIMARY|GREATEST|ULTIMATELY|LEAST|MAIN)\b/g;
+
+        const quizDB = [
+            // Original 50 Core Domain 1 Concepts
+            { id: 1, topic: "Audit Charter & Mgmt", q: "A long-term IT employee with a strong technical background has applied for a position in the IS audit department. Hiring should be primarily based on the individual’s experience and:", options: ["Length of service.", "Age and capacity to learn.", "IT knowledge for credibility.", "Ability to be independent of existing IT relationships."], a: 3, exp: "<strong>D is correct.</strong> Independence is fundamental. An auditor cannot effectively audit a department they were recently part of.", rule: "Rule: Independence must be maintained in fact and appearance." },
+            { id: 2, topic: "Audit Evidence & Sampling", q: "An enterprise recently upgraded its purchase system to incorporate EDI. Which of the following controls should be implemented in the EDI interface to provide for efficient data mapping?", options: ["Key verification", "One-for-one checking", "Manual recalculations", "Functional acknowledgments"], a: 3, exp: "<strong>D is correct.</strong> Functional acknowledgments act as an electronic audit trail, ensuring data was received and mapped correctly.", rule: "EDI requires functional acknowledgments as proof of receipt." },
+            { id: 3, topic: "Internal Controls & CSA", q: "An IS auditor notes that failed login attempts to a core financial system are automatically logged and retained for a year. This logging is:", options: ["An effective preventive control.", "A valid detective control.", "Not an adequate control.", "A corrective control."], a: 1, exp: "<strong>B is correct.</strong> Logging records events *after* they occur, making it a Detective control.", rule: "Preventive = Blocks. Detective = Alerts/Logs. Corrective = Fixes/Restores." },
+            { id: 4, topic: "Internal Controls & CSA", q: "A PRIMARY benefit derived for an organization employing control self-assessment (CSA) techniques is that it:", options: ["Can identify high-risk areas that might need a detailed review later.", "Allows IS auditors to independently assess risk.", "Can be used as a replacement for traditional audits.", "Allows management to relinquish responsibility for control."], a: 0, exp: "<strong>A is correct.</strong> CSA shifts primary review tasks to line management, identifying high-risk areas quickly.", rule: "In CSA, the auditor is a facilitator. Management owns the controls." },
+            { id: 5, topic: "Audit Evidence & Sampling", q: "Which of the following forms of evidence would an IS auditor consider the MOST reliable?", options: ["An oral statement from the auditee", "The results of a test that is performed by an external IS auditor", "An internally generated computer accounting report", "A confirmation letter that is received from an outside source"], a: 1, exp: "<strong>B is correct.</strong> Direct observation and tests performed independently by the auditor are the most reliable.", rule: "Evidence Hierarchy: Auditor generated > External > Internal > Oral." },
+            { id: 6, topic: "Reporting & Follow-up", q: "When preparing an audit report, the IS auditor should ensure that the results are supported by:", options: ["Statements from IS management", "Work papers of other auditors", "An organizational control self-assessment", "Sufficient and appropriate audit evidence"], a: 3, exp: "<strong>D is correct.</strong> Every finding MUST be backed by sufficient and appropriate evidence gathered during fieldwork.", rule: "Opinions require evidence." },
+            { id: 7, topic: "Risk Assessment", q: "Which of the following is the MAIN reason to perform a risk assessment in the planning phase of an IS audit?", options: ["To ensure management’s concerns are addressed", "To provide reasonable assurance material items will be addressed", "To ensure the audit team will perform audits within budget", "To develop audit program and procedures needed to perform the audit"], a: 1, exp: "<strong>B is correct.</strong> Risk assessments tell the auditor where the biggest threats are, focusing the audit on material items.", rule: "Risk-based auditing focuses limited resources on high-risk areas." },
+            { id: 8, topic: "Audit Charter & Mgmt", q: "What is the PRIMARY purpose of an audit charter?", options: ["State the objectives and scope of a specific audit.", "Outline the technical audit methodology.", "Document the IS audit function's authority, scope, and responsibility.", "Define the timeline and budget for the audit department."], a: 2, exp: "<strong>C is correct.</strong> An audit charter is the foundational document that grants the auditor authority and independence.", rule: "Charter = Authority, Scope, Responsibility. Approved by the Board." },
+            { id: 9, topic: "Audit Evidence & Sampling", q: "Which testing method involves an auditor checking a sample of items to verify that a specific control is operating as designed?", options: ["Substantive testing", "Compliance testing", "Analytical procedures", "Stop-and-go testing"], a: 1, exp: "<strong>B is correct.</strong> Compliance testing checks if a control is present and working (Attribute). Substantive testing checks data integrity (Variable).", rule: "Compliance = Control works? Substantive = Data accurate?" },
+            { id: 10, topic: "Risk Assessment", q: "During a risk-based audit planning process, what should be the IS auditor's FIRST step?", options: ["Identify the control procedures currently in place.", "Determine the vulnerabilities associated with the IT infrastructure.", "Gain an understanding of the organization's business mission and objectives.", "Evaluate the results of the previous audit."], a: 2, exp: "<strong>C is correct.</strong> You cannot identify what is at risk until you understand what the business is trying to achieve.", rule: "Business objectives ALWAYS come before IT infrastructure/controls." },
+            { id: 11, topic: "Internal Controls & CSA", q: "A control designed to minimize the impact of an event after it has already occurred is called a:", options: ["Preventive control", "Detective control", "Corrective control", "Directive control"], a: 2, exp: "<strong>C is correct.</strong> Corrective controls act after detection to restore the system (e.g., backups).", rule: "Backups and DRPs are Corrective controls." },
+            { id: 12, topic: "Audit Evidence & Sampling", q: "What is the PRIMARY benefit of implementing continuous auditing?", options: ["It eliminates the need for external auditors.", "It allows for real-time or near real-time identification of anomalies.", "It reduces the overall cost of the IT infrastructure.", "It automatically corrects errors in financial transactions."], a: 1, exp: "<strong>B is correct.</strong> Continuous auditing uses automated tools to constantly monitor systems for anomalies.", rule: "Continuous Auditing (CA) is real-time anomaly detection by auditors." },
+            { id: 13, topic: "Risk Assessment", q: "In the context of IS auditing, what does 'inherent risk' mean?", options: ["The risk that an auditor will fail to detect a material error.", "The risk that a control will fail to prevent a material error.", "The susceptibility of an asset to a material error assuming there are no related controls.", "The risk that management will ignore the audit findings."], a: 2, exp: "<strong>C is correct.</strong> Inherent risk is the raw, natural level of risk before any security controls are applied.", rule: "Inherent (Raw) -> Controls applied -> Residual (Remaining) Risk." },
+            { id: 14, topic: "Reporting & Follow-up", q: "Which of the following is the BEST indicator of the effectiveness of an IS audit function?", options: ["The number of high-risk findings reported.", "The percentage of audit recommendations implemented by management.", "Completion of the annual audit plan within budget.", "The frequency of audit reports issued."], a: 1, exp: "<strong>B is correct.</strong> Audits only add value if recommendations are implemented to fix vulnerabilities.", rule: "Value is realized through management action (remediation)." },
+            { id: 15, topic: "Audit Evidence & Sampling", q: "An IS auditor uses statistical sampling to test a population of purchase orders. If the auditor wants to decrease the margin of error, they should:", options: ["Decrease the sample size.", "Increase the sample size.", "Use non-statistical sampling instead.", "Increase the tolerable error rate."], a: 1, exp: "<strong>B is correct.</strong> A larger sample size provides a more accurate representation, reducing the margin of error.", rule: "Higher confidence/lower error margin requires a larger sample." },
+            { id: 16, topic: "Risk Assessment", q: "Management has decided to accept a known risk because the cost of the control exceeds the value of the asset. What should the IS auditor do?", options: ["Report the issue to the external regulatory body.", "Force management to implement the control.", "Document management's decision and verify it aligns with risk tolerance.", "Implement the control on behalf of management."], a: 2, exp: "<strong>C is correct.</strong> Auditors do not force fixes. If management accepts a risk aligning with policy, the auditor simply documents it.", rule: "Auditors advise, Management decides/accepts risk." },
+            { id: 17, topic: "Risk Assessment", q: "Which type of risk is defined as the risk that the IS auditor's procedures will not find a material error that actually exists?", options: ["Inherent Risk", "Control Risk", "Detection Risk", "Business Risk"], a: 2, exp: "<strong>C is correct.</strong> Detection risk is the risk the auditor misses the problem. It is the only risk the auditor can directly control.", rule: "Auditor controls Detection Risk by adjusting sample size/testing." },
+            { id: 18, topic: "Audit Evidence & Sampling", q: "What sampling technique is BEST used when an auditor suspects fraud and wants to find at least one exception in a population?", options: ["Variable sampling", "Stop-and-go sampling", "Discovery sampling", "Stratified sampling"], a: 2, exp: "<strong>C is correct.</strong> Discovery sampling is used when the expected error rate is near zero, and finding just ONE exception is critical.", rule: "Fraud/Irregularities = Discovery Sampling." },
+            { id: 19, topic: "Audit Charter & Mgmt", q: "Who should officially approve the IS Audit Charter?", options: ["The Chief Information Officer (CIO)", "The Chief Information Security Officer (CISO)", "The Audit Committee or Board of Directors", "The Lead IS Auditor"], a: 2, exp: "<strong>C is correct.</strong> To guarantee independence, the charter must be approved by the highest level of governance.", rule: "Audit Charter must be approved by the Board/Audit Committee." },
+            { id: 20, topic: "Audit Evidence & Sampling", q: "An auditor is testing whether employees are signing the AUP. The auditor expects very few errors. Which sampling method MINIMIZES the sample size?", options: ["Discovery sampling", "Variable sampling", "Stop-and-go sampling", "Random sampling"], a: 2, exp: "<strong>C is correct.</strong> Stop-and-go sampling allows the auditor to stop testing early if no errors are found in the initial small sample.", rule: "Minimize testing time = Stop-and-go sampling." },
+            { id: 21, topic: "Internal Controls & CSA", q: "A primary control is deemed too expensive to implement. Management implements an alternative control that mitigates the risk to an acceptable level. This is known as a:", options: ["Directive control", "Detective control", "Compensating control", "Corrective control"], a: 2, exp: "<strong>C is correct.</strong> A compensating control is used when a primary control is unfeasible, too costly, or fails.", rule: "Compensating control = The Backup Plan for a primary control." },
+            { id: 22, topic: "Audit Evidence & Sampling", q: "When using Generalized Audit Software (GAS), what is the PRIMARY advantage for the IS auditor?", options: ["It automatically fixes errors in the database.", "It allows the auditor to independently run queries and access data.", "It eliminates the need for risk assessments.", "It replaces the need for substantive testing."], a: 1, exp: "<strong>B is correct.</strong> GAS provides the auditor with independence. They don't have to rely on IT to pull reports.", rule: "GAS/CAATs = Auditor Independence in data gathering." },
+            { id: 23, topic: "Reporting & Follow-up", q: "During a follow-up audit, the IS auditor's PRIMARY responsibility is to:", options: ["Re-audit the entire business process.", "Verify that management has implemented the agreed-upon corrective actions.", "Report the original findings to the regulatory authorities.", "Evaluate new emerging risks in the department."], a: 1, exp: "<strong>B is correct.</strong> Follow-up audits have a narrow scope: checking if management actually fixed what they promised to fix.", rule: "Follow-up = Verify Remediation." },
+            { id: 24, topic: "Reporting & Follow-up", q: "What is the MAIN purpose of the exit interview at the end of an audit?", options: ["To negotiate the severity of the findings.", "To ensure the facts presented in the report are accurate and agreed upon.", "To deliver the final printed audit report.", "To evaluate the performance of the audit team."], a: 1, exp: "<strong>B is correct.</strong> The exit interview ensures there are no surprises and confirms factual accuracy with management.", rule: "Exit Interview = Factual Accuracy & No Surprises." },
+            { id: 25, topic: "Reporting & Follow-up", q: "If an IS auditor uncovers a critical security vulnerability that is actively being exploited, they should:", options: ["Wait until the final report to document it.", "Fix the vulnerability themselves immediately.", "Communicate it to management immediately.", "Exclude it from the scope if it wasn't in the original plan."], a: 2, exp: "<strong>C is correct.</strong> Critical, active threats must be reported to management immediately so they can stop the bleeding.", rule: "Imminent danger = Immediate communication." },
+            { id: 26, topic: "Audit Evidence & Sampling", q: "Which testing technique allows an auditor to submit test data through the actual live production system to verify processing logic?", options: ["Parallel simulation", "Integrated Test Facility (ITF)", "Generalized Audit Software", "Snapshot technique"], a: 1, exp: "<strong>B is correct.</strong> An ITF sets up a 'dummy' entity in the live production system to run test transactions safely.", rule: "ITF = Testing in Live Production with dummy entities." },
+            { id: 27, topic: "Reporting & Follow-up", q: "What should be included in the management response section of an IS audit report?", options: ["The auditor's opinion on management's performance.", "A detailed timeline and action plan from management to address the findings.", "A request for a larger audit budget.", "The names of employees who caused the errors."], a: 1, exp: "<strong>B is correct.</strong> Management's response should acknowledge the finding and provide a concrete action plan and target date.", rule: "Management Response = Action Plan + Timeline." },
+            { id: 28, topic: "Risk Assessment", q: "What is 'materiality' in the context of IS auditing?", options: ["The physical hardware being audited.", "The importance or significance of an item in influencing decisions.", "The volume of data processed by the system.", "The amount of time spent on the audit."], a: 1, exp: "<strong>B is correct.</strong> Materiality refers to how significant an issue is. If an error is 'material', it impacts stakeholder decisions.", rule: "Materiality = Significance / Impact." },
+            { id: 29, topic: "Audit Charter & Mgmt", q: "When using the work of an external expert (Subject Matter Expert), the IS auditor is ULTIMATELY responsible for:", options: ["The accuracy of the expert's technical tools.", "Paying the expert's invoice.", "Evaluating the expert's work and the final audit conclusions.", "Training the expert on audit methodology."], a: 2, exp: "<strong>C is correct.</strong> You can outsource the testing, but you cannot outsource the responsibility for the audit conclusions.", rule: "Auditor retains ultimate responsibility for the report." },
+            { id: 30, topic: "Risk Assessment", q: "The PRIMARY purpose of performing a control walkthrough during the planning phase is to:", options: ["Gather substantive evidence.", "Understand the process design and confirm controls are in place.", "Identify all instances of fraud.", "Train the auditee on security best practices."], a: 1, exp: "<strong>B is correct.</strong> A walkthrough involves tracing a single transaction to understand the process and verify control design.", rule: "Walkthrough = Verify Design and Understanding." },
+            { id: 31, topic: "Audit Evidence & Sampling", q: "Which of the following is an attribute sampling application?", options: ["Estimating the total monetary value of inventory.", "Testing the approval signatures on purchase orders.", "Calculating the average downtime of servers.", "Determining the financial impact of a breach."], a: 1, exp: "<strong>B is correct.</strong> Attribute sampling deals with binary Yes/No conditions (e.g., Is the signature there or not?).", rule: "Attribute = Compliance (Yes/No). Variable = Substantive (Numbers/Money)." },
+            { id: 32, topic: "Risk Assessment", q: "An IS auditor finds that an organization has no formal risk assessment process. The auditor should FIRST:", options: ["Conduct a risk assessment for the organization.", "Recommend that management implement a risk assessment framework.", "Halt the audit until a risk assessment is done.", "Notify external regulators."], a: 1, exp: "<strong>B is correct.</strong> The auditor identifies the gap (lack of framework) and recommends management fixes it.", rule: "Auditors recommend. They do not perform operational duties (like conducting the org's risk assessment)." },
+            { id: 33, topic: "Internal Controls & CSA", q: "Which of the following is the BEST example of a detective control?", options: ["Data validation edits", "Segregation of duties", "Review of system access logs", "Restoring from a backup tape"], a: 2, exp: "<strong>C is correct.</strong> Log reviews detect unauthorized actions after they have occurred.", rule: "Logs, Alerts, and Reviews are Detective." },
+            { id: 34, topic: "Audit Evidence & Sampling", q: "An auditor notes that a system calculation is failing. To independently verify the calculation logic, the auditor writes a script to re-process the data and compares the results. This is known as:", options: ["Integrated Test Facility (ITF)", "Parallel Simulation", "Snapshots", "Continuous Auditing"], a: 1, exp: "<strong>B is correct.</strong> Parallel simulation involves the auditor running their own software/logic alongside the client's data to compare outputs.", rule: "Parallel Simulation = Auditor's software vs Client's software." },
+            { id: 35, topic: "Reporting & Follow-up", q: "If management disagrees with an audit finding during the exit interview, the IS auditor should:", options: ["Remove the finding from the report.", "Include the finding and document management's disagreement in the report.", "Escalate immediately to external regulators.", "Modify the evidence to convince management."], a: 1, exp: "<strong>B is correct.</strong> If evidence supports the finding, it stays in the report. Management's disagreement is formally noted in their response section.", rule: "Never alter factual findings based on management pressure." },
+            { id: 36, topic: "Audit Charter & Mgmt", q: "An IS auditor discovers they are related to the IT Director of the department they are auditing. What is the BEST course of action?", options: ["Proceed but exercise extreme objectivity.", "Disclose the relationship in the final audit report.", "Inform audit management so they can be reassigned.", "Only audit areas not directly managed by the IT Director."], a: 2, exp: "<strong>C is correct.</strong> This is a clear impairment of independence. The auditor must step down from this specific assignment.", rule: "Impairment of independence requires immediate disclosure and reassignment." },
+            { id: 37, topic: "Internal Controls & CSA", q: "The PRIMARY objective of Segregation of Duties (SoD) is to:", options: ["Increase operational efficiency.", "Prevent a single individual from committing and concealing fraud/errors.", "Reduce the number of IT staff needed.", "Automate manual accounting processes."], a: 1, exp: "<strong>B is correct.</strong> SoD splits critical tasks so no one person has end-to-end control, reducing the risk of hidden fraud.", rule: "SoD = Fraud prevention through divided power." },
+            { id: 38, topic: "Risk Assessment", q: "When evaluating IT risks, the IS auditor should place the GREATEST emphasis on:", options: ["Threats with the highest technical complexity.", "Vulnerabilities that have existed the longest.", "Risks that have the highest potential impact on business objectives.", "Risks identified in the previous year's audit."], a: 2, exp: "<strong>C is correct.</strong> Impact on business objectives is always the highest priority in risk evaluation.", rule: "Business impact > Technical metrics." },
+            { id: 39, topic: "Internal Controls & CSA", q: "A 'Mandatory Access Control' (MAC) system is an example of what kind of control?", options: ["Preventive", "Detective", "Corrective", "Directive"], a: 0, exp: "<strong>A is correct.</strong> Access controls prevent unauthorized users from accessing systems or data.", rule: "Access controls (Logical/Physical) are Preventive." },
+            { id: 40, topic: "Risk Assessment", q: "Which of the following describes 'Control Risk'?", options: ["The risk the auditor misses an error.", "The risk a material error occurs because there are no controls.", "The risk that a material error will not be prevented or detected by the internal control system.", "The risk of a business venture failing."], a: 2, exp: "<strong>C is correct.</strong> Control risk is the probability that the organization's implemented controls fail to do their job.", rule: "Control Risk = The controls are broken/ineffective." },
+            { id: 41, topic: "Audit Evidence & Sampling", q: "In audit sampling, the 'Tolerable Error Rate' represents:", options: ["The number of mistakes the auditor is allowed to make.", "The maximum error rate in the population that the auditor is willing to accept.", "The guaranteed accuracy of the sample.", "The percentage of the population that must be tested."], a: 1, exp: "<strong>B is correct.</strong> Tolerable error is the threshold. If errors exceed this rate, the control is deemed ineffective.", rule: "Tolerable Error = Max acceptable failure rate." },
+            { id: 42, topic: "Audit Charter & Mgmt", q: "Which of the following is NOT typically found in an IS Audit Charter?", options: ["The authority of the audit function.", "The independence of the audit function.", "The detailed annual audit schedule.", "The scope of the audit function's responsibilities."], a: 2, exp: "<strong>C is correct.</strong> The annual schedule changes every year. The Charter is a static, overarching governance document.", rule: "Charter = High-level authority. Does NOT include specific schedules/budgets." },
+            { id: 43, topic: "Risk Assessment", q: "An IS auditor is evaluating a newly proposed IT project. The MOST important factor for the auditor to verify is that the project:", options: ["Uses the latest agile development methodologies.", "Is aligned with the organization's strategic business goals.", "Has the lowest possible vendor cost.", "Will be completed within six months."], a: 1, exp: "<strong>B is correct.</strong> IT projects only hold value if they align with and support business goals.", rule: "IT Strategy MUST align with Business Strategy." },
+            { id: 44, topic: "Reporting & Follow-up", q: "An auditor finds a minor compliance issue that does not impact security or financial reporting. The auditor should:", options: ["Ignore it to save time.", "Report it to the Board of Directors immediately.", "Include it in the report as a minor observation/recommendation.", "Demand the system be taken offline."], a: 2, exp: "<strong>C is correct.</strong> All findings should be documented, but minor issues are reported as observations to local management, not escalated to the Board.", rule: "Report findings based on Materiality." },
+            { id: 45, topic: "Audit Evidence & Sampling", q: "When using continuous auditing, what is the PRIMARY role of the IS auditor?", options: ["To review the alerts and anomalies generated by the automated tools.", "To write the application code for the business.", "To fix the transaction errors identified by the system.", "To approve the daily financial ledgers."], a: 0, exp: "<strong>A is correct.</strong> In continuous auditing, tools flag anomalies, and the auditor's job is to investigate those specific flags.", rule: "Auditor investigates anomalies; management fixes errors." },
+            { id: 46, topic: "Internal Controls & CSA", q: "Who should be responsible for designing and implementing internal controls?", options: ["The IS Auditor", "External Regulators", "Operational Management", "The Audit Committee"], a: 2, exp: "<strong>C is correct.</strong> Management owns the processes and is responsible for designing and maintaining the controls.", rule: "Management designs/owns controls. Auditors evaluate them." },
+            { id: 47, topic: "Audit Evidence & Sampling", q: "An auditor wants to ensure that a data file has not been altered since it was extracted. Which technique should they use?", options: ["Encryption", "Digital Signatures", "Hashing (e.g., MD5 or SHA)", "Data Masking"], a: 2, exp: "<strong>C is correct.</strong> Hashing generates a unique fixed-length value. If the file changes, the hash changes, proving a loss of integrity.", rule: "Hashing = Integrity checking." },
+            { id: 48, topic: "Risk Assessment", q: "The FIRST step in developing a risk management program is to:", options: ["Implement security controls.", "Identify the assets and their value to the business.", "Conduct a vulnerability scan.", "Calculate the Annualized Loss Expectancy (ALE)."], a: 1, exp: "<strong>B is correct.</strong> You cannot protect what you don't know you have. Asset identification and valuation is always step one.", rule: "FIRST step in Risk = Asset Identification." },
+            { id: 49, topic: "Audit Evidence & Sampling", q: "A 'Confidence Level' of 95% in statistical sampling implies:", options: ["95% of the population was tested.", "There is a 5% risk that the sample does not accurately represent the population.", "The controls are 95% effective.", "The auditor is 95% finished with the testing phase."], a: 1, exp: "<strong>B is correct.</strong> A 95% confidence level means you accept a 5% sampling risk (the risk the sample is a statistical fluke).", rule: "Confidence Level + Sampling Risk = 100%." },
+            { id: 50, topic: "Reporting & Follow-up", q: "After issuing the final audit report, the IS auditor's involvement with the auditee should:", options: ["End completely until the next annual audit.", "Continue through formal follow-up procedures to verify remediation.", "Shift to helping the auditee implement the fixes.", "Involve daily operational monitoring of the department."], a: 1, exp: "<strong>B is correct.</strong> The audit lifecycle includes follow-up to ensure management actually mitigated the reported risks.", rule: "The audit is not truly complete until follow-up verifies remediation." },
+
+            // NEW 50 QUESTIONS (Q51-100)
+            { id: 51, topic: "Audit Charter & Mgmt", q: "Which of the following is the MOST important factor for ensuring the IS audit function is effective?", options: ["Advanced audit software tools.", "A highly technical audit staff.", "Independence of the IS audit function.", "Frequent audits of all departments."], a: 2, exp: "<strong>C is correct.</strong> Without independence, the auditor cannot objectively report findings, rendering the entire function useless.", rule: "Independence is the bedrock of the audit function." },
+            { id: 52, topic: "Risk Assessment", q: "During a risk-based audit, an IS auditor discovers that a specific control is missing, but the business impact of a failure is negligible. The auditor should:", options: ["Report it as a critical finding immediately.", "Recommend implementing the control regardless of cost.", "Note the missing control but assess the residual risk as acceptable.", "Halt the audit until the control is added."], a: 2, exp: "<strong>C is correct.</strong> If the impact is negligible, the risk may be within the acceptable risk appetite. Cost of control must not exceed asset value.", rule: "Risk is evaluated by Business Impact." },
+            { id: 53, topic: "Audit Charter & Mgmt", q: "Which entity is ULTIMATELY responsible for the organization's system of internal controls?", options: ["The IS Auditor", "Executive Management / Board of Directors", "The IT Department", "External Auditors"], a: 1, exp: "<strong>B is correct.</strong> Executive management and the board bear the ultimate responsibility for ensuring internal controls exist and are effective.", rule: "Management owns the controls. Auditors evaluate them." },
+            { id: 54, topic: "Internal Controls & CSA", q: "An organization uses a badge swipe system to enter the server room, but employees often hold the door open for others (tailgating). What is the BEST preventive control to fix this?", options: ["Review badge logs daily.", "Install a security camera.", "Install a mantrap / deadcoded door.", "Issue a policy warning against tailgating."], a: 2, exp: "<strong>C is correct.</strong> A mantrap physically prevents more than one person from entering at a time. Cameras and logs are detective.", rule: "Preventive physically stops the action. Detective records it." },
+            { id: 55, topic: "Audit Evidence & Sampling", q: "An IS auditor is reviewing firewall rules. Instead of checking all 5,000 rules, the auditor uses a statistical sample. The risk that the sample does not reflect the entire rule set is called:", options: ["Inherent risk", "Control risk", "Sampling risk", "Detection risk"], a: 2, exp: "<strong>C is correct.</strong> Sampling risk is the statistical probability that the sample chosen does not accurately reflect the actual population.", rule: "Sampling Risk = Fluke sample." },
+            { id: 56, topic: "Audit Evidence & Sampling", q: "When evaluating the reliability of audit evidence, which of the following is considered the LEAST reliable?", options: ["Evidence obtained directly by the auditor.", "Evidence provided by an independent third party.", "Evidence generated automatically by the IT system.", "Evidence provided orally by the IT manager."], a: 3, exp: "<strong>D is correct.</strong> Oral evidence leaves no paper trail and is highly subjective.", rule: "Oral evidence is ALWAYS the weakest form of evidence." },
+            { id: 57, topic: "Reporting & Follow-up", q: "An IS auditor finds a significant flaw in the financial reporting system during fieldwork. The FIRST action the auditor should take is to:", options: ["Include it in the final audit report.", "Inform the external financial auditors.", "Validate the finding and communicate it to IT management.", "Implement a temporary patch to fix the flaw."], a: 2, exp: "<strong>C is correct.</strong> Before escalating to final reports, the auditor must validate the fact and inform the relevant management so they are aware.", rule: "Validate facts and communicate locally before escalating." },
+            { id: 58, topic: "Audit Evidence & Sampling", q: "An IS auditor is checking if invoices over $10,000 have the required manager signature. Which sampling method should be used?", options: ["Variable sampling", "Attribute sampling", "Stratified sampling", "Substantive sampling"], a: 1, exp: "<strong>B is correct.</strong> Checking for a signature is a binary 'Yes/No' test of compliance, which requires Attribute sampling.", rule: "Attribute = Yes/No (Compliance)." },
+            { id: 59, topic: "Risk Assessment", q: "Which of the following BEST describes a vulnerability?", options: ["A hacker attempting to breach the network.", "A natural disaster like a flood.", "A weakness in the system design or implementation.", "The financial loss resulting from a breach."], a: 2, exp: "<strong>C is correct.</strong> A vulnerability is a weakness. A threat (hacker/flood) exploits a vulnerability to cause an impact.", rule: "Risk = Threat x Vulnerability x Impact." },
+            { id: 60, topic: "Internal Controls & CSA", q: "Which of the following is an example of a Compensating Control?", options: ["A firewall blocking unauthorized IP addresses.", "A daily review of exception logs because duties cannot be adequately segregated.", "A policy document requiring strong passwords.", "A data backup used to restore a crashed server."], a: 1, exp: "<strong>B is correct.</strong> Because Segregation of Duties (the primary control) cannot be achieved, a daily manual review (the compensating control) is added to mitigate the risk.", rule: "Compensating Control offsets a weak/missing primary control." },
+            { id: 61, topic: "Audit Charter & Mgmt", q: "If the IS audit department reports directly to the Chief Financial Officer (CFO), which fundamental principle might be compromised?", options: ["Competence", "Independence", "Confidentiality", "Integrity"], a: 1, exp: "<strong>B is correct.</strong> If the auditor reports to the CFO, they cannot independently audit the finance department without fear of retaliation. They should report to the Audit Committee.", rule: "Reporting line dictates Independence." },
+            { id: 62, topic: "Risk Assessment", q: "In a risk assessment, the value of an information asset should be determined PRIMARILY by:", options: ["The original cost to purchase the hardware and software.", "The IT department's estimate of its technical importance.", "The impact its loss would have on the business operations.", "The cost to replace the asset with a newer version."], a: 2, exp: "<strong>C is correct.</strong> An old $50 server might hold $5 million worth of customer data. The business impact determines the true value.", rule: "Asset value = Business Impact." },
+            { id: 63, topic: "Internal Controls & CSA", q: "In a Control Self-Assessment (CSA), what is the PRIMARY role of the IS auditor?", options: ["To design the controls being assessed.", "To act as a facilitator and guide management in the assessment.", "To punish departments that fail the assessment.", "To take over the operational risk management function."], a: 1, exp: "<strong>B is correct.</strong> In CSA, management does the assessing. The auditor simply provides the methodology and facilitates the workshop.", rule: "CSA Auditor = Facilitator." },
+            { id: 64, topic: "Audit Evidence & Sampling", q: "When using Generalized Audit Software (GAS) to test a database, the IS auditor is performing:", options: ["Compliance testing", "Substantive testing", "Control design walkthrough", "Attribute sampling"], a: 1, exp: "<strong>B is correct.</strong> Using GAS to query the actual database to look for errors, duplicates, or anomalies is testing the substance (data) itself.", rule: "GAS queries data = Substantive testing." },
+            { id: 65, topic: "Reporting & Follow-up", q: "Management has agreed to implement a fix for an audit finding by Q3. During the Q4 follow-up audit, the auditor finds the fix was not implemented. The auditor should FIRST:", options: ["Report the failure to the Board of Directors.", "Determine the reason for the delay and the current risk level.", "Revoke the IT department's operational budget.", "Close the issue and plan to review it next year."], a: 1, exp: "<strong>B is correct.</strong> Before escalating, the auditor must understand WHY it wasn't fixed and what the residual risk currently is.", rule: "Investigate the root cause before escalating." },
+            { id: 66, topic: "Audit Charter & Mgmt", q: "An IS auditor is asked to design the new security architecture for the company, and then audit it next year. This is a violation of:", options: ["Professional Competence", "Segregation of Duties", "Independence", "Due Professional Care"], a: 2, exp: "<strong>C is correct.</strong> An auditor cannot objectively audit a system they built. This is a massive impairment of independence.", rule: "You cannot audit your own work." },
+            { id: 67, topic: "Audit Evidence & Sampling", q: "To ensure that data in a file has not been accidentally altered during transmission, which control is BEST?", options: ["Symmetric Encryption", "Hashing", "Digital Certificates", "Data Masking"], a: 1, exp: "<strong>B is correct.</strong> Hashing generates a unique digest. If the file changes by even one bit, the hash changes, proving a loss of integrity.", rule: "Hashing guarantees Integrity." },
+            { id: 68, topic: "Risk Assessment", q: "Which of the following is the BEST method for determining the frequency of IS audits?", options: ["Auditing all systems annually.", "Following the schedule of the previous year.", "Basing the frequency on a comprehensive risk assessment.", "Auditing based on the availability of audit staff."], a: 2, exp: "<strong>C is correct.</strong> High-risk systems should be audited more frequently than low-risk systems. Risk dictates the schedule.", rule: "Risk Assessment drives the Audit Plan." },
+            { id: 69, topic: "Reporting & Follow-up", q: "The PRIMARY objective of an audit exit interview is to:", options: ["Present the final printed report to the Board.", "Ensure the auditee agrees with the factual accuracy of the findings.", "Negotiate the severity level of the risks.", "Demand immediate remediation of all findings."], a: 1, exp: "<strong>B is correct.</strong> The exit interview ensures there are no factual misunderstandings between the auditor and management before the report is finalized.", rule: "Exit Interview = Confirm Facts." },
+            { id: 70, topic: "Internal Controls & CSA", q: "Which of the following controls is MOST effective in preventing a payroll clerk from modifying their own salary?", options: ["Regular review of payroll logs.", "Segregation of duties in the payroll application.", "Mandatory vacations for payroll clerks.", "Data encryption of the payroll database."], a: 1, exp: "<strong>B is correct.</strong> Segregation of duties physically prevents the clerk from having the necessary access rights to authorize their own changes.", rule: "SoD is the ultimate preventive control against internal fraud." },
+            { id: 71, topic: "Audit Evidence & Sampling", q: "An auditor is using a sample to estimate the total monetary value of errors in an accounts receivable database. This is called:", options: ["Attribute sampling", "Variable sampling", "Stop-and-go sampling", "Discovery sampling"], a: 1, exp: "<strong>B is correct.</strong> Variable sampling is used to estimate numerical values (like dollars, weights, or time).", rule: "Variable = Value/Numbers." },
+            { id: 72, topic: "Audit Evidence & Sampling", q: "If an auditor wants to decrease the risk of drawing an incorrect conclusion from a sample (decrease sampling risk), they must:", options: ["Decrease the sample size.", "Increase the sample size.", "Change from statistical to judgmental sampling.", "Only audit the largest transactions."], a: 1, exp: "<strong>B is correct.</strong> A larger sample provides more precision and reduces the risk that the sample doesn't represent the population.", rule: "Larger Sample = Less Sampling Risk = Higher Confidence." },
+            { id: 73, topic: "Risk Assessment", q: "When developing a risk-based audit plan, the IS auditor should evaluate risk based on:", options: ["Inherent risk and Control risk.", "Detection risk and Audit risk.", "Business risk and Vendor risk.", "Financial risk and Operational risk."], a: 0, exp: "<strong>A is correct.</strong> The auditor evaluates Inherent Risk (raw risk) and Control Risk (controls failing) to determine how much testing they need to do.", rule: "Audit Planning relies on Inherent + Control risk." },
+            { id: 74, topic: "Reporting & Follow-up", q: "If management decides NOT to address a severe audit finding because of budget constraints, what is the auditor's responsibility?", options: ["Accept the risk on behalf of the company.", "Report the decision to the Board of Directors or Audit Committee.", "Force the IT department to fix it anyway.", "Remove the finding from the final report."], a: 1, exp: "<strong>B is correct.</strong> Management can accept risk, but if the auditor believes the risk is too high for the business, they must escalate it to the Board (the ultimate governance body).", rule: "Escalate unacceptable risk to the Board." },
+            { id: 75, topic: "Audit Charter & Mgmt", q: "Which of the following is the MOST important element to include in an IS Audit Charter?", options: ["The specific audit tools to be used.", "The annual training budget for auditors.", "The auditor's right of access to systems, data, and personnel.", "The step-by-step procedures for conducting an audit."], a: 2, exp: "<strong>C is correct.</strong> Without explicit, board-approved access to data and personnel, the auditor cannot do their job.", rule: "Charter must explicitly grant access rights." },
+            { id: 76, topic: "Internal Controls & CSA", q: "What is the PRIMARY advantage of a Control Self-Assessment (CSA) program?", options: ["It replaces the need for an internal audit function.", "It shifts the responsibility of risk management entirely to the auditor.", "It increases line management's awareness and ownership of internal controls.", "It guarantees 100% compliance with external regulations."], a: 2, exp: "<strong>C is correct.</strong> By forcing management to assess their own controls, they become more aware of risks and take ownership of the solutions.", rule: "CSA = Management Ownership." },
+            { id: 77, topic: "Audit Evidence & Sampling", q: "An auditor is testing a population where they expect to find ZERO errors, but finding even one error is critical (e.g., fraud). The BEST sampling method is:", options: ["Variable sampling", "Discovery sampling", "Attribute sampling", "Stratified sampling"], a: 1, exp: "<strong>B is correct.</strong> Discovery sampling is designed specifically for finding anomalies like fraud when the expected error rate is near zero.", rule: "Discovery Sampling = Fraud hunting." },
+            { id: 78, topic: "Risk Assessment", q: "A company implements a strict password policy and a firewall to reduce the likelihood of a breach. This is an example of risk:", options: ["Avoidance", "Acceptance", "Mitigation", "Transfer"], a: 2, exp: "<strong>C is correct.</strong> Mitigation (or reduction) involves implementing controls to lessen the probability or impact of a threat.", rule: "Controls = Risk Mitigation." },
+            { id: 79, topic: "Reporting & Follow-up", q: "During an audit, the auditor finds that a control is operating effectively, but it is not documented in any formal procedure. The auditor should:", options: ["Ignore the issue since the control is working.", "Report a finding regarding the lack of documentation.", "Write the procedure document for the IT team.", "Fail the entire audit."], a: 1, exp: "<strong>B is correct.</strong> If it's not documented, it's not repeatable, and knowledge is lost if the employee leaves. It must be reported.", rule: "Undocumented controls = Audit finding." },
+            { id: 80, topic: "Audit Charter & Mgmt", q: "An IS auditor is planning to use the work of a third-party security expert. The auditor must FIRST:", options: ["Pay the expert's invoice.", "Assess the expert's competence, objectivity, and independence.", "Incorporate the expert's findings directly into the report without review.", "Ask management to approve the expert's methodology."], a: 1, exp: "<strong>B is correct.</strong> Before relying on someone else's work, the auditor must verify they are qualified and unbiased.", rule: "Verify SME competence and independence FIRST." },
+            { id: 81, topic: "Internal Controls & CSA", q: "Which of the following is considered an administrative (directive) control?", options: ["Biometric scanner", "Intrusion Prevention System (IPS)", "Information Security Policy", "Data Backup"], a: 2, exp: "<strong>C is correct.</strong> Policies, procedures, and guidelines are administrative controls that direct employee behavior.", rule: "Policies = Directive/Administrative controls." },
+            { id: 82, topic: "Audit Evidence & Sampling", q: "When using the Integrated Test Facility (ITF) approach, what is the MOST critical step for the auditor?", options: ["Ensuring test data is permanently added to the production database.", "Ensuring the test transactions are removed from the system after testing.", "Running the test during peak business hours.", "Using Generalized Audit Software to create the data."], a: 1, exp: "<strong>B is correct.</strong> If dummy test data is left in the live production system, it will corrupt the company's actual financial records.", rule: "ITF requires strict removal of test data." },
+            { id: 83, topic: "Risk Assessment", q: "Which formula accurately describes the components of an IT risk?", options: ["Risk = Threat x Vulnerability x Impact", "Risk = Asset Value x Control effectiveness", "Risk = Inherent Risk x Detection Risk", "Risk = Probability + Mitigation"], a: 0, exp: "<strong>A is correct.</strong> Risk requires a Threat actor exploiting a Vulnerability, resulting in a business Impact.", rule: "Risk = Threat x Vuln x Impact." },
+            { id: 84, topic: "Reporting & Follow-up", q: "The IS auditor should structure the audit report to PRIMARILY address the needs of:", options: ["The IT operational staff.", "The external regulatory auditors.", "Senior management and the Audit Committee.", "The Chief Information Security Officer (CISO)."], a: 2, exp: "<strong>C is correct.</strong> The report must be written so that senior management and the board (the ultimate decision-makers) can understand the business impact of the findings.", rule: "Write reports for Senior Management." },
+            { id: 85, topic: "Internal Controls & CSA", q: "A bank requires a teller to enter a transaction, and a manager to approve any transaction over $5,000. This is an example of:", options: ["Compensating control", "Detective control", "Segregation of Duties", "Continuous auditing"], a: 2, exp: "<strong>C is correct.</strong> Splitting the task (entry vs. approval) between two people is classic Segregation of Duties to prevent fraud.", rule: "Maker/Checker = Segregation of Duties." },
+            { id: 86, topic: "Audit Evidence & Sampling", q: "When evaluating audit evidence, 'Appropriateness' refers to the evidence being:", options: ["Sufficient in quantity.", "Relevant and reliable to the audit objective.", "Approved by management.", "Generated by an automated system."], a: 1, exp: "<strong>B is correct.</strong> 'Sufficiency' refers to quantity. 'Appropriateness' refers to quality (relevance and reliability).", rule: "Appropriate = Quality/Relevant. Sufficient = Quantity." },
+            { id: 87, topic: "Audit Charter & Mgmt", q: "Which standard dictates that IS auditors must maintain their knowledge and skills through continuing professional education (CPE)?", options: ["Code of Professional Ethics", "The Audit Charter", "ISACA Privacy Policy", "The Control Framework"], a: 0, exp: "<strong>A is correct.</strong> The ISACA Code of Professional Ethics explicitly requires members to maintain competency through ongoing training.", rule: "CPE is an Ethical requirement." },
+            { id: 88, topic: "Risk Assessment", q: "An enterprise is adopting a new cloud-based ERP system. The IS auditor's BEST recommendation during the planning phase is to:", options: ["Ensure the cloud provider uses the exact same hardware as the enterprise.", "Ensure right-to-audit clauses are included in the vendor contract.", "Demand that the cloud provider be audited monthly.", "Avoid the cloud entirely due to inherent risks."], a: 1, exp: "<strong>B is correct.</strong> Without a 'right-to-audit' clause, the auditor will have no authority to verify the security of the outsourced data.", rule: "Cloud/Outsourcing ALWAYS requires Right-to-Audit clauses." },
+            { id: 89, topic: "Audit Evidence & Sampling", q: "The risk that the IS auditor will reach an invalid conclusion based on the test results of a sample is called:", options: ["Inherent risk", "Audit risk", "Sampling risk", "Business risk"], a: 2, exp: "<strong>C is correct.</strong> Sampling risk occurs because the auditor did not test 100% of the population, leaving a chance the sample was unrepresentative.", rule: "Sampling Risk = Sample doesn't match population." },
+            { id: 90, topic: "Internal Controls & CSA", q: "Which of the following is the BEST reason to automate internal controls?", options: ["To reduce the need for an IS auditor.", "To eliminate all inherent risks.", "To ensure controls are applied consistently without human error.", "To decrease the initial cost of system deployment."], a: 2, exp: "<strong>C is correct.</strong> Automated controls do not get tired, do not forget, and cannot be socially engineered. They apply the rule 100% of the time.", rule: "Automated controls > Manual controls (Consistency)." },
+            { id: 91, topic: "Reporting & Follow-up", q: "During an audit, an IS auditor discovers that a previous audit finding was closed by management, but the implemented fix is completely ineffective. The auditor should:", options: ["Reopen the old finding and escalate to the Audit Committee.", "Report the ineffective fix as a new finding in the current audit.", "Ignore it, as the previous auditor signed off on it.", "Fix the issue manually to protect the company."], a: 1, exp: "<strong>B is correct.</strong> It is a current control deficiency. It should be documented as a finding in the current audit report with references to the failed remediation.", rule: "Current failures are reported as current findings." },
+            { id: 92, topic: "Risk Assessment", q: "What is the PRIMARY purpose of establishing a 'Risk Appetite'?", options: ["To eliminate all IT risks.", "To dictate the exact budget for IT security.", "To define the amount of risk management is willing to accept in pursuit of its goals.", "To guarantee compliance with all local laws."], a: 2, exp: "<strong>C is correct.</strong> Risk appetite provides the threshold. If a risk is below the appetite, management accepts it. If it's above, they mitigate it.", rule: "Risk Appetite = Acceptable boundary of risk." },
+            { id: 93, topic: "Audit Charter & Mgmt", q: "The IS audit function should be functionally independent of:", options: ["The Audit Committee", "The Board of Directors", "The business operations and IT management being audited.", "External regulators"], a: 2, exp: "<strong>C is correct.</strong> Auditors must be independent from the people they are auditing (Management/Operations) to remain objective.", rule: "Auditors must be independent of Operations." },
+            { id: 94, topic: "Audit Evidence & Sampling", q: "When using Parallel Simulation, what is the auditor doing?", options: ["Processing real client data through auditor-controlled software.", "Processing dummy data through the client's live software.", "Reviewing the client's source code line by line.", "Simulating a disaster to test the DRP."], a: 0, exp: "<strong>A is correct.</strong> Parallel simulation takes live production data and runs it through the auditor's own software to see if the output matches the client's output.", rule: "Parallel Simulation = Auditor Software + Live Data." },
+            { id: 95, topic: "Internal Controls & CSA", q: "Which of the following BEST represents a physical preventive control?", options: ["A smoke detector.", "A biometric fingerprint scanner on a server room door.", "A security guard reviewing CCTV footage from yesterday.", "A fire suppression sprinkler system."], a: 1, exp: "<strong>B is correct.</strong> The biometric scanner physically prevents an unauthorized person from entering. Smoke detectors are detective. Sprinklers are corrective.", rule: "Physical Preventive = Locks, Mantraps, Biometrics." },
+            { id: 96, topic: "Reporting & Follow-up", q: "When an auditor writes a recommendation in the final report, it should be:", options: ["Highly technical so the IT team knows exactly which code to change.", "Focused on addressing the root cause of the finding.", "Dictating the exact vendor software management must buy.", "Vague so management has maximum flexibility."], a: 1, exp: "<strong>B is correct.</strong> Recommendations should target the root cause of the vulnerability. They should NOT dictate specific technologies (which steps on management's toes).", rule: "Recommendations fix the Root Cause, not the symptom." },
+            { id: 97, topic: "Risk Assessment", q: "An organization is considering outsourcing its payroll processing. What is the FIRST thing the IS auditor should verify?", options: ["The vendor's disaster recovery plan.", "That a business case and risk assessment were conducted before the decision.", "The cost savings of the outsourcing contract.", "The encryption standard used by the vendor."], a: 1, exp: "<strong>B is correct.</strong> Before looking at technical details, the auditor must verify that management followed proper governance (doing a risk assessment) before making the decision.", rule: "FIRST step in outsourcing = Risk Assessment / Business Case." },
+            { id: 98, topic: "Audit Evidence & Sampling", q: "If an auditor is testing the effectiveness of a control over a period of time, they are performing:", options: ["Substantive testing", "Compliance testing", "A walkthrough", "Data analytics"], a: 1, exp: "<strong>B is correct.</strong> Compliance testing checks if a control operated effectively and consistently over the audit period.", rule: "Control effectiveness = Compliance Testing." },
+            { id: 99, topic: "Internal Controls & CSA", q: "Management has implemented a policy requiring all employees to change their passwords every 90 days. This is a:", options: ["Detective control", "Directive (Administrative) control", "Corrective control", "Physical control"], a: 1, exp: "<strong>B is correct.</strong> A policy is a written rule directing behavior. (Note: The system forcing the change would be a logical preventive control).", rule: "Policies/Rules = Directive Controls." },
+            { id: 100, topic: "Reporting & Follow-up", q: "What determines the scope and timeline of the auditor's follow-up activities?", options: ["The ISACA standards.", "The availability of the audit staff.", "The risk rating of the original findings and management's agreed remediation dates.", "The external auditor's schedule."], a: 2, exp: "<strong>C is correct.</strong> Follow-ups are prioritized based on how severe the original risk was, and they are scheduled based on when management promised to fix it.", rule: "Follow-up schedule is driven by Risk and Target Dates." }
+        ];
+
+        // ================= STATE MANAGEMENT =================
+        const STORE_KEY = 'cisaD1App_v6_safe'; 
+        
+        function getInitialState() {
+            return {
+                masteredIds: [], 
+                lostIds: [],     
+                quickIds: [],    
+                streak: { count: 0, lastDate: null },
+                plan: {}, 
+                stats: {
+                    "Audit Charter & Mgmt": { correct: 0, total: 0 },
+                    "Risk Assessment": { correct: 0, total: 0 },
+                    "Audit Evidence & Sampling": { correct: 0, total: 0 },
+                    "Internal Controls & CSA": { correct: 0, total: 0 },
+                    "Reporting & Follow-up": { correct: 0, total: 0 }
+                },
+                errorLog: [],
+                examDate: null
+            };
+        }
+
+        let state = null;
+        try {
+            state = JSON.parse(localStorage.getItem(STORE_KEY));
+        } catch(e) {
+            console.error("Local storage error:", e);
+        }
+
+        if (!state || !state.stats || !state.masteredIds) {
+            state = getInitialState();
+        }
+
+        // Engine State
+        let currentQuiz = [];
+        let currentQIndex = 0;
+        let sessionScore = 0;
+        let isExamMode = false;
+        let selectedAnswerIndex = null;
+        let examAnswers = []; 
+        let timerInterval;
+        let secondsElapsed = 0;
+        let examTimeLimit = 90 * 60; // 90 mins (1 hr 30 mins)
+        let quickCurrentId = null;
+
+        // ================= INIT =================
+        function init() {
+            checkStreak();
+            renderDash();
+            renderErrorLog();
+            initQuickGrid();
+        }
+
+        function checkStreak() {
+            const today = new Date().toLocaleDateString();
+            if(state.streak.lastDate !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                if(state.streak.lastDate === yesterday.toLocaleDateString() || state.streak.count === 0) {
+                    // Valid continuation
+                } else {
+                    state.streak.count = 0; // Broke streak
+                }
+                document.getElementById('streak-count').textContent = state.streak.count;
+            } else {
+                document.getElementById('streak-count').textContent = state.streak.count;
+            }
+        }
+
+        function incrementStreak() {
+            const today = new Date().toLocaleDateString();
+            if(state.streak.lastDate !== today) {
+                state.streak.count += 1;
+                state.streak.lastDate = today;
+                document.getElementById('streak-count').textContent = state.streak.count;
+                saveState();
+                showToast("Daily Streak increased! 🔥");
+            }
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(`view-${viewName}`).classList.add('active');
+            document.getElementById(`nav-${viewName}`).classList.add('active');
+            
+            if(viewName === 'dash') renderDash();
+            if(viewName === 'review') renderErrorLog();
+            if(viewName === 'quick') initQuickGrid();
+            if(viewName === 'quiz') {
+                document.getElementById('quiz-menu').style.display = 'block';
+                document.getElementById('quiz-engine').classList.remove('active');
+                stopTimer();
+            }
+            document.getElementById('main-scroll').scrollTo(0,0);
+        }
+
+        function saveState() { 
+            try {
+                localStorage.setItem(STORE_KEY, JSON.stringify(state)); 
+            } catch(e) {
+                console.error("Save error", e);
+            }
+        }
+
+        // ================= UI HELPERS =================
+        function showToast(msg) {
+            const t = document.getElementById('toastContainer');
+            if(!t) return;
+            t.innerHTML = `<i class="fa-solid fa-bell"></i> <span>${msg}</span>`;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function haptic() { if(navigator.vibrate) navigator.vibrate(15); }
+
+        // ================= DASHBOARD JOURNEY =================
+        function renderDash() {
+            try {
+                const total = 100;
+                const mastered = state.masteredIds.length;
+                const lost = state.lostIds.length;
+                const untouched = total - mastered - lost;
+                
+                const pct = Math.round((mastered / total) * 100);
+                
+                // SVG Circle Math safely
+                const circle = document.getElementById('main-progress-ring');
+                if (circle) {
+                    const circumference = 400; 
+                    const offset = circumference - (pct / 100) * circumference;
+                    circle.style.strokeDashoffset = offset;
+                }
+                
+                const dashPct = document.getElementById('dash-pct');
+                if (dashPct) {
+                    dashPct.textContent = `${pct}%`;
+                    const colorClass = pct >= 80 ? 'var(--success)' : (pct >= 60 ? 'var(--warning)' : 'var(--danger)');
+                    dashPct.style.color = colorClass;
+                }
+
+                // Journey Numbers
+                const elMastered = document.getElementById('stat-mastered');
+                if (elMastered) elMastered.textContent = mastered;
+                const elLost = document.getElementById('stat-lost');
+                if (elLost) elLost.textContent = lost;
+                const elUntouched = document.getElementById('stat-untouched');
+                if (elUntouched) elUntouched.textContent = untouched;
+
+                // Journey Bars
+                const barMastered = document.getElementById('bar-mastered');
+                if (barMastered) barMastered.style.width = `${(mastered/total)*100}%`;
+                const barLost = document.getElementById('bar-lost');
+                if (barLost) barLost.style.width = `${(lost/total)*100}%`;
+
+                // Subtopic Stats
+                const statsContainer = document.getElementById('domain-stats');
+                if (statsContainer) {
+                    statsContainer.innerHTML = '';
+                    d1Topics.forEach(topic => {
+                        const stat = state.stats[topic] || {correct:0, total:0};
+                        const topicPct = stat.total === 0 ? 0 : Math.round((stat.correct / stat.total) * 100);
+                        let barColor = topicPct >= 80 ? 'var(--success)' : (topicPct >= 60 ? 'var(--warning)' : 'var(--danger)');
+                        if(stat.total === 0) barColor = 'var(--text-muted)';
+                        
+                        statsContainer.innerHTML += `
+                            <div class="progress-container">
+                                <div class="progress-header">
+                                    <span class="domain-name">${topic} <span class="domain-weight">${stat.total} Qs</span></span>
+                                    <span style="color: ${barColor};">${topicPct}%</span>
+                                </div>
+                                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${topicPct}%; background: ${barColor}"></div></div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (err) {
+                console.error("Safe renderDash failure:", err);
+            }
+        }
+
+        // Bulletproof Reset Logic
+        function hardReset() {
+            if(confirm("DANGER: This wipes your entire journey, scores, and lost questions. Start fresh?")) {
+                localStorage.removeItem(STORE_KEY);
+                // Immediately refresh the page to completely kill all local variables and start fresh
+                window.location.reload(); 
+            }
+        }
+
+        // ================= TRACKING LOGIC (MASTERED VS LOST) =================
+        function trackAnswer(id, isCorrect) {
+            state.masteredIds = state.masteredIds.filter(x => x !== id);
+            state.lostIds = state.lostIds.filter(x => x !== id);
+
+            if(isCorrect) {
+                state.masteredIds.push(id);
+            } else {
+                state.lostIds.push(id);
+            }
+            saveState();
+        }
+
+        // ================= QUICK GRIND =================
+        function initQuickGrid() {
+            const grid = document.getElementById('quick-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            quizDB.forEach((q, i) => {
+                const el = document.createElement('div');
+                let statusClass = '';
+                if(state.masteredIds.includes(q.id)) statusClass = 'mastered';
+                if(state.lostIds.includes(q.id)) statusClass = 'lost';
+                
+                el.className = `grid-item ${statusClass}`;
+                el.innerText = i + 1;
+                el.onclick = () => openQuickModal(q.id);
+                grid.appendChild(el);
+            });
+        }
+
+        function triggerQuickSpin() {
+            const available = quizDB.filter(q => !state.masteredIds.includes(q.id));
+            if(available.length === 0) {
+                showToast("You mastered all 100 questions! Amazing job!");
+                return;
+            }
+            
+            const btn = document.getElementById('quickSpinBtn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Selecting...`;
+            
+            let counter = 0, speed = 20, lastHighlight = null;
+            const step = () => {
+                if(lastHighlight) {
+                    const oldEl = document.getElementById('quick-grid').children[lastHighlight.id-1];
+                    if(oldEl) oldEl.classList.remove("highlight");
+                }
+                const randomItem = available[Math.floor(Math.random() * available.length)];
+                const el = document.getElementById('quick-grid').children[randomItem.id-1];
+                if(el) el.classList.add("highlight");
+                lastHighlight = randomItem;
+                counter++;
+                if(counter < 20) {
+                    setTimeout(step, speed * 1.2);
+                } else {
+                    setTimeout(() => {
+                        if(el) el.classList.remove("highlight"); 
+                        openQuickModal(randomItem.id);
+                        btn.innerHTML = `<i class="fa-solid fa-dice"></i> Spin Random Unmastered`;
+                    }, 400);
+                }
+            };
+            step();
+        }
+
+        function openQuickModal(id) {
+            haptic();
+            quickCurrentId = id;
+            const q = quizDB.find(x => x.id === id);
+            
+            document.getElementById('qm-topic').textContent = q.topic;
+            document.getElementById('qm-num').textContent = `Q #${id}`;
+            document.getElementById('qm-text').innerHTML = q.q.replace(isacaKeywords, "<strong>$&</strong>");
+            
+            const optsContainer = document.getElementById('qm-options-container');
+            optsContainer.innerHTML = '';
+            
+            // Render buttons for user to answer
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span class="option-letter">${['A','B','C','D'][idx]}</span> <span>${opt}</span>`;
+                btn.onclick = () => selectQuickAnswer(idx, btn);
+                optsContainer.appendChild(btn);
+            });
+            
+            document.getElementById('qm-exp').style.display = 'none';
+            document.getElementById('qm-done-btn').style.display = 'none';
+            
+            document.getElementById('quickModalOverlay').classList.add('active');
+        }
+
+        function selectQuickAnswer(selectedIndex, btnElement) {
+            haptic(); incrementStreak();
+            const q = quizDB.find(x => x.id === quickCurrentId);
+            const isCorrect = (selectedIndex === q.a);
+            
+            trackAnswer(q.id, isCorrect);
+
+            const buttons = document.getElementById('qm-options-container').querySelectorAll('.option-btn');
+            buttons.forEach((b, idx) => {
+                b.disabled = true;
+                if(idx === q.a) b.classList.add('correct');
+                else if (idx === selectedIndex && !isCorrect) b.classList.add('wrong');
+            });
+
+            document.getElementById('qm-exp').innerHTML = `${q.exp}<br><div style="margin-top:10px; opacity:0.8; font-size:0.85rem;"><i class="fa-solid fa-lightbulb"></i> ${q.rule}</div>`;
+            document.getElementById('qm-exp').style.display = 'block';
+            document.getElementById('qm-done-btn').style.display = 'flex';
+        }
+
+        function closeQuickModal(e) {
+            if (!e || e.target === document.getElementById('quickModalOverlay')) {
+                document.getElementById('quickModalOverlay').classList.remove('active');
+                initQuickGrid();
+                renderDash();
+            }
+        }
+
+        // ================= DEEP TRAIN (QUIZ ENGINE) =================
+        function startQuiz(mode) {
+            isExamMode = (mode === 'exam');
+            examAnswers = [];
+            
+            if(mode === 'adaptive') {
+                if(state.lostIds.length === 0) {
+                    showToast("No Lost questions! Loading general practice.");
+                    currentQuiz = [...quizDB].sort(()=>Math.random()-0.5).slice(0, 20);
+                } else {
+                    const pool = quizDB.filter(q => state.lostIds.includes(q.id));
+                    currentQuiz = pool.sort(()=>Math.random()-0.5);
+                }
+            } else if (mode === 'practice') {
+                currentQuiz = [...quizDB].sort(()=>Math.random()-0.5).slice(0, 20);
+            } else if (mode === 'exam') {
+                currentQuiz = [...quizDB].sort(()=>Math.random()-0.5); // All 100
+            }
+
+            currentQIndex = 0; sessionScore = 0;
+            
+            document.getElementById('quiz-menu').style.display = 'none';
+            document.getElementById('quiz-engine').classList.add('active');
+            
+            const timerEl = document.getElementById('session-timer');
+            if(isExamMode) {
+                timerEl.classList.add('urgent');
+                startTimer(true); // 90 min countdown
+            } else {
+                timerEl.classList.remove('urgent');
+                startTimer(false); // standard count-up
+            }
+            
+            loadQuestion();
+        }
+
+        function startTimer(countdown) {
+            secondsElapsed = countdown ? examTimeLimit : 0;
+            updateTimerUI();
+            timerInterval = setInterval(() => {
+                if(countdown) {
+                    secondsElapsed--;
+                    if(secondsElapsed <= 0) {
+                        stopTimer();
+                        alert("Time's up! Submitting exam automatically.");
+                        finishQuiz();
+                    }
+                } else {
+                    secondsElapsed++;
+                }
+                updateTimerUI();
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            let s = Math.max(0, secondsElapsed);
+            const h = Math.floor(s / 3600);
+            const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
+            const sc = (s % 60).toString().padStart(2, '0');
+            
+            if (h > 0) {
+                document.getElementById('session-timer').innerHTML = `<i class="fa-regular fa-clock"></i> ${h}:${m}:${sc}`;
+            } else {
+                document.getElementById('session-timer').innerHTML = `<i class="fa-regular fa-clock"></i> ${m}:${sc}`;
+            }
+        }
+
+        function stopTimer() { clearInterval(timerInterval); }
+
+        function loadQuestion() {
+            selectedAnswerIndex = null; hasRevealed = false;
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-finish').style.display = 'none';
+            document.getElementById('explanation').style.display = 'none';
+            
+            const q = currentQuiz[currentQIndex];
+            document.getElementById('quiz-counter').textContent = `${currentQIndex + 1} / ${currentQuiz.length}`;
+            document.getElementById('quiz-topic').textContent = q.topic;
+            
+            const alertBox = document.getElementById('mindset-alert');
+            if(!isExamMode && q.q.match(isacaKeywords)) {
+                alertBox.style.display = 'flex';
+                const kw = q.q.match(isacaKeywords)[0];
+                alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>ISACA TRAP WORD: "<strong>${kw}</strong>"</span>`;
+            } else {
+                alertBox.style.display = 'none';
+            }
+
+            let formattedQ = q.q.replace(isacaKeywords, "<strong style='color:var(--warning)'>$&</strong>");
+            document.getElementById('q-text').innerHTML = formattedQ;
+            
+            const optsContainer = document.getElementById('options-container');
+            optsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                // Only show previously selected answer in Exam mode if going back
+                if (isExamMode && examAnswers[currentQIndex] === idx) {
+                    btn.classList.add('selected');
+                }
+                btn.innerHTML = `<span class="option-letter">${['A','B','C','D'][idx]}</span> <span>${opt}</span>`;
+                btn.onclick = () => handleOptionClick(idx, btn);
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        function handleOptionClick(idx, btn) {
+            haptic();
+            selectedAnswerIndex = idx;
+            
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            if(isExamMode) {
+                // Do not grade instantly. Save choice, show Next/Finish button.
+                examAnswers[currentQIndex] = idx;
+                if(currentQIndex < currentQuiz.length - 1) {
+                    document.getElementById('btn-next').style.display = 'flex';
+                } else {
+                    document.getElementById('btn-finish').style.display = 'flex';
+                }
+            } else {
+                // Practice Mode: Grade instantly and show explanation
+                buttons.forEach(b => b.disabled = true);
+                processPracticeAnswer(idx);
+            }
+        }
+
+        function processPracticeAnswer(idx) {
+            incrementStreak();
+            const q = currentQuiz[currentQIndex];
+            const isCorrect = (idx === q.a);
+            
+            trackAnswer(q.id, isCorrect);
+            
+            if(!state.stats[q.topic]) state.stats[q.topic] = {correct:0, total:0};
+            state.stats[q.topic].total += 1;
+
+            if(isCorrect) {
+                sessionScore++;
+                state.stats[q.topic].correct += 1;
+            } else {
+                state.errorLog.unshift({
+                    id: q.id, topic: q.topic, q: q.q, userAns: q.options[idx], corAns: q.options[q.a],
+                    exp: q.exp, date: new Date().toLocaleDateString()
+                });
+                if(state.errorLog.length > 50) state.errorLog.pop();
+            }
+            saveState();
+
+            const buttons = document.getElementById('options-container').querySelectorAll('.option-btn');
+            buttons.forEach((b, i) => {
+                if(i === q.a) b.classList.add('correct');
+                else if (i === idx && !isCorrect) b.classList.add('wrong');
+            });
+
+            const expBox = document.getElementById('explanation');
+            expBox.innerHTML = `${q.exp} <div class="dynamic-rule"><i class="fa-solid fa-lightbulb"></i> <div>${q.rule}</div></div>`;
+            expBox.style.display = 'block';
+
+            if(currentQIndex < currentQuiz.length - 1) document.getElementById('btn-next').style.display = 'flex';
+            else document.getElementById('btn-finish').style.display = 'flex';
+            
+            setTimeout(() => { document.getElementById('main-scroll').scrollTo({top: 1000, behavior: 'smooth'}); }, 100);
+        }
+
+        function nextQuestion() {
+            if (isExamMode && selectedAnswerIndex !== null) {
+                examAnswers[currentQIndex] = selectedAnswerIndex;
+            }
+            currentQIndex++;
+            loadQuestion();
+            document.getElementById('main-scroll').scrollTo(0,0);
+        }
+
+        function finishQuiz() {
+            stopTimer();
+            incrementStreak();
+            
+            if (isExamMode) {
+                if (selectedAnswerIndex !== null) {
+                    examAnswers[currentQIndex] = selectedAnswerIndex;
+                }
+
+                sessionScore = 0;
+                currentQuiz.forEach((q, i) => {
+                    const userAnsIdx = examAnswers[i];
+                    const isCorrect = (userAnsIdx === q.a);
+                    
+                    if(!state.stats[q.topic]) state.stats[q.topic] = {correct:0, total:0};
+                    state.stats[q.topic].total += 1;
+                    
+                    if (userAnsIdx !== undefined) {
+                        trackAnswer(q.id, isCorrect);
+                    }
+                    
+                    if (isCorrect) {
+                        state.stats[q.topic].correct += 1;
+                        sessionScore++;
+                    } else {
+                        state.errorLog.unshift({
+                            id: q.id, topic: q.topic, q: q.q, 
+                            userAns: userAnsIdx !== undefined ? q.options[userAnsIdx] : "Skipped", 
+                            corAns: q.options[q.a],
+                            exp: q.exp, date: new Date().toLocaleDateString()
+                        });
+                        if(state.errorLog.length > 100) state.errorLog.pop();
+                    }
+                });
+                
+                saveState();
+                renderDash();
+                const pct = Math.round((sessionScore / currentQuiz.length) * 100);
+                alert(`Exam Complete!\n\nScore: ${sessionScore} out of ${currentQuiz.length} (${pct}%)\n\nReview your mistakes in the Review tab.`);
+                switchView('dash');
+
+            } else {
+                // Practice Finish
+                renderDash();
+                const pct = Math.round((sessionScore / currentQuiz.length) * 100);
+                let timeStr = document.getElementById('session-timer').innerText;
+                alert(`Practice Session Complete!\n\nScore: ${pct}% (${sessionScore}/${currentQuiz.length})\nTime: ${timeStr}`);
+                switchView('dash');
+            }
+        }
+
+        // ================= ERROR LOG (REVIEW TAB) =================
+        function renderErrorLog() {
+            const list = document.getElementById('error-list');
+            if(!list) return;
+            list.innerHTML = '';
+            
+            if(state.lostIds.length === 0) {
+                list.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding: 20px;">You haven't lost any questions yet! Good job!</p>`;
+                return;
+            }
+
+            // Retrieve full question data for lost IDs
+            const lostQs = quizDB.filter(q => state.lostIds.includes(q.id));
+
+            lostQs.forEach(q => {
+                list.innerHTML += `
+                    <div class="error-card">
+                        <div class="error-header">
+                            <span style="color:var(--danger); font-weight:700; font-size:0.85rem;">Q #${q.id} | ${q.topic}</span>
+                        </div>
+                        <div class="err-q">${q.q.replace(isacaKeywords, "<strong>$&</strong>")}</div>
+                        <div class="err-cor"><i class="fa-solid fa-check" style="width:15px"></i> Correct: ${q.options[q.a]}</div>
+                        <div style="font-size:0.9rem; color:var(--text-muted); margin-top:10px; padding-top:10px; border-top:1px solid rgba(244,63,94,0.3); line-height: 1.5;">
+                            ${q.exp}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Start
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
