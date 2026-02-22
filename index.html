@@ -253,6 +253,13 @@
         .explanation-box strong { color: white; display: block; margin-bottom: 8px; font-size: 1.05rem;}
         .dynamic-rule { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px; border-radius: 10px; margin-top: 15px; font-size: 0.85rem; color: var(--warning); display: flex; gap: 10px; align-items: flex-start; line-height: 1.5; font-weight: 500;}
 
+        /* Analogy Box & Rich Explanations */
+        .err-detailed-exp { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin-top: 12px; border-left: 4px solid var(--primary); }
+        .err-detailed-exp p { margin: 0 0 12px 0; font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
+        
+        .analogy-box { background: rgba(245, 158, 11, 0.1); padding: 12px; border-radius: 10px; border: 1px dashed rgba(245, 158, 11, 0.3); display: flex; gap: 10px; align-items: flex-start; color: var(--text-main); font-size: 0.9rem; line-height: 1.5; margin-top: 12px; }
+        .analogy-box i { margin-top: 3px; font-size: 1.1rem; color: var(--warning); }
+
         /* --- Modals (Full Screen Overlay) --- */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -278,16 +285,18 @@
         .doc-title { font-size: 1.3rem; font-weight: 800; color: white; line-height: 1.3; }
         
         .doc-content { font-size: 0.95rem; color: #cbd5e1; line-height: 1.7; }
-        .doc-content h4 { color: white; font-size: 1.1rem; margin: 20px 0 10px 0; }
+        .doc-content h4 { color: white; font-size: 1.1rem; margin: 25px 0 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
         .doc-content ul { padding-left: 20px; margin-bottom: 20px; }
-        .doc-content li { margin-bottom: 10px; }
-        .doc-content strong { color: var(--secondary); }
+        .doc-content li { margin-bottom: 12px; }
+        .doc-content strong { color: var(--secondary); font-weight: 700; }
+        .doc-content p { margin-bottom: 15px; }
         
         .isaca-trap {
-            background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.4);
-            padding: 15px; border-radius: 12px; margin: 20px 0; color: var(--text-main);
+            background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.4);
+            padding: 15px; border-radius: 12px; margin: 25px 0; color: var(--text-main);
+            border-left: 4px solid var(--danger);
         }
-        .isaca-trap strong { display: block; color: var(--warning); margin-bottom: 8px; font-size: 1rem; }
+        .isaca-trap strong { display: flex; align-items: center; gap: 8px; color: #fca5a5; margin-bottom: 8px; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;}
 
         /* --- Review Tab Rules Scroll --- */
         .rules-scroller {
@@ -333,20 +342,20 @@
         
         /* Confetti */
         .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            z-index: 9999;
-            pointer-events: none;
-            animation: fall linear forwards;
+            position: fixed; width: 10px; height: 10px; top: -10px; z-index: 9999;
+            pointer-events: none; animation: fall linear forwards;
         }
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
     </style>
 </head>
 <body>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+      <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#3b82f6" />
+        <stop offset="100%" stop-color="#6366f1" />
+      </linearGradient>
+    </svg>
 
     <!-- Fixed Header -->
     <header>
@@ -401,25 +410,25 @@
 
             <!-- Deep Lessons (ISACA Masterclass) -->
             <h2 class="section-title"><i class="fa-solid fa-graduation-cap"></i> Deep Lessons (D1)</h2>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Tap any card to read the detailed ISACA conceptual document.</p>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Aligned exactly with ISACA CRM 28th Edition. Tap to read.</p>
             
             <div class="lessons-scroller">
                 
                 <div class="lesson-card" onclick="openLessonModal('charter')">
                     <div class="tap-to-read">Tap to read</div>
                     <i class="fa-solid fa-file-contract watermark"></i>
-                    <h4>1. The Audit Charter</h4>
+                    <h4>1. Audit Standards & Ethics</h4>
                     <ul>
-                        <li>Establishes role & authority.</li>
+                        <li>ITAF & Standards vs Guidelines.</li>
                         <li>Approved by <strong>Board of Directors</strong>.</li>
-                        <li>It is a <strong>static document</strong>.</li>
+                        <li>Code of Professional Ethics.</li>
                     </ul>
                 </div>
 
                 <div class="lesson-card" onclick="openLessonModal('risk')">
                     <div class="tap-to-read">Tap to read</div>
                     <i class="fa-solid fa-chart-line watermark"></i>
-                    <h4>2. Risk-Based Auditing</h4>
+                    <h4>2. Risk-Based Planning</h4>
                     <ul>
                         <li><strong>Inherent Risk:</strong> Raw risk.</li>
                         <li><strong>Detection Risk:</strong> Auditor misses error.</li>
@@ -430,18 +439,18 @@
                 <div class="lesson-card" onclick="openLessonModal('controls')">
                     <div class="tap-to-read">Tap to read</div>
                     <i class="fa-solid fa-shield-halved watermark"></i>
-                    <h4>3. Internal Controls</h4>
+                    <h4>3. Internal Controls & CSA</h4>
                     <ul>
                         <li><strong>Preventive:</strong> Stops error (SoD).</li>
                         <li><strong>Detective:</strong> Finds error (Logs).</li>
-                        <li><strong>Compensating:</strong> Offsets weak control.</li>
+                        <li><strong>CSA:</strong> Management owns risk.</li>
                     </ul>
                 </div>
 
                 <div class="lesson-card" onclick="openLessonModal('evidence')">
                     <div class="tap-to-read">Tap to read</div>
                     <i class="fa-solid fa-magnifying-glass watermark"></i>
-                    <h4>4. Audit Evidence</h4>
+                    <h4>4. Audit Execution & Evidence</h4>
                     <ul>
                         <li>Sufficient (Qty) & <strong>Appropriate</strong> (Qly).</li>
                         <li>Best: <strong>Auditor observation</strong>.</li>
@@ -452,11 +461,33 @@
                 <div class="lesson-card" onclick="openLessonModal('sampling')">
                     <div class="tap-to-read">Tap to read</div>
                     <i class="fa-solid fa-percent watermark"></i>
-                    <h4>5. Sampling Strategies</h4>
+                    <h4>5. Sampling Methodologies</h4>
                     <ul>
                         <li><strong>Attribute:</strong> Compliance (Yes/No).</li>
                         <li><strong>Variable:</strong> Substantive (Value/$).</li>
-                        <li><strong>Discovery:</strong> Fraud hunting (0 errors).</li>
+                        <li><strong>Discovery:</strong> Fraud hunting.</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-card" onclick="openLessonModal('caats')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-laptop-code watermark"></i>
+                    <h4>6. Data Analytics & CAATs</h4>
+                    <ul>
+                        <li><strong>GAS:</strong> Independent querying.</li>
+                        <li><strong>ITF:</strong> Dummy entities in live DB.</li>
+                        <li>Continuous Auditing vs Monitoring.</li>
+                    </ul>
+                </div>
+
+                <div class="lesson-card" onclick="openLessonModal('reporting')">
+                    <div class="tap-to-read">Tap to read</div>
+                    <i class="fa-solid fa-bullhorn watermark"></i>
+                    <h4>7. Reporting & Follow-Up</h4>
+                    <ul>
+                        <li><strong>Exit Interview:</strong> Confirm facts.</li>
+                        <li><strong>Reporting:</strong> Executive summary first.</li>
+                        <li><strong>Follow-Up:</strong> Verify remediation.</li>
                     </ul>
                 </div>
 
@@ -504,7 +535,7 @@
 
                 <div class="mode-btn" onclick="startQuiz('exam')" style="border-color: rgba(244, 63, 94, 0.4);">
                     <div class="mode-title" style="color: var(--danger);"><i class="fa-solid fa-stopwatch"></i> Hardcore Exam Mode</div>
-                    <div class="mode-desc">All 100 questions. 1h 30m timer. No explanations. Grades everything at the end.</div>
+                    <div class="mode-desc">All 100 questions. Strict 1h 30m timer. No feedback. Grades everything at the end.</div>
                 </div>
             </div>
 
@@ -528,7 +559,7 @@
                     <!-- Options container -->
                     <div id="options-container"></div>
                     
-                    <div class="explanation-box" id="explanation"></div>
+                    <div id="explanation-container"></div> <!-- Dynamic container for exp + analogy -->
                     
                     <button class="btn-main" id="btn-next" onclick="nextQuestion()" style="display: none; margin-top: 20px;">Next Question <i class="fa-solid fa-arrow-right"></i></button>
                     <button class="btn-main success" id="btn-finish" onclick="finishQuiz()" style="display: none; margin-top: 20px;"><i class="fa-solid fa-flag-checkered"></i> Finish Session</button>
@@ -548,8 +579,8 @@
                 <div class="rule-card"><h3><i class="fa-solid fa-gavel"></i> 5. Board Approves Charter</h3><p>The Audit Charter is static and approved by highest level (Board/Audit Comm).</p></div>
             </div>
 
-            <h2 class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-book-skull"></i> Questions I Lost</h2>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:20px;">These are the questions you got wrong. Study the explanations. Re-test them in the 'Quick Grid' or 'Adaptive Mode' to move them to Mastered.</p>
+            <h2 class="section-title" style="margin-top: 30px;"><i class="fa-solid fa-book-skull"></i> Mistake Journal</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:20px;">These are the questions you got wrong. Study the explanations and the analogies to permanently fix your blind spots.</p>
             
             <div id="error-list">
                 <!-- Injected via JS -->
@@ -571,7 +602,7 @@
             <!-- User MUST select an option to see the answer -->
             <div id="qm-options-container" style="margin-bottom: 25px;"></div>
             
-            <div class="explanation-box" id="qm-exp" style="display:none; border-radius: var(--radius-md); border-left: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: white; margin-top: 0; margin-bottom: 20px;">Explanation here</div>
+            <div class="explanation-box" id="qm-exp" style="display:none; border-radius: var(--radius-md); border-left: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: white; margin-top: 0; margin-bottom: 20px;"></div>
             
             <button class="btn-main" id="qm-done-btn" onclick="closeQuickModal()" style="margin-top: 15px; background: var(--success); display: none;">
                 <i class="fa-solid fa-arrow-right"></i> Continue
@@ -678,116 +709,182 @@
             }
         }
 
-        // ================= LESSONS DATA (BASED ON ISACA PDF) =================
+        // ================= LESSONS DATA (BASED ON ISACA CRM 28th EDITION) =================
         const lessonsDB = {
             'charter': {
-                title: "The IS Audit Charter",
+                title: "1. Audit Standards & Ethics",
                 icon: '<i class="fa-solid fa-file-contract"></i>',
                 content: `
-                    <p>The IS Audit Charter is the most important governance document for an auditor. It establishes the role, authority, and accountability of the IS audit function within the enterprise.</p>
+                    <p>The IS audit function must be governed by rigorous standards to ensure quality, independence, and objectiveness as defined in the ISACA IT Assurance Framework (ITAF).</p>
                     
-                    <h4>Key Concepts:</h4>
+                    <h4>ITAF (IT Assurance Framework)</h4>
                     <ul>
-                        <li><strong>Approval:</strong> It must be approved by the highest level of management (The Board of Directors or the Audit Committee).</li>
-                        <li><strong>Authority:</strong> It explicitly grants the auditor the right of access to systems, data, and personnel to conduct the audit.</li>
-                        <li><strong>Nature:</strong> It is a <strong>static</strong> document. It does not change yearly. It only changes if the fundamental purpose of the audit function changes.</li>
+                        <li><strong>Standards:</strong> These are <em>mandatory</em> requirements. Auditors must comply with them.</li>
+                        <li><strong>Guidelines:</strong> These provide guidance on how to apply the standards. They are <em>recommended</em> but not mandatory.</li>
+                        <li><strong>Tools and Techniques:</strong> These provide examples of processes and tools to assist the auditor.</li>
+                    </ul>
+
+                    <h4>The IS Audit Charter</h4>
+                    <p>The Audit Charter is the overarching document that establishes the role, authority, and accountability of the IS audit function.</p>
+                    <ul>
+                        <li><strong>Approval:</strong> It MUST be approved by the highest level of governance (<strong>Board of Directors</strong> or Audit Committee).</li>
+                        <li><strong>Authority:</strong> It grants the auditor explicit rights of access to systems, data, and personnel.</li>
+                        <li><strong>Static Nature:</strong> It is a <em>static</em> document. It does not change yearly.</li>
                     </ul>
 
                     <div class="isaca-trap">
-                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
-                        The charter does <b>NOT</b> contain the annual audit schedule, budget, project plans, or specific audit methodologies. If an exam question asks where the audit schedule is, the answer is the "Annual Audit Plan," not the Charter.
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP: "The Schedule"</strong>
+                        The charter does <b>NOT</b> contain the annual audit schedule, budget, project plans, or specific audit methodologies. That belongs in the <em>Annual Audit Plan</em>.
                     </div>
 
-                    <h4>Independence & Objectivity</h4>
-                    <p>Auditors must be independent in both <em>fact</em> and <em>appearance</em>. They cannot audit their own work, and they should report directly to the Audit Committee, not to the IT Director or CFO.</p>
+                    <h4>Code of Professional Ethics</h4>
+                    <p>Auditors must be independent in <em>fact</em> (mindset) and <em>appearance</em> (how others view them). They must also engage in <strong>Continuing Professional Education (CPE)</strong> to maintain competency.</p>
                 `
             },
             'risk': {
-                title: "Risk-Based Auditing",
+                title: "2. Risk-Based Planning",
                 icon: '<i class="fa-solid fa-chart-line"></i>',
                 content: `
-                    <p>ISACA expects you to always align IT with the Business. Therefore, a risk-based audit approach is used to assess risk and help an IS auditor decide which areas to audit first.</p>
+                    <p>Auditors cannot test everything. A risk-based audit approach is used to allocate audit resources to the areas of highest risk.</p>
 
-                    <h4>The Golden Rule of Planning:</h4>
-                    <p>The very <strong>FIRST</strong> step in any audit planning or risk assessment is to <strong>understand the business mission and objectives</strong>. You cannot protect an asset until you know its value to the business.</p>
+                    <h4>The Golden Rule of Planning</h4>
+                    <p>The very <strong>FIRST</strong> step in any audit planning or risk assessment is to <strong>understand the business mission and objectives</strong>. IT only exists to support the business.</p>
 
-                    <h4>Types of Risk:</h4>
+                    <h4>The Risk Model</h4>
                     <ul>
-                        <li><strong>Inherent Risk:</strong> The raw risk level of a process assuming there are NO internal controls in place.</li>
-                        <li><strong>Control Risk:</strong> The risk that a material error exists and the internal controls fail to prevent or detect it.</li>
-                        <li><strong>Detection Risk:</strong> The risk that the IS auditor's tests fail to find a material error. <em>(This is the ONLY risk the auditor can directly control by doing more testing).</em></li>
-                        <li><strong>Audit Risk:</strong> The overall risk that the auditor reaches an incorrect conclusion. (Inherent × Control × Detection).</li>
+                        <li><strong>Inherent Risk:</strong> The raw risk level of a process assuming NO internal controls exist.</li>
+                        <li><strong>Control Risk:</strong> The risk that a material error exists and the organization's internal controls <em>fail</em> to prevent or detect it.</li>
+                        <li><strong>Detection Risk:</strong> The risk that the <em>IS auditor's testing</em> fails to find a material error. This is the ONLY risk the auditor can directly control (by increasing sample sizes).</li>
+                        <li><strong>Audit Risk:</strong> The risk of reaching an incorrect conclusion. (Audit Risk = Inherent × Control × Detection).</li>
+                    </ul>
+
+                    <h4>Risk Responses</h4>
+                    <ul>
+                        <li><strong>Mitigate:</strong> Implementing controls to reduce risk.</li>
+                        <li><strong>Transfer:</strong> Buying insurance or outsourcing (shifts financial burden).</li>
+                        <li><strong>Avoid:</strong> Stopping the risky activity entirely.</li>
+                        <li><strong>Accept:</strong> Doing nothing, usually because control costs exceed asset value.</li>
                     </ul>
 
                     <div class="isaca-trap">
-                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
-                        If a control costs more to implement than the value of the asset it protects, management should <strong>Accept the risk</strong>. The auditor does not force management to fix it.
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP: "Accepting Risk"</strong>
+                        Auditors do NOT accept risk. Only <strong>Management</strong> can accept risk. The auditor identifies and reports the risk.
                     </div>
                 `
             },
             'controls': {
-                title: "Internal Controls & CSA",
+                title: "3. Internal Controls & CSA",
                 icon: '<i class="fa-solid fa-shield-halved"></i>',
                 content: `
-                    <p>Internal controls are the mechanisms, rules, and procedures implemented by a company to ensure the integrity of financial and accounting information, promote accountability, and prevent fraud.</p>
+                    <p>Internal controls mitigate risk, promote accountability, and prevent fraud.</p>
 
-                    <h4>Control Classifications:</h4>
+                    <h4>Control Classifications</h4>
                     <ul>
-                        <li><strong>Preventive:</strong> Stops the error or fraud before it occurs. (e.g., Segregation of Duties, Firewalls, Mantraps, Data Validation Edits).</li>
-                        <li><strong>Detective:</strong> Identifies the error after it has occurred. (e.g., Log reviews, Intrusion Detection Systems (IDS), Audits, CCTV).</li>
-                        <li><strong>Corrective:</strong> Fixes the damage after the error is detected. (e.g., Backups, Disaster Recovery Plans (DRP), Patching).</li>
-                        <li><strong>Compensating:</strong> An alternative control used when a primary control is too expensive or impossible to implement.</li>
+                        <li><strong>Preventive:</strong> Stops the error or fraud <em>before</em> it occurs. (e.g., Segregation of Duties, Firewalls, Mantraps). <em>ISACA considers these the strongest type of control.</em></li>
+                        <li><strong>Detective:</strong> Identifies the error <em>after</em> it has occurred. (e.g., Log reviews, Intrusion Detection Systems (IDS), Audits, CCTV).</li>
+                        <li><strong>Corrective:</strong> Fixes the damage after the error is detected. (e.g., Backups, Disaster Recovery Plans, Patching).</li>
+                        <li><strong>Compensating:</strong> An alternative control used when a primary control is unfeasible or too expensive to implement.</li>
+                        <li><strong>Directive:</strong> Administrative controls (e.g., Policies, Guidelines) that direct behavior.</li>
                     </ul>
 
                     <div class="isaca-trap">
-                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
-                        ISACA highly prefers <strong>Preventive</strong> controls over Detective controls. It is always better to stop an error than to find it later.
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP: "Preventive > Detective"</strong>
+                        If a question asks for the "BEST" way to secure a system, look for a <strong>Preventive</strong> control. It is always better to lock the door than to review the security tape after the robbery.
                     </div>
 
                     <h4>Control Self-Assessment (CSA)</h4>
-                    <p>A methodology where management and staff evaluate the effectiveness of their own internal controls. The auditor's role in a CSA is strictly as a <strong>facilitator</strong>. Management owns the risk.</p>
+                    <p>A methodology where management and staff evaluate the effectiveness of their own internal controls. It shifts ownership and awareness of risk to the line managers.</p>
+                    <p>The auditor's role in a CSA is strictly as a <strong>facilitator</strong>. Management owns the risk and the assessment.</p>
                 `
             },
             'evidence': {
-                title: "Audit Evidence & Reliability",
+                title: "4. Audit Execution & Evidence",
                 icon: '<i class="fa-solid fa-magnifying-glass"></i>',
                 content: `
-                    <p>Audit evidence is the information used by the auditor to arrive at the conclusions on which the audit opinion is based. Evidence must be both <strong>Sufficient</strong> (enough of it) and <strong>Appropriate</strong> (reliable and relevant).</p>
+                    <p>Audit evidence is the information used by the auditor to arrive at the conclusions on which the audit opinion is based.</p>
 
-                    <h4>Hierarchy of Evidence Reliability (Best to Worst):</h4>
+                    <h4>Characteristics of Evidence</h4>
+                    <ul>
+                        <li><strong>Sufficient:</strong> Refers to the <em>quantity</em> of evidence (Did you test enough samples?).</li>
+                        <li><strong>Appropriate:</strong> Refers to the <em>quality</em> and <em>reliability</em> of the evidence (Is it relevant and objective?).</li>
+                    </ul>
+
+                    <h4>Hierarchy of Evidence Reliability (Best to Worst)</h4>
                     <ol>
-                        <li><strong>Auditor's direct physical observation:</strong> (e.g., Auditor goes to the server room and checks the door lock themselves).</li>
-                        <li><strong>Independent Third-Party Confirmation:</strong> (e.g., A letter from a bank confirming a balance).</li>
-                        <li><strong>Internal system-generated reports:</strong> (Assuming IT general controls are strong).</li>
-                        <li><strong>Internal manual documents:</strong> (Invoices, signed papers).</li>
-                        <li><strong>Oral statements / Interviews:</strong> (The absolute weakest form of evidence. Never base a finding solely on what someone said).</li>
+                        <li><strong>Auditor's direct observation:</strong> The auditor physically verifies it themselves.</li>
+                        <li><strong>Independent Third-Party Confirmation:</strong> Evidence received directly from an external source (e.g., Bank confirmation).</li>
+                        <li><strong>Internal system-generated reports:</strong> Reliable if IT General Controls (ITGCs) are strong.</li>
+                        <li><strong>Internal manual documents:</strong> Invoices, signed papers (susceptible to forgery).</li>
+                        <li><strong>Oral statements / Interviews:</strong> The absolute weakest form of evidence.</li>
                     </ol>
 
                     <div class="isaca-trap">
-                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP:</strong>
-                        When given a scenario where an IT Manager promises that a system is patched, the auditor must <strong>independently verify</strong> the patch status. Trust, but verify.
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP: "Trust, but Verify"</strong>
+                        If an IT Manager promises that a system is patched or a policy is enforced, the auditor must <strong>independently verify</strong> the claim using technical tests or observation. Interviews are never enough.
                     </div>
                 `
             },
             'sampling': {
-                title: "Sampling & Testing Tools",
+                title: "5. Sampling Methodologies",
                 icon: '<i class="fa-solid fa-percent"></i>',
                 content: `
-                    <p>Because auditors cannot test 100% of transactions, they use statistical sampling to draw conclusions about a population.</p>
+                    <p>Auditors use statistical sampling to draw mathematically sound conclusions about an entire population.</p>
 
-                    <h4>Types of Sampling:</h4>
+                    <h4>Types of Sampling</h4>
                     <ul>
-                        <li><strong>Attribute Sampling:</strong> Used for <em>Compliance Testing</em>. It deals with binary Yes/No questions. (e.g., Is the manager's signature on the invoice? Yes or No).</li>
-                        <li><strong>Variable Sampling:</strong> Used for <em>Substantive Testing</em>. It deals with numeric values, weights, or money. (e.g., Estimating the total dollar amount of payroll errors).</li>
+                        <li><strong>Attribute Sampling:</strong> Used for <em>Compliance Testing</em>. Deals with binary, Yes/No questions. (e.g., Is the manager's signature present? Yes or No).</li>
+                        <li><strong>Variable Sampling:</strong> Used for <em>Substantive Testing</em>. Deals with numeric values, weights, or money. (e.g., Estimating the total dollar amount of payroll errors).</li>
                         <li><strong>Discovery Sampling:</strong> Used when the expected error rate is 0%. If even <em>one</em> error is found, testing stops. Primarily used to hunt for <strong>Fraud</strong>.</li>
-                        <li><strong>Stop-and-Go Sampling:</strong> Used to minimize sample size when very few errors are expected.</li>
+                        <li><strong>Stop-and-Go Sampling:</strong> Used to minimize sample size when very few errors are expected. Tests a small batch, and stops early if no errors are found.</li>
                     </ul>
 
-                    <h4>Computer-Assisted Audit Techniques (CAATs):</h4>
+                    <h4>Sampling Risks & Metrics</h4>
                     <ul>
-                        <li><strong>Generalized Audit Software (GAS):</strong> Allows auditors to query databases independently without relying on IT staff.</li>
-                        <li><strong>Integrated Test Facility (ITF):</strong> Creating a "dummy" entity in the live production system to run test transactions alongside real data. (Crucial: Dummy data must be removed!).</li>
+                        <li><strong>Sampling Risk:</strong> The risk that the sample does not accurately represent the population. (A 95% Confidence Level means a 5% Sampling Risk).</li>
+                        <li><strong>Tolerable Error Rate:</strong> The maximum error rate in the population that the auditor is willing to accept before determining the control is completely ineffective.</li>
                     </ul>
+                    <p><em>To decrease sampling risk (and increase confidence), the auditor must <strong>increase the sample size</strong>.</em></p>
+                `
+            },
+            'caats': {
+                title: "6. Data Analytics & CAATs",
+                icon: '<i class="fa-solid fa-laptop-code"></i>',
+                content: `
+                    <p>Computer-Assisted Audit Techniques (CAATs) enable auditors to gather evidence independently and test massive amounts of data.</p>
+
+                    <h4>Key CAATs Tools</h4>
+                    <ul>
+                        <li><strong>Generalized Audit Software (GAS):</strong> Allows auditors to write scripts to query databases independently, analyzing 100% of the data rather than a small sample. It preserves <strong>auditor independence</strong> because they don't rely on IT staff to pull reports.</li>
+                        <li><strong>Integrated Test Facility (ITF):</strong> Creating a "dummy" entity in the live production system to run test transactions alongside real data. <em>Crucial rule: Dummy test data must be removed to avoid corrupting the real financials!</em></li>
+                        <li><strong>Parallel Simulation:</strong> The auditor takes the client's live data and processes it through the <em>auditor's own software</em> to see if the output matches the client's system output.</li>
+                    </ul>
+
+                    <h4>Continuous Auditing vs. Monitoring</h4>
+                    <ul>
+                        <li><strong>Continuous Monitoring:</strong> Performed by <em>Management</em> to ensure processes are working efficiently on a daily basis.</li>
+                        <li><strong>Continuous Auditing:</strong> Performed by <em>IS Auditors</em> using automated tools to gather evidence and detect anomalies in real-time.</li>
+                    </ul>
+                `
+            },
+            'reporting': {
+                title: "7. Reporting & Follow-Up",
+                icon: '<i class="fa-solid fa-bullhorn"></i>',
+                content: `
+                    <p>The final phase of the audit process involves communicating results to management and ensuring remediation occurs.</p>
+
+                    <h4>The Exit Interview</h4>
+                    <p>Before the final report is published, the auditor conducts an exit interview with management. The primary purpose is to <strong>ensure the factual accuracy</strong> of the findings and guarantee there are no surprises in the final report.</p>
+
+                    <div class="isaca-trap">
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i> ISACA TRAP: "Management Disagreements"</strong>
+                        If management disagrees with a valid finding, the auditor does NOT remove it. The finding stays, and management's disagreement is formally noted in their response section.
+                    </div>
+
+                    <h4>Audit Reporting</h4>
+                    <p>Audit reports should be structured for <strong>Senior Management</strong>. The Executive Summary is the most important part, highlighting material business impacts rather than deep technical jargon.</p>
+
+                    <h4>Follow-up Procedures</h4>
+                    <p>An audit is not truly complete until a follow-up is conducted. The auditor's primary responsibility during follow-up is to verify that management has <strong>implemented the agreed-upon corrective actions</strong> based on the timelines provided in their management response.</p>
                 `
             }
         };
@@ -797,19 +894,26 @@
             const data = lessonsDB[lessonKey];
             if(!data) return;
 
-            document.getElementById('lm-icon').innerHTML = data.icon;
-            document.getElementById('lm-title').textContent = data.title;
-            document.getElementById('lm-content').innerHTML = data.content;
+            const iconEl = document.getElementById('lm-icon');
+            if (iconEl) iconEl.innerHTML = data.icon;
+            
+            const titleEl = document.getElementById('lm-title');
+            if (titleEl) titleEl.textContent = data.title;
+            
+            const contentEl = document.getElementById('lm-content');
+            if (contentEl) contentEl.innerHTML = data.content;
 
-            document.getElementById('lessonModalOverlay').classList.add('active');
+            const modalOverlay = document.getElementById('lessonModalOverlay');
+            if (modalOverlay) modalOverlay.classList.add('active');
         }
 
         function closeLessonModal(e) {
-            if (!e || e.target === document.getElementById('lessonModalOverlay')) {
-                document.getElementById('lessonModalOverlay').classList.remove('active');
+            const modalOverlay = document.getElementById('lessonModalOverlay');
+            if (!modalOverlay) return;
+            if (!e || e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
             }
         }
-
 
         // ================= CISA 100 QUESTIONS DATA =================
         const isacaKeywords = /\b(FIRST|BEST|MOST|PRIMARY|GREATEST|ULTIMATELY|LEAST|MAIN)\b/g;
@@ -822,114 +926,121 @@
             "Reporting & Follow-up"
         ];
 
+        // 100 Master Questions strictly focused on Domain 1 (28th Edition)
         const quizDB = [
-            // Original 50 Core Domain 1 Concepts
-            { id: 1, topic: "Audit Charter & Mgmt", q: "A long-term IT employee with a strong technical background has applied for a position in the IS audit department. Hiring should be primarily based on the individual’s experience and:", options: ["Length of service.", "Age and capacity to learn.", "IT knowledge for credibility.", "Ability to be independent of existing IT relationships."], a: 3, exp: "<strong>D is correct.</strong> Independence is fundamental. An auditor cannot effectively audit a department they were recently part of.", rule: "Rule: Independence must be maintained in fact and appearance." },
-            { id: 2, topic: "Audit Evidence & Sampling", q: "An enterprise recently upgraded its purchase system to incorporate EDI. Which of the following controls should be implemented in the EDI interface to provide for efficient data mapping?", options: ["Key verification", "One-for-one checking", "Manual recalculations", "Functional acknowledgments"], a: 3, exp: "<strong>D is correct.</strong> Functional acknowledgments act as an electronic audit trail, ensuring data was received and mapped correctly.", rule: "EDI requires functional acknowledgments as proof of receipt." },
-            { id: 3, topic: "Internal Controls & CSA", q: "An IS auditor notes that failed login attempts to a core financial system are automatically logged and retained for a year. This logging is:", options: ["An effective preventive control.", "A valid detective control.", "Not an adequate control.", "A corrective control."], a: 1, exp: "<strong>B is correct.</strong> Logging records events *after* they occur, making it a Detective control.", rule: "Preventive = Blocks. Detective = Alerts/Logs. Corrective = Fixes/Restores." },
-            { id: 4, topic: "Internal Controls & CSA", q: "A PRIMARY benefit derived for an organization employing control self-assessment (CSA) techniques is that it:", options: ["Can identify high-risk areas that might need a detailed review later.", "Allows IS auditors to independently assess risk.", "Can be used as a replacement for traditional audits.", "Allows management to relinquish responsibility for control."], a: 0, exp: "<strong>A is correct.</strong> CSA shifts primary review tasks to line management, identifying high-risk areas quickly.", rule: "In CSA, the auditor is a facilitator. Management owns the controls." },
-            { id: 5, topic: "Audit Evidence & Sampling", q: "Which of the following forms of evidence would an IS auditor consider the MOST reliable?", options: ["An oral statement from the auditee", "The results of a test that is performed by an external IS auditor", "An internally generated computer accounting report", "A confirmation letter that is received from an outside source"], a: 1, exp: "<strong>B is correct.</strong> Direct observation and tests performed independently by the auditor are the most reliable.", rule: "Evidence Hierarchy: Auditor generated > External > Internal > Oral." },
-            { id: 6, topic: "Reporting & Follow-up", q: "When preparing an audit report, the IS auditor should ensure that the results are supported by:", options: ["Statements from IS management", "Work papers of other auditors", "An organizational control self-assessment", "Sufficient and appropriate audit evidence"], a: 3, exp: "<strong>D is correct.</strong> Every finding MUST be backed by sufficient and appropriate evidence gathered during fieldwork.", rule: "Opinions require evidence." },
-            { id: 7, topic: "Risk Assessment", q: "Which of the following is the MAIN reason to perform a risk assessment in the planning phase of an IS audit?", options: ["To ensure management’s concerns are addressed", "To provide reasonable assurance material items will be addressed", "To ensure the audit team will perform audits within budget", "To develop audit program and procedures needed to perform the audit"], a: 1, exp: "<strong>B is correct.</strong> Risk assessments tell the auditor where the biggest threats are, focusing the audit on material items.", rule: "Risk-based auditing focuses limited resources on high-risk areas." },
-            { id: 8, topic: "Audit Charter & Mgmt", q: "What is the PRIMARY purpose of an audit charter?", options: ["State the objectives and scope of a specific audit.", "Outline the technical audit methodology.", "Document the IS audit function's authority, scope, and responsibility.", "Define the timeline and budget for the audit department."], a: 2, exp: "<strong>C is correct.</strong> An audit charter is the foundational document that grants the auditor authority and independence.", rule: "Charter = Authority, Scope, Responsibility. Approved by the Board." },
-            { id: 9, topic: "Audit Evidence & Sampling", q: "Which testing method involves an auditor checking a sample of items to verify that a specific control is operating as designed?", options: ["Substantive testing", "Compliance testing", "Analytical procedures", "Stop-and-go testing"], a: 1, exp: "<strong>B is correct.</strong> Compliance testing checks if a control is present and working (Attribute). Substantive testing checks data integrity (Variable).", rule: "Compliance = Control works? Substantive = Data accurate?" },
-            { id: 10, topic: "Risk Assessment", q: "During a risk-based audit planning process, what should be the IS auditor's FIRST step?", options: ["Identify the control procedures currently in place.", "Determine the vulnerabilities associated with the IT infrastructure.", "Gain an understanding of the organization's business mission and objectives.", "Evaluate the results of the previous audit."], a: 2, exp: "<strong>C is correct.</strong> You cannot identify what is at risk until you understand what the business is trying to achieve.", rule: "Business objectives ALWAYS come before IT infrastructure/controls." },
-            { id: 11, topic: "Internal Controls & CSA", q: "A control designed to minimize the impact of an event after it has already occurred is called a:", options: ["Preventive control", "Detective control", "Corrective control", "Directive control"], a: 2, exp: "<strong>C is correct.</strong> Corrective controls act after detection to restore the system (e.g., backups).", rule: "Backups and DRPs are Corrective controls." },
-            { id: 12, topic: "Audit Evidence & Sampling", q: "What is the PRIMARY benefit of implementing continuous auditing?", options: ["It eliminates the need for external auditors.", "It allows for real-time or near real-time identification of anomalies.", "It reduces the overall cost of the IT infrastructure.", "It automatically corrects errors in financial transactions."], a: 1, exp: "<strong>B is correct.</strong> Continuous auditing uses automated tools to constantly monitor systems for anomalies.", rule: "Continuous Auditing (CA) is real-time anomaly detection by auditors." },
-            { id: 13, topic: "Risk Assessment", q: "In the context of IS auditing, what does 'inherent risk' mean?", options: ["The risk that an auditor will fail to detect a material error.", "The risk that a control will fail to prevent a material error.", "The susceptibility of an asset to a material error assuming there are no related controls.", "The risk that management will ignore the audit findings."], a: 2, exp: "<strong>C is correct.</strong> Inherent risk is the raw, natural level of risk before any security controls are applied.", rule: "Inherent (Raw) -> Controls applied -> Residual (Remaining) Risk." },
-            { id: 14, topic: "Reporting & Follow-up", q: "Which of the following is the BEST indicator of the effectiveness of an IS audit function?", options: ["The number of high-risk findings reported.", "The percentage of audit recommendations implemented by management.", "Completion of the annual audit plan within budget.", "The frequency of audit reports issued."], a: 1, exp: "<strong>B is correct.</strong> Audits only add value if recommendations are implemented to fix vulnerabilities.", rule: "Value is realized through management action (remediation)." },
-            { id: 15, topic: "Audit Evidence & Sampling", q: "An IS auditor uses statistical sampling to test a population of purchase orders. If the auditor wants to decrease the margin of error, they should:", options: ["Decrease the sample size.", "Increase the sample size.", "Use non-statistical sampling instead.", "Increase the tolerable error rate."], a: 1, exp: "<strong>B is correct.</strong> A larger sample size provides a more accurate representation, reducing the margin of error.", rule: "Higher confidence/lower error margin requires a larger sample." },
-            { id: 16, topic: "Risk Assessment", q: "Management has decided to accept a known risk because the cost of the control exceeds the value of the asset. What should the IS auditor do?", options: ["Report the issue to the external regulatory body.", "Force management to implement the control.", "Document management's decision and verify it aligns with risk tolerance.", "Implement the control on behalf of management."], a: 2, exp: "<strong>C is correct.</strong> Auditors do not force fixes. If management accepts a risk aligning with policy, the auditor simply documents it.", rule: "Auditors advise, Management decides/accepts risk." },
-            { id: 17, topic: "Risk Assessment", q: "Which type of risk is defined as the risk that the IS auditor's procedures will not find a material error that actually exists?", options: ["Inherent Risk", "Control Risk", "Detection Risk", "Business Risk"], a: 2, exp: "<strong>C is correct.</strong> Detection risk is the risk the auditor misses the problem. It is the only risk the auditor can directly control.", rule: "Auditor controls Detection Risk by adjusting sample size/testing." },
-            { id: 18, topic: "Audit Evidence & Sampling", q: "What sampling technique is BEST used when an auditor suspects fraud and wants to find at least one exception in a population?", options: ["Variable sampling", "Stop-and-go sampling", "Discovery sampling", "Stratified sampling"], a: 2, exp: "<strong>C is correct.</strong> Discovery sampling is used when the expected error rate is near zero, and finding just ONE exception is critical.", rule: "Fraud/Irregularities = Discovery Sampling." },
-            { id: 19, topic: "Audit Charter & Mgmt", q: "Who should officially approve the IS Audit Charter?", options: ["The Chief Information Officer (CIO)", "The Chief Information Security Officer (CISO)", "The Audit Committee or Board of Directors", "The Lead IS Auditor"], a: 2, exp: "<strong>C is correct.</strong> To guarantee independence, the charter must be approved by the highest level of governance.", rule: "Audit Charter must be approved by the Board/Audit Committee." },
-            { id: 20, topic: "Audit Evidence & Sampling", q: "An auditor is testing whether employees are signing the AUP. The auditor expects very few errors. Which sampling method MINIMIZES the sample size?", options: ["Discovery sampling", "Variable sampling", "Stop-and-go sampling", "Random sampling"], a: 2, exp: "<strong>C is correct.</strong> Stop-and-go sampling allows the auditor to stop testing early if no errors are found in the initial small sample.", rule: "Minimize testing time = Stop-and-go sampling." },
-            { id: 21, topic: "Internal Controls & CSA", q: "A primary control is deemed too expensive to implement. Management implements an alternative control that mitigates the risk to an acceptable level. This is known as a:", options: ["Directive control", "Detective control", "Compensating control", "Corrective control"], a: 2, exp: "<strong>C is correct.</strong> A compensating control is used when a primary control is unfeasible, too costly, or fails.", rule: "Compensating control = The Backup Plan for a primary control." },
-            { id: 22, topic: "Audit Evidence & Sampling", q: "When using Generalized Audit Software (GAS), what is the PRIMARY advantage for the IS auditor?", options: ["It automatically fixes errors in the database.", "It allows the auditor to independently run queries and access data.", "It eliminates the need for risk assessments.", "It replaces the need for substantive testing."], a: 1, exp: "<strong>B is correct.</strong> GAS provides the auditor with independence. They don't have to rely on IT to pull reports.", rule: "GAS/CAATs = Auditor Independence in data gathering." },
-            { id: 23, topic: "Reporting & Follow-up", q: "During a follow-up audit, the IS auditor's PRIMARY responsibility is to:", options: ["Re-audit the entire business process.", "Verify that management has implemented the agreed-upon corrective actions.", "Report the original findings to the regulatory authorities.", "Evaluate new emerging risks in the department."], a: 1, exp: "<strong>B is correct.</strong> Follow-up audits have a narrow scope: checking if management actually fixed what they promised to fix.", rule: "Follow-up = Verify Remediation." },
-            { id: 24, topic: "Reporting & Follow-up", q: "What is the MAIN purpose of the exit interview at the end of an audit?", options: ["To negotiate the severity of the findings.", "To ensure the facts presented in the report are accurate and agreed upon.", "To deliver the final printed audit report.", "To evaluate the performance of the audit team."], a: 1, exp: "<strong>B is correct.</strong> The exit interview ensures there are no surprises and confirms factual accuracy with management.", rule: "Exit Interview = Factual Accuracy & No Surprises." },
-            { id: 25, topic: "Reporting & Follow-up", q: "If an IS auditor uncovers a critical security vulnerability that is actively being exploited, they should:", options: ["Wait until the final report to document it.", "Fix the vulnerability themselves immediately.", "Communicate it to management immediately.", "Exclude it from the scope if it wasn't in the original plan."], a: 2, exp: "<strong>C is correct.</strong> Critical, active threats must be reported to management immediately so they can stop the bleeding.", rule: "Imminent danger = Immediate communication." },
-            { id: 26, topic: "Audit Evidence & Sampling", q: "Which testing technique allows an auditor to submit test data through the actual live production system to verify processing logic?", options: ["Parallel simulation", "Integrated Test Facility (ITF)", "Generalized Audit Software", "Snapshot technique"], a: 1, exp: "<strong>B is correct.</strong> An ITF sets up a 'dummy' entity in the live production system to run test transactions safely.", rule: "ITF = Testing in Live Production with dummy entities." },
-            { id: 27, topic: "Reporting & Follow-up", q: "What should be included in the management response section of an IS audit report?", options: ["The auditor's opinion on management's performance.", "A detailed timeline and action plan from management to address the findings.", "A request for a larger audit budget.", "The names of employees who caused the errors."], a: 1, exp: "<strong>B is correct.</strong> Management's response should acknowledge the finding and provide a concrete action plan and target date.", rule: "Management Response = Action Plan + Timeline." },
-            { id: 28, topic: "Risk Assessment", q: "What is 'materiality' in the context of IS auditing?", options: ["The physical hardware being audited.", "The importance or significance of an item in influencing decisions.", "The volume of data processed by the system.", "The amount of time spent on the audit."], a: 1, exp: "<strong>B is correct.</strong> Materiality refers to how significant an issue is. If an error is 'material', it impacts stakeholder decisions.", rule: "Materiality = Significance / Impact." },
-            { id: 29, topic: "Audit Charter & Mgmt", q: "When using the work of an external expert (Subject Matter Expert), the IS auditor is ULTIMATELY responsible for:", options: ["The accuracy of the expert's technical tools.", "Paying the expert's invoice.", "Evaluating the expert's work and the final audit conclusions.", "Training the expert on audit methodology."], a: 2, exp: "<strong>C is correct.</strong> You can outsource the testing, but you cannot outsource the responsibility for the audit conclusions.", rule: "Auditor retains ultimate responsibility for the report." },
-            { id: 30, topic: "Risk Assessment", q: "The PRIMARY purpose of performing a control walkthrough during the planning phase is to:", options: ["Gather substantive evidence.", "Understand the process design and confirm controls are in place.", "Identify all instances of fraud.", "Train the auditee on security best practices."], a: 1, exp: "<strong>B is correct.</strong> A walkthrough involves tracing a single transaction to understand the process and verify control design.", rule: "Walkthrough = Verify Design and Understanding." },
-            { id: 31, topic: "Audit Evidence & Sampling", q: "Which of the following is an attribute sampling application?", options: ["Estimating the total monetary value of inventory.", "Testing the approval signatures on purchase orders.", "Calculating the average downtime of servers.", "Determining the financial impact of a breach."], a: 1, exp: "<strong>B is correct.</strong> Attribute sampling deals with binary Yes/No conditions (e.g., Is the signature there or not?).", rule: "Attribute = Compliance (Yes/No). Variable = Substantive (Numbers/Money)." },
-            { id: 32, topic: "Risk Assessment", q: "An IS auditor finds that an organization has no formal risk assessment process. The auditor should FIRST:", options: ["Conduct a risk assessment for the organization.", "Recommend that management implement a risk assessment framework.", "Halt the audit until a risk assessment is done.", "Notify external regulators."], a: 1, exp: "<strong>B is correct.</strong> The auditor identifies the gap (lack of framework) and recommends management fixes it.", rule: "Auditors recommend. They do not perform operational duties (like conducting the org's risk assessment)." },
-            { id: 33, topic: "Internal Controls & CSA", q: "Which of the following is the BEST example of a detective control?", options: ["Data validation edits", "Segregation of duties", "Review of system access logs", "Restoring from a backup tape"], a: 2, exp: "<strong>C is correct.</strong> Log reviews detect unauthorized actions after they have occurred.", rule: "Logs, Alerts, and Reviews are Detective." },
-            { id: 34, topic: "Audit Evidence & Sampling", q: "An auditor notes that a system calculation is failing. To independently verify the calculation logic, the auditor writes a script to re-process the data and compares the results. This is known as:", options: ["Integrated Test Facility (ITF)", "Parallel Simulation", "Snapshots", "Continuous Auditing"], a: 1, exp: "<strong>B is correct.</strong> Parallel simulation involves the auditor running their own software/logic alongside the client's data to compare outputs.", rule: "Parallel Simulation = Auditor's software vs Client's software." },
-            { id: 35, topic: "Reporting & Follow-up", q: "If management disagrees with an audit finding during the exit interview, the IS auditor should:", options: ["Remove the finding from the report.", "Include the finding and document management's disagreement in the report.", "Escalate immediately to external regulators.", "Modify the evidence to convince management."], a: 1, exp: "<strong>B is correct.</strong> If evidence supports the finding, it stays in the report. Management's disagreement is formally noted in their response section.", rule: "Never alter factual findings based on management pressure." },
-            { id: 36, topic: "Audit Charter & Mgmt", q: "An IS auditor discovers they are related to the IT Director of the department they are auditing. What is the BEST course of action?", options: ["Proceed but exercise extreme objectivity.", "Disclose the relationship in the final audit report.", "Inform audit management so they can be reassigned.", "Only audit areas not directly managed by the IT Director."], a: 2, exp: "<strong>C is correct.</strong> This is a clear impairment of independence. The auditor must step down from this specific assignment.", rule: "Impairment of independence requires immediate disclosure and reassignment." },
-            { id: 37, topic: "Internal Controls & CSA", q: "The PRIMARY objective of Segregation of Duties (SoD) is to:", options: ["Increase operational efficiency.", "Prevent a single individual from committing and concealing fraud/errors.", "Reduce the number of IT staff needed.", "Automate manual accounting processes."], a: 1, exp: "<strong>B is correct.</strong> SoD splits critical tasks so no one person has end-to-end control, reducing the risk of hidden fraud.", rule: "SoD = Fraud prevention through divided power." },
-            { id: 38, topic: "Risk Assessment", q: "When evaluating IT risks, the IS auditor should place the GREATEST emphasis on:", options: ["Threats with the highest technical complexity.", "Vulnerabilities that have existed the longest.", "Risks that have the highest potential impact on business objectives.", "Risks identified in the previous year's audit."], a: 2, exp: "<strong>C is correct.</strong> Impact on business objectives is always the highest priority in risk evaluation.", rule: "Business impact > Technical metrics." },
-            { id: 39, topic: "Internal Controls & CSA", q: "A 'Mandatory Access Control' (MAC) system is an example of what kind of control?", options: ["Preventive", "Detective", "Corrective", "Directive"], a: 0, exp: "<strong>A is correct.</strong> Access controls prevent unauthorized users from accessing systems or data.", rule: "Access controls (Logical/Physical) are Preventive." },
-            { id: 40, topic: "Risk Assessment", q: "Which of the following describes 'Control Risk'?", options: ["The risk the auditor misses an error.", "The risk a material error occurs because there are no controls.", "The risk that a material error will not be prevented or detected by the internal control system.", "The risk of a business venture failing."], a: 2, exp: "<strong>C is correct.</strong> Control risk is the probability that the organization's implemented controls fail to do their job.", rule: "Control Risk = The controls are broken/ineffective." },
-            { id: 41, topic: "Audit Evidence & Sampling", q: "In audit sampling, the 'Tolerable Error Rate' represents:", options: ["The number of mistakes the auditor is allowed to make.", "The maximum error rate in the population that the auditor is willing to accept.", "The guaranteed accuracy of the sample.", "The percentage of the population that must be tested."], a: 1, exp: "<strong>B is correct.</strong> Tolerable error is the threshold. If errors exceed this rate, the control is deemed ineffective.", rule: "Tolerable Error = Max acceptable failure rate." },
-            { id: 42, topic: "Audit Charter & Mgmt", q: "Which of the following is NOT typically found in an IS Audit Charter?", options: ["The authority of the audit function.", "The independence of the audit function.", "The detailed annual audit schedule.", "The scope of the audit function's responsibilities."], a: 2, exp: "<strong>C is correct.</strong> The annual schedule changes every year. The Charter is a static, overarching governance document.", rule: "Charter = High-level authority. Does NOT include specific schedules/budgets." },
-            { id: 43, topic: "Risk Assessment", q: "An IS auditor is evaluating a newly proposed IT project. The MOST important factor for the auditor to verify is that the project:", options: ["Uses the latest agile development methodologies.", "Is aligned with the organization's strategic business goals.", "Has the lowest possible vendor cost.", "Will be completed within six months."], a: 1, exp: "<strong>B is correct.</strong> IT projects only hold value if they align with and support business goals.", rule: "IT Strategy MUST align with Business Strategy." },
-            { id: 44, topic: "Reporting & Follow-up", q: "An auditor finds a minor compliance issue that does not impact security or financial reporting. The auditor should:", options: ["Ignore it to save time.", "Report it to the Board of Directors immediately.", "Include it in the report as a minor observation/recommendation.", "Demand the system be taken offline."], a: 2, exp: "<strong>C is correct.</strong> All findings should be documented, but minor issues are reported as observations to local management, not escalated to the Board.", rule: "Report findings based on Materiality." },
-            { id: 45, topic: "Audit Evidence & Sampling", q: "When using continuous auditing, what is the PRIMARY role of the IS auditor?", options: ["To review the alerts and anomalies generated by the automated tools.", "To write the application code for the business.", "To fix the transaction errors identified by the system.", "To approve the daily financial ledgers."], a: 0, exp: "<strong>A is correct.</strong> In continuous auditing, tools flag anomalies, and the auditor's job is to investigate those specific flags.", rule: "Auditor investigates anomalies; management fixes errors." },
-            { id: 46, topic: "Internal Controls & CSA", q: "Who should be responsible for designing and implementing internal controls?", options: ["The IS Auditor", "External Regulators", "Operational Management", "The Audit Committee"], a: 2, exp: "<strong>C is correct.</strong> Management owns the processes and is responsible for designing and maintaining the controls.", rule: "Management designs/owns controls. Auditors evaluate them." },
-            { id: 47, topic: "Audit Evidence & Sampling", q: "An auditor wants to ensure that a data file has not been altered since it was extracted. Which technique should they use?", options: ["Encryption", "Digital Signatures", "Hashing (e.g., MD5 or SHA)", "Data Masking"], a: 2, exp: "<strong>C is correct.</strong> Hashing generates a unique fixed-length value. If the file changes, the hash changes, proving a loss of integrity.", rule: "Hashing = Integrity checking." },
-            { id: 48, topic: "Risk Assessment", q: "The FIRST step in developing a risk management program is to:", options: ["Implement security controls.", "Identify the assets and their value to the business.", "Conduct a vulnerability scan.", "Calculate the Annualized Loss Expectancy (ALE)."], a: 1, exp: "<strong>B is correct.</strong> You cannot protect what you don't know you have. Asset identification and valuation is always step one.", rule: "FIRST step in Risk = Asset Identification." },
-            { id: 49, topic: "Audit Evidence & Sampling", q: "A 'Confidence Level' of 95% in statistical sampling implies:", options: ["95% of the population was tested.", "There is a 5% risk that the sample does not accurately represent the population.", "The controls are 95% effective.", "The auditor is 95% finished with the testing phase."], a: 1, exp: "<strong>B is correct.</strong> A 95% confidence level means you accept a 5% sampling risk (the risk the sample is a statistical fluke).", rule: "Confidence Level + Sampling Risk = 100%." },
-            { id: 50, topic: "Reporting & Follow-up", q: "After issuing the final audit report, the IS auditor's involvement with the auditee should:", options: ["End completely until the next annual audit.", "Continue through formal follow-up procedures to verify remediation.", "Shift to helping the auditee implement the fixes.", "Involve daily operational monitoring of the department."], a: 1, exp: "<strong>B is correct.</strong> The audit lifecycle includes follow-up to ensure management actually mitigated the reported risks.", rule: "The audit is not truly complete until follow-up verifies remediation." },
+            // PART 1: Audit Charter & Ethics (ITAF)
+            { id: 1, topic: "Audit Charter & Mgmt", q: "A long-term IT employee with a strong technical background has applied for a position in the IS audit department. Hiring should be primarily based on the individual’s experience and:", options: ["Length of service.", "Age and capacity to learn.", "IT knowledge for credibility.", "Ability to be independent of existing IT relationships."], a: 3, exp: "Independence is fundamental. An auditor cannot effectively audit a department they were recently part of without a conflict of interest.", rule: "Independence must be maintained in fact and appearance.", analogy: "Imagine a referee officiating a game for a team they used to play for. Even if they are fair, the appearance of bias ruins the game." },
+            { id: 2, topic: "Audit Charter & Mgmt", q: "What is the PRIMARY purpose of an audit charter?", options: ["State the objectives and scope of a specific audit.", "Outline the technical audit methodology.", "Document the IS audit function's authority, scope, and responsibility.", "Define the timeline and budget for the audit department."], a: 2, exp: "An audit charter is the foundational document that grants the auditor the authority and independence to operate.", rule: "Charter = Authority, Scope, Responsibility. Approved by the Board.", analogy: "The charter is a police officer's badge. It proves they have the authority to ask questions and inspect the premises." },
+            { id: 3, topic: "Audit Charter & Mgmt", q: "Who should officially approve the IS Audit Charter?", options: ["The Chief Information Officer (CIO)", "The Chief Information Security Officer (CISO)", "The Audit Committee or Board of Directors", "The Lead IS Auditor"], a: 2, exp: "To guarantee independence, the charter must be approved by the highest level of governance (Audit Committee/Board).", rule: "Audit Charter must be approved by the Board/Audit Committee.", analogy: "A constitution must be approved by the supreme rulers of the land, not a middle-manager." },
+            { id: 4, topic: "Audit Charter & Mgmt", q: "When using the work of an external expert (Subject Matter Expert), the IS auditor is ULTIMATELY responsible for:", options: ["The accuracy of the expert's technical tools.", "Paying the expert's invoice.", "Evaluating the expert's work and the final audit conclusions.", "Training the expert on audit methodology."], a: 2, exp: "You can outsource the testing, but you cannot outsource the responsibility. The lead auditor owns the final report.", rule: "Auditor retains ultimate responsibility for the report.", analogy: "The lead architect hires a plumber. If the pipes burst, the client blames the architect, not the plumber." },
+            { id: 5, topic: "Audit Charter & Mgmt", q: "An IS auditor discovers they are related to the IT Director of the department they are auditing. What is the BEST course of action?", options: ["Proceed but exercise extreme objectivity.", "Disclose the relationship in the final audit report.", "Inform audit management so they can be reassigned.", "Only audit areas not directly managed by the IT Director."], a: 2, exp: "This is a clear impairment of independence. The auditor must step down from this specific assignment.", rule: "Impairment of independence requires immediate disclosure and reassignment.", analogy: "A judge cannot preside over a murder trial if the defendant is their brother." },
+            { id: 6, topic: "Audit Charter & Mgmt", q: "Which of the following is NOT typically found in an IS Audit Charter?", options: ["The authority of the audit function.", "The independence of the audit function.", "The detailed annual audit schedule.", "The scope of the audit function's responsibilities."], a: 2, exp: "The annual schedule changes every year. The Charter is a static, overarching governance document.", rule: "Charter = High-level authority. Does NOT include specific schedules/budgets.", analogy: "The US Constitution doesn't list what the President is eating for lunch tomorrow." },
+            { id: 7, topic: "Audit Charter & Mgmt", q: "Which of the following is the MOST important factor for ensuring the IS audit function is effective?", options: ["Advanced audit software tools.", "A highly technical audit staff.", "Independence of the IS audit function.", "Frequent audits of all departments."], a: 2, exp: "Without independence, the auditor cannot objectively report findings, rendering the entire function useless.", rule: "Independence is the bedrock of the audit function.", analogy: "A judge can be the smartest person in the room (technical staff), but if they are bribed (no independence), the justice system fails." },
+            { id: 8, topic: "Audit Charter & Mgmt", q: "If the IS audit department reports directly to the Chief Financial Officer (CFO), which fundamental principle might be compromised?", options: ["Competence", "Independence", "Confidentiality", "Integrity"], a: 1, exp: "If the auditor reports to the CFO, they cannot independently audit the finance department without fear of retaliation.", rule: "Reporting line dictates Independence.", analogy: "It's like the Internal Affairs police department answering directly to the corrupt police captain they are investigating." },
+            { id: 9, topic: "Audit Charter & Mgmt", q: "An IS auditor is asked to design the new security architecture for the company, and then audit it next year. This is a violation of:", options: ["Professional Competence", "Segregation of Duties", "Independence", "Due Professional Care"], a: 2, exp: "An auditor cannot objectively audit a system they built. This is a massive impairment of independence.", rule: "You cannot audit your own work.", analogy: "A student writing their own final exam questions." },
+            { id: 10, topic: "Audit Charter & Mgmt", q: "Which of the following is the MOST important element to include in an IS Audit Charter?", options: ["The specific audit tools to be used.", "The annual training budget for auditors.", "The auditor's right of access to systems, data, and personnel.", "The step-by-step procedures for conducting an audit."], a: 2, exp: "Without explicit, board-approved access to data and personnel, the auditor cannot do their job.", rule: "Charter must explicitly grant access rights.", analogy: "A VIP All-Access backstage pass. Without it, the security guards won't let you in." },
+            { id: 11, topic: "Audit Charter & Mgmt", q: "An IS auditor is planning to use the work of a third-party security expert. The auditor must FIRST:", options: ["Pay the expert's invoice.", "Assess the expert's competence, objectivity, and independence.", "Incorporate the expert's findings directly into the report without review.", "Ask management to approve the expert's methodology."], a: 1, exp: "Before relying on someone else's work, the auditor must verify they are qualified and unbiased.", rule: "Verify SME competence and independence FIRST.", analogy: "Before you let a stranger babysit your kids, you check their references and background first." },
+            { id: 12, topic: "Audit Charter & Mgmt", q: "Which standard dictates that IS auditors must maintain their knowledge and skills through continuing professional education (CPE)?", options: ["Code of Professional Ethics", "The Audit Charter", "ISACA Privacy Policy", "The Control Framework"], a: 0, exp: "The ISACA Code of Professional Ethics explicitly requires members to maintain competency through ongoing training.", rule: "CPE is an Ethical requirement.", analogy: "A doctor must keep reading medical journals to learn about new diseases. It is unethical to treat patients using 20-year-old knowledge." },
+            { id: 13, topic: "Audit Charter & Mgmt", q: "The IS audit function should be functionally independent of:", options: ["The Audit Committee", "The Board of Directors", "The business operations and IT management being audited.", "External regulators"], a: 2, exp: "Auditors must be independent from the people they are auditing (Management/Operations) to remain objective.", rule: "Auditors must be independent of Operations.", analogy: "Internal Affairs investigates the police. They cannot be regular beat cops, or they would cover for their friends." },
+            { id: 14, topic: "Audit Charter & Mgmt", q: "When ISACA refers to 'Due Professional Care', it means the auditor should:", options: ["Find every single error in the system.", "Guarantee that fraud will not occur.", "Perform the audit with the competence and skill expected of a professional.", "Rely completely on management's assertions."], a: 2, exp: "Due professional care means doing the job to the best of your professional ability, but it does NOT guarantee absolute assurance that all errors will be found.", rule: "Due care means professional diligence, not absolute perfection.", analogy: "A surgeon provides due care by performing the surgery correctly. They cannot guarantee the patient will live forever." },
+            { id: 15, topic: "Audit Charter & Mgmt", q: "An IS auditor is asked to participate in an IT steering committee. To maintain independence, the auditor should ONLY:", options: ["Vote on the approval of new IT projects.", "Serve in an advisory capacity without making management decisions.", "Take minutes for the committee meetings.", "Refuse to attend the meetings entirely."], a: 1, exp: "Auditors can advise management, but they cannot make or vote on management decisions without impairing their independence.", rule: "Auditors advise, they do not decide.", analogy: "A financial advisor can suggest stocks, but you are the one who actually presses the 'Buy' button." },
 
-            // NEW 50 QUESTIONS (Q51-100)
-            { id: 51, topic: "Audit Charter & Mgmt", q: "Which of the following is the MOST important factor for ensuring the IS audit function is effective?", options: ["Advanced audit software tools.", "A highly technical audit staff.", "Independence of the IS audit function.", "Frequent audits of all departments."], a: 2, exp: "<strong>C is correct.</strong> Without independence, the auditor cannot objectively report findings, rendering the entire function useless.", rule: "Independence is the bedrock of the audit function." },
-            { id: 52, topic: "Risk Assessment", q: "During a risk-based audit, an IS auditor discovers that a specific control is missing, but the business impact of a failure is negligible. The auditor should:", options: ["Report it as a critical finding immediately.", "Recommend implementing the control regardless of cost.", "Note the missing control but assess the residual risk as acceptable.", "Halt the audit until the control is added."], a: 2, exp: "<strong>C is correct.</strong> If the impact is negligible, the risk may be within the acceptable risk appetite. Cost of control must not exceed asset value.", rule: "Risk is evaluated by Business Impact." },
-            { id: 53, topic: "Audit Charter & Mgmt", q: "Which entity is ULTIMATELY responsible for the organization's system of internal controls?", options: ["The IS Auditor", "Executive Management / Board of Directors", "The IT Department", "External Auditors"], a: 1, exp: "<strong>B is correct.</strong> Executive management and the board bear the ultimate responsibility for ensuring internal controls exist and are effective.", rule: "Management owns the controls. Auditors evaluate them." },
-            { id: 54, topic: "Internal Controls & CSA", q: "An organization uses a badge swipe system to enter the server room, but employees often hold the door open for others (tailgating). What is the BEST preventive control to fix this?", options: ["Review badge logs daily.", "Install a security camera.", "Install a mantrap / deadcoded door.", "Issue a policy warning against tailgating."], a: 2, exp: "<strong>C is correct.</strong> A mantrap physically prevents more than one person from entering at a time. Cameras and logs are detective.", rule: "Preventive physically stops the action. Detective records it." },
-            { id: 55, topic: "Audit Evidence & Sampling", q: "An IS auditor is reviewing firewall rules. Instead of checking all 5,000 rules, the auditor uses a statistical sample. The risk that the sample does not reflect the entire rule set is called:", options: ["Inherent risk", "Control risk", "Sampling risk", "Detection risk"], a: 2, exp: "<strong>C is correct.</strong> Sampling risk is the statistical probability that the sample chosen does not accurately reflect the actual population.", rule: "Sampling Risk = Fluke sample." },
-            { id: 56, topic: "Audit Evidence & Sampling", q: "When evaluating the reliability of audit evidence, which of the following is considered the LEAST reliable?", options: ["Evidence obtained directly by the auditor.", "Evidence provided by an independent third party.", "Evidence generated automatically by the IT system.", "Evidence provided orally by the IT manager."], a: 3, exp: "<strong>D is correct.</strong> Oral evidence leaves no paper trail and is highly subjective.", rule: "Oral evidence is ALWAYS the weakest form of evidence." },
-            { id: 57, topic: "Reporting & Follow-up", q: "An IS auditor finds a significant flaw in the financial reporting system during fieldwork. The FIRST action the auditor should take is to:", options: ["Include it in the final audit report.", "Inform the external financial auditors.", "Validate the finding and communicate it to IT management.", "Implement a temporary patch to fix the flaw."], a: 2, exp: "<strong>C is correct.</strong> Before escalating to final reports, the auditor must validate the fact and inform the relevant management so they are aware.", rule: "Validate facts and communicate locally before escalating." },
-            { id: 58, topic: "Audit Evidence & Sampling", q: "An IS auditor is checking if invoices over $10,000 have the required manager signature. Which sampling method should be used?", options: ["Variable sampling", "Attribute sampling", "Stratified sampling", "Substantive sampling"], a: 1, exp: "<strong>B is correct.</strong> Checking for a signature is a binary 'Yes/No' test of compliance, which requires Attribute sampling.", rule: "Attribute = Yes/No (Compliance)." },
-            { id: 59, topic: "Risk Assessment", q: "Which of the following BEST describes a vulnerability?", options: ["A hacker attempting to breach the network.", "A natural disaster like a flood.", "A weakness in the system design or implementation.", "The financial loss resulting from a breach."], a: 2, exp: "<strong>C is correct.</strong> A vulnerability is a weakness. A threat (hacker/flood) exploits a vulnerability to cause an impact.", rule: "Risk = Threat x Vulnerability x Impact." },
-            { id: 60, topic: "Internal Controls & CSA", q: "Which of the following is an example of a Compensating Control?", options: ["A firewall blocking unauthorized IP addresses.", "A daily review of exception logs because duties cannot be adequately segregated.", "A policy document requiring strong passwords.", "A data backup used to restore a crashed server."], a: 1, exp: "<strong>B is correct.</strong> Because Segregation of Duties (the primary control) cannot be achieved, a daily manual review (the compensating control) is added to mitigate the risk.", rule: "Compensating Control offsets a weak/missing primary control." },
-            { id: 61, topic: "Audit Charter & Mgmt", q: "If the IS audit department reports directly to the Chief Financial Officer (CFO), which fundamental principle might be compromised?", options: ["Competence", "Independence", "Confidentiality", "Integrity"], a: 1, exp: "<strong>B is correct.</strong> If the auditor reports to the CFO, they cannot independently audit the finance department without fear of retaliation. They should report to the Audit Committee.", rule: "Reporting line dictates Independence." },
-            { id: 62, topic: "Risk Assessment", q: "In a risk assessment, the value of an information asset should be determined PRIMARILY by:", options: ["The original cost to purchase the hardware and software.", "The IT department's estimate of its technical importance.", "The impact its loss would have on the business operations.", "The cost to replace the asset with a newer version."], a: 2, exp: "<strong>C is correct.</strong> An old $50 server might hold $5 million worth of customer data. The business impact determines the true value.", rule: "Asset value = Business Impact." },
-            { id: 63, topic: "Internal Controls & CSA", q: "In a Control Self-Assessment (CSA), what is the PRIMARY role of the IS auditor?", options: ["To design the controls being assessed.", "To act as a facilitator and guide management in the assessment.", "To punish departments that fail the assessment.", "To take over the operational risk management function."], a: 1, exp: "<strong>B is correct.</strong> In CSA, management does the assessing. The auditor simply provides the methodology and facilitates the workshop.", rule: "CSA Auditor = Facilitator." },
-            { id: 64, topic: "Audit Evidence & Sampling", q: "When using Generalized Audit Software (GAS) to test a database, the IS auditor is performing:", options: ["Compliance testing", "Substantive testing", "Control design walkthrough", "Attribute sampling"], a: 1, exp: "<strong>B is correct.</strong> Using GAS to query the actual database to look for errors, duplicates, or anomalies is testing the substance (data) itself.", rule: "GAS queries data = Substantive testing." },
-            { id: 65, topic: "Reporting & Follow-up", q: "Management has agreed to implement a fix for an audit finding by Q3. During the Q4 follow-up audit, the auditor finds the fix was not implemented. The auditor should FIRST:", options: ["Report the failure to the Board of Directors.", "Determine the reason for the delay and the current risk level.", "Revoke the IT department's operational budget.", "Close the issue and plan to review it next year."], a: 1, exp: "<strong>B is correct.</strong> Before escalating, the auditor must understand WHY it wasn't fixed and what the residual risk currently is.", rule: "Investigate the root cause before escalating." },
-            { id: 66, topic: "Audit Charter & Mgmt", q: "An IS auditor is asked to design the new security architecture for the company, and then audit it next year. This is a violation of:", options: ["Professional Competence", "Segregation of Duties", "Independence", "Due Professional Care"], a: 2, exp: "<strong>C is correct.</strong> An auditor cannot objectively audit a system they built. This is a massive impairment of independence.", rule: "You cannot audit your own work." },
-            { id: 67, topic: "Audit Evidence & Sampling", q: "To ensure that data in a file has not been accidentally altered during transmission, which control is BEST?", options: ["Symmetric Encryption", "Hashing", "Digital Certificates", "Data Masking"], a: 1, exp: "<strong>B is correct.</strong> Hashing generates a unique digest. If the file changes by even one bit, the hash changes, proving a loss of integrity.", rule: "Hashing guarantees Integrity." },
-            { id: 68, topic: "Risk Assessment", q: "Which of the following is the BEST method for determining the frequency of IS audits?", options: ["Auditing all systems annually.", "Following the schedule of the previous year.", "Basing the frequency on a comprehensive risk assessment.", "Auditing based on the availability of audit staff."], a: 2, exp: "<strong>C is correct.</strong> High-risk systems should be audited more frequently than low-risk systems. Risk dictates the schedule.", rule: "Risk Assessment drives the Audit Plan." },
-            { id: 69, topic: "Reporting & Follow-up", q: "The PRIMARY objective of an audit exit interview is to:", options: ["Present the final printed report to the Board.", "Ensure the auditee agrees with the factual accuracy of the findings.", "Negotiate the severity level of the risks.", "Demand immediate remediation of all findings."], a: 1, exp: "<strong>B is correct.</strong> The exit interview ensures there are no factual misunderstandings between the auditor and management before the report is finalized.", rule: "Exit Interview = Confirm Facts." },
-            { id: 70, topic: "Internal Controls & CSA", q: "Which of the following controls is MOST effective in preventing a payroll clerk from modifying their own salary?", options: ["Regular review of payroll logs.", "Segregation of duties in the payroll application.", "Mandatory vacations for payroll clerks.", "Data encryption of the payroll database."], a: 1, exp: "<strong>B is correct.</strong> Segregation of duties physically prevents the clerk from having the necessary access rights to authorize their own changes.", rule: "SoD is the ultimate preventive control against internal fraud." },
-            { id: 71, topic: "Audit Evidence & Sampling", q: "An auditor is using a sample to estimate the total monetary value of errors in an accounts receivable database. This is called:", options: ["Attribute sampling", "Variable sampling", "Stop-and-go sampling", "Discovery sampling"], a: 1, exp: "<strong>B is correct.</strong> Variable sampling is used to estimate numerical values (like dollars, weights, or time).", rule: "Variable = Value/Numbers." },
-            { id: 72, topic: "Audit Evidence & Sampling", q: "If an auditor wants to decrease the risk of drawing an incorrect conclusion from a sample (decrease sampling risk), they must:", options: ["Decrease the sample size.", "Increase the sample size.", "Change from statistical to judgmental sampling.", "Only audit the largest transactions."], a: 1, exp: "<strong>B is correct.</strong> A larger sample provides more precision and reduces the risk that the sample doesn't represent the population.", rule: "Larger Sample = Less Sampling Risk = Higher Confidence." },
-            { id: 73, topic: "Risk Assessment", q: "When developing a risk-based audit plan, the IS auditor should evaluate risk based on:", options: ["Inherent risk and Control risk.", "Detection risk and Audit risk.", "Business risk and Vendor risk.", "Financial risk and Operational risk."], a: 0, exp: "<strong>A is correct.</strong> The auditor evaluates Inherent Risk (raw risk) and Control Risk (controls failing) to determine how much testing they need to do.", rule: "Audit Planning relies on Inherent + Control risk." },
-            { id: 74, topic: "Reporting & Follow-up", q: "If management decides NOT to address a severe audit finding because of budget constraints, what is the auditor's responsibility?", options: ["Accept the risk on behalf of the company.", "Report the decision to the Board of Directors or Audit Committee.", "Force the IT department to fix it anyway.", "Remove the finding from the final report."], a: 1, exp: "<strong>B is correct.</strong> Management can accept risk, but if the auditor believes the risk is too high for the business, they must escalate it to the Board (the ultimate governance body).", rule: "Escalate unacceptable risk to the Board." },
-            { id: 75, topic: "Audit Charter & Mgmt", q: "Which of the following is the MOST important element to include in an IS Audit Charter?", options: ["The specific audit tools to be used.", "The annual training budget for auditors.", "The auditor's right of access to systems, data, and personnel.", "The step-by-step procedures for conducting an audit."], a: 2, exp: "<strong>C is correct.</strong> Without explicit, board-approved access to data and personnel, the auditor cannot do their job.", rule: "Charter must explicitly grant access rights." },
-            { id: 76, topic: "Internal Controls & CSA", q: "What is the PRIMARY advantage of a Control Self-Assessment (CSA) program?", options: ["It replaces the need for an internal audit function.", "It shifts the responsibility of risk management entirely to the auditor.", "It increases line management's awareness and ownership of internal controls.", "It guarantees 100% compliance with external regulations."], a: 2, exp: "<strong>C is correct.</strong> By forcing management to assess their own controls, they become more aware of risks and take ownership of the solutions.", rule: "CSA = Management Ownership." },
-            { id: 77, topic: "Audit Evidence & Sampling", q: "An auditor is testing a population where they expect to find ZERO errors, but finding even one error is critical (e.g., fraud). The BEST sampling method is:", options: ["Variable sampling", "Discovery sampling", "Attribute sampling", "Stratified sampling"], a: 1, exp: "<strong>B is correct.</strong> Discovery sampling is designed specifically for finding anomalies like fraud when the expected error rate is near zero.", rule: "Discovery Sampling = Fraud hunting." },
-            { id: 78, topic: "Risk Assessment", q: "A company implements a strict password policy and a firewall to reduce the likelihood of a breach. This is an example of risk:", options: ["Avoidance", "Acceptance", "Mitigation", "Transfer"], a: 2, exp: "<strong>C is correct.</strong> Mitigation (or reduction) involves implementing controls to lessen the probability or impact of a threat.", rule: "Controls = Risk Mitigation." },
-            { id: 79, topic: "Reporting & Follow-up", q: "During an audit, the auditor finds that a control is operating effectively, but it is not documented in any formal procedure. The auditor should:", options: ["Ignore the issue since the control is working.", "Report a finding regarding the lack of documentation.", "Write the procedure document for the IT team.", "Fail the entire audit."], a: 1, exp: "<strong>B is correct.</strong> If it's not documented, it's not repeatable, and knowledge is lost if the employee leaves. It must be reported.", rule: "Undocumented controls = Audit finding." },
-            { id: 80, topic: "Audit Charter & Mgmt", q: "An IS auditor is planning to use the work of a third-party security expert. The auditor must FIRST:", options: ["Pay the expert's invoice.", "Assess the expert's competence, objectivity, and independence.", "Incorporate the expert's findings directly into the report without review.", "Ask management to approve the expert's methodology."], a: 1, exp: "<strong>B is correct.</strong> Before relying on someone else's work, the auditor must verify they are qualified and unbiased.", rule: "Verify SME competence and independence FIRST." },
-            { id: 81, topic: "Internal Controls & CSA", q: "Which of the following is considered an administrative (directive) control?", options: ["Biometric scanner", "Intrusion Prevention System (IPS)", "Information Security Policy", "Data Backup"], a: 2, exp: "<strong>C is correct.</strong> Policies, procedures, and guidelines are administrative controls that direct employee behavior.", rule: "Policies = Directive/Administrative controls." },
-            { id: 82, topic: "Audit Evidence & Sampling", q: "When using the Integrated Test Facility (ITF) approach, what is the MOST critical step for the auditor?", options: ["Ensuring test data is permanently added to the production database.", "Ensuring the test transactions are removed from the system after testing.", "Running the test during peak business hours.", "Using Generalized Audit Software to create the data."], a: 1, exp: "<strong>B is correct.</strong> If dummy test data is left in the live production system, it will corrupt the company's actual financial records.", rule: "ITF requires strict removal of test data." },
-            { id: 83, topic: "Risk Assessment", q: "Which formula accurately describes the components of an IT risk?", options: ["Risk = Threat x Vulnerability x Impact", "Risk = Asset Value x Control effectiveness", "Risk = Inherent Risk x Detection Risk", "Risk = Probability + Mitigation"], a: 0, exp: "<strong>A is correct.</strong> Risk requires a Threat actor exploiting a Vulnerability, resulting in a business Impact.", rule: "Risk = Threat x Vuln x Impact." },
-            { id: 84, topic: "Reporting & Follow-up", q: "The IS auditor should structure the audit report to PRIMARILY address the needs of:", options: ["The IT operational staff.", "The external regulatory auditors.", "Senior management and the Audit Committee.", "The Chief Information Security Officer (CISO)."], a: 2, exp: "<strong>C is correct.</strong> The report must be written so that senior management and the board (the ultimate decision-makers) can understand the business impact of the findings.", rule: "Write reports for Senior Management." },
-            { id: 85, topic: "Internal Controls & CSA", q: "A bank requires a teller to enter a transaction, and a manager to approve any transaction over $5,000. This is an example of:", options: ["Compensating control", "Detective control", "Segregation of Duties", "Continuous auditing"], a: 2, exp: "<strong>C is correct.</strong> Splitting the task (entry vs. approval) between two people is classic Segregation of Duties to prevent fraud.", rule: "Maker/Checker = Segregation of Duties." },
-            { id: 86, topic: "Audit Evidence & Sampling", q: "When evaluating audit evidence, 'Appropriateness' refers to the evidence being:", options: ["Sufficient in quantity.", "Relevant and reliable to the audit objective.", "Approved by management.", "Generated by an automated system."], a: 1, exp: "<strong>B is correct.</strong> 'Sufficiency' refers to quantity. 'Appropriateness' refers to quality (relevance and reliability).", rule: "Appropriate = Quality/Relevant. Sufficient = Quantity." },
-            { id: 87, topic: "Audit Charter & Mgmt", q: "Which standard dictates that IS auditors must maintain their knowledge and skills through continuing professional education (CPE)?", options: ["Code of Professional Ethics", "The Audit Charter", "ISACA Privacy Policy", "The Control Framework"], a: 0, exp: "<strong>A is correct.</strong> The ISACA Code of Professional Ethics explicitly requires members to maintain competency through ongoing training.", rule: "CPE is an Ethical requirement." },
-            { id: 88, topic: "Risk Assessment", q: "An enterprise is adopting a new cloud-based ERP system. The IS auditor's BEST recommendation during the planning phase is to:", options: ["Ensure the cloud provider uses the exact same hardware as the enterprise.", "Ensure right-to-audit clauses are included in the vendor contract.", "Demand that the cloud provider be audited monthly.", "Avoid the cloud entirely due to inherent risks."], a: 1, exp: "<strong>B is correct.</strong> Without a 'right-to-audit' clause, the auditor will have no authority to verify the security of the outsourced data.", rule: "Cloud/Outsourcing ALWAYS requires Right-to-Audit clauses." },
-            { id: 89, topic: "Audit Evidence & Sampling", q: "The risk that the IS auditor will reach an invalid conclusion based on the test results of a sample is called:", options: ["Inherent risk", "Audit risk", "Sampling risk", "Business risk"], a: 2, exp: "<strong>C is correct.</strong> Sampling risk occurs because the auditor did not test 100% of the population, leaving a chance the sample was unrepresentative.", rule: "Sampling Risk = Sample doesn't match population." },
-            { id: 90, topic: "Internal Controls & CSA", q: "Which of the following is the BEST reason to automate internal controls?", options: ["To reduce the need for an IS auditor.", "To eliminate all inherent risks.", "To ensure controls are applied consistently without human error.", "To decrease the initial cost of system deployment."], a: 2, exp: "<strong>C is correct.</strong> Automated controls do not get tired, do not forget, and cannot be socially engineered. They apply the rule 100% of the time.", rule: "Automated controls > Manual controls (Consistency)." },
-            { id: 91, topic: "Reporting & Follow-up", q: "During an audit, an IS auditor discovers that a previous audit finding was closed by management, but the implemented fix is completely ineffective. The auditor should:", options: ["Reopen the old finding and escalate to the Audit Committee.", "Report the ineffective fix as a new finding in the current audit.", "Ignore it, as the previous auditor signed off on it.", "Fix the issue manually to protect the company."], a: 1, exp: "<strong>B is correct.</strong> It is a current control deficiency. It should be documented as a finding in the current audit report with references to the failed remediation.", rule: "Current failures are reported as current findings." },
-            { id: 92, topic: "Risk Assessment", q: "What is the PRIMARY purpose of establishing a 'Risk Appetite'?", options: ["To eliminate all IT risks.", "To dictate the exact budget for IT security.", "To define the amount of risk management is willing to accept in pursuit of its goals.", "To guarantee compliance with all local laws."], a: 2, exp: "<strong>C is correct.</strong> Risk appetite provides the threshold. If a risk is below the appetite, management accepts it. If it's above, they mitigate it.", rule: "Risk Appetite = Acceptable boundary of risk." },
-            { id: 93, topic: "Audit Charter & Mgmt", q: "The IS audit function should be functionally independent of:", options: ["The Audit Committee", "The Board of Directors", "The business operations and IT management being audited.", "External regulators"], a: 2, exp: "<strong>C is correct.</strong> Auditors must be independent from the people they are auditing (Management/Operations) to remain objective.", rule: "Auditors must be independent of Operations." },
-            { id: 94, topic: "Audit Evidence & Sampling", q: "When using Parallel Simulation, what is the auditor doing?", options: ["Processing real client data through auditor-controlled software.", "Processing dummy data through the client's live software.", "Reviewing the client's source code line by line.", "Simulating a disaster to test the DRP."], a: 0, exp: "<strong>A is correct.</strong> Parallel simulation takes live production data and runs it through the auditor's own software to see if the output matches the client's output.", rule: "Parallel Simulation = Auditor Software + Live Data." },
-            { id: 95, topic: "Internal Controls & CSA", q: "Which of the following BEST represents a physical preventive control?", options: ["A smoke detector.", "A biometric fingerprint scanner on a server room door.", "A security guard reviewing CCTV footage from yesterday.", "A fire suppression sprinkler system."], a: 1, exp: "<strong>B is correct.</strong> The biometric scanner physically prevents an unauthorized person from entering. Smoke detectors are detective. Sprinklers are corrective.", rule: "Physical Preventive = Locks, Mantraps, Biometrics." },
-            { id: 96, topic: "Reporting & Follow-up", q: "When an auditor writes a recommendation in the final report, it should be:", options: ["Highly technical so the IT team knows exactly which code to change.", "Focused on addressing the root cause of the finding.", "Dictating the exact vendor software management must buy.", "Vague so management has maximum flexibility."], a: 1, exp: "<strong>B is correct.</strong> Recommendations should target the root cause of the vulnerability. They should NOT dictate specific technologies (which steps on management's toes).", rule: "Recommendations fix the Root Cause, not the symptom." },
-            { id: 97, topic: "Risk Assessment", q: "An organization is considering outsourcing its payroll processing. What is the FIRST thing the IS auditor should verify?", options: ["The vendor's disaster recovery plan.", "That a business case and risk assessment were conducted before the decision.", "The cost savings of the outsourcing contract.", "The encryption standard used by the vendor."], a: 1, exp: "<strong>B is correct.</strong> Before looking at technical details, the auditor must verify that management followed proper governance (doing a risk assessment) before making the decision.", rule: "FIRST step in outsourcing = Risk Assessment / Business Case." },
-            { id: 98, topic: "Audit Evidence & Sampling", q: "If an auditor is testing the effectiveness of a control over a period of time, they are performing:", options: ["Substantive testing", "Compliance testing", "A walkthrough", "Data analytics"], a: 1, exp: "<strong>B is correct.</strong> Compliance testing checks if a control operated effectively and consistently over the audit period.", rule: "Control effectiveness = Compliance Testing." },
-            { id: 99, topic: "Internal Controls & CSA", q: "Management has implemented a policy requiring all employees to change their passwords every 90 days. This is a:", options: ["Detective control", "Directive (Administrative) control", "Corrective control", "Physical control"], a: 1, exp: "<strong>B is correct.</strong> A policy is a written rule directing behavior. (Note: The system forcing the change would be a logical preventive control).", rule: "Policies/Rules = Directive Controls." },
-            { id: 100, topic: "Reporting & Follow-up", q: "What determines the scope and timeline of the auditor's follow-up activities?", options: ["The ISACA standards.", "The availability of the audit staff.", "The risk rating of the original findings and management's agreed remediation dates.", "The external auditor's schedule."], a: 2, exp: "<strong>C is correct.</strong> Follow-ups are prioritized based on how severe the original risk was, and they are scheduled based on when management promised to fix it.", rule: "Follow-up schedule is driven by Risk and Target Dates." }
+            // PART 2: Risk-Based Audit Planning
+            { id: 16, topic: "Risk Assessment", q: "Which of the following is the MAIN reason to perform a risk assessment in the planning phase of an IS audit?", options: ["To ensure management’s concerns are addressed", "To provide reasonable assurance material items will be addressed", "To ensure the audit team will perform audits within budget", "To develop audit program and procedures needed to perform the audit"], a: 1, exp: "Risk assessments tell the auditor where the biggest threats are, focusing the audit on material (significant) items.", rule: "Risk-based auditing focuses limited resources on high-risk areas.", analogy: "A doctor triage's patients in an ER. You treat the heart attack (high risk) before the sprained ankle (low risk)." },
+            { id: 17, topic: "Risk Assessment", q: "During a risk-based audit planning process, what should be the IS auditor's FIRST step?", options: ["Identify the control procedures currently in place.", "Determine the vulnerabilities associated with the IT infrastructure.", "Gain an understanding of the organization's business mission and objectives.", "Evaluate the results of the previous audit."], a: 2, exp: "You cannot identify what is at risk until you understand what the business is trying to achieve. Business comes first.", rule: "Business objectives ALWAYS precede IT infrastructure/controls.", analogy: "You can't buy insurance for a house until you know how much the house is actually worth." },
+            { id: 18, topic: "Risk Assessment", q: "In the context of IS auditing, what does 'inherent risk' mean?", options: ["The risk that an auditor will fail to detect a material error.", "The risk that a control will fail to prevent a material error.", "The susceptibility of an asset to a material error assuming there are no related controls.", "The risk that management will ignore the audit findings."], a: 2, exp: "Inherent risk is the raw, natural level of risk associated with a process before any security controls are applied.", rule: "Inherent (Raw) -> Controls applied -> Residual (Remaining) Risk.", analogy: "Jumping out of an airplane has a massive Inherent Risk. Wearing a parachute is the Control. Landing safely with a bruised knee is the Residual risk." },
+            { id: 19, topic: "Risk Assessment", q: "Management has decided to accept a known risk because the cost of the control exceeds the value of the asset. What should the IS auditor do?", options: ["Report the issue to the external regulatory body.", "Force management to implement the control.", "Document management's decision and verify it aligns with risk tolerance.", "Implement the control on behalf of management."], a: 2, exp: "Auditors do not force fixes. If management accepts a risk that aligns with policy, the auditor simply documents the decision.", rule: "Auditors advise; Management decides and accepts risk.", analogy: "The mechanic tells you the car needs a $5000 engine fix. The car is only worth $2000. You decide not to fix it. The mechanic just notes it on the receipt." },
+            { id: 20, topic: "Risk Assessment", q: "Which type of risk is defined as the risk that the IS auditor's procedures will not find a material error that actually exists?", options: ["Inherent Risk", "Control Risk", "Detection Risk", "Business Risk"], a: 2, exp: "Detection risk is the risk that the auditor misses the problem. It is the only risk the auditor can directly control.", rule: "Auditor controls Detection Risk by doing more testing.", analogy: "A metal detector at the airport. The 'Detection Risk' is the chance a knife slips through without the machine beeping." },
+            { id: 21, topic: "Risk Assessment", q: "What is 'materiality' in the context of IS auditing?", options: ["The physical hardware being audited.", "The importance or significance of an item in influencing decisions.", "The volume of data processed by the system.", "The amount of time spent on the audit."], a: 1, exp: "Materiality refers to how significant an issue is. If an error is 'material', it is large enough to change the decisions of management.", rule: "Materiality = Significance / Impact.", analogy: "Losing 10 cents is immaterial. Losing $10,000 is highly material. Auditors only care about material things." },
+            { id: 22, topic: "Risk Assessment", q: "The PRIMARY purpose of performing a control walkthrough during the planning phase is to:", options: ["Gather substantive evidence.", "Understand the process design and confirm controls are in place.", "Identify all instances of fraud.", "Train the auditee on security best practices."], a: 1, exp: "A walkthrough involves tracing a single transaction to understand the process and verify control design before heavy testing begins.", rule: "Walkthrough = Verify Design and Understanding.", analogy: "Walking through a haunted house with the lights on before Halloween, just to see where the actors are hiding." },
+            { id: 23, topic: "Risk Assessment", q: "An IS auditor finds that an organization has no formal risk assessment process. The auditor should FIRST:", options: ["Conduct a risk assessment for the organization.", "Recommend that management implement a risk assessment framework.", "Halt the audit until a risk assessment is done.", "Notify external regulators."], a: 1, exp: "The auditor identifies the gap and recommends management fixes it. The auditor does NOT do the risk assessment for them.", rule: "Auditors recommend. They do not perform operational duties.", analogy: "A personal trainer tells you to do pushups. They don't do the pushups for you." },
+            { id: 24, topic: "Risk Assessment", q: "When evaluating IT risks, the IS auditor should place the GREATEST emphasis on:", options: ["Threats with the highest technical complexity.", "Vulnerabilities that have existed the longest.", "Risks that have the highest potential impact on business objectives.", "Risks identified in the previous year's audit."], a: 2, exp: "Impact on business objectives is always the highest priority in risk evaluation.", rule: "Business impact > Technical metrics.", analogy: "A tiny leak in the hull of a submarine (High Impact) is way more important than a massive crack in the captain's coffee mug." },
+            { id: 25, topic: "Risk Assessment", q: "Which of the following describes 'Control Risk'?", options: ["The risk the auditor misses an error.", "The risk a material error occurs because there are no controls.", "The risk that a material error will not be prevented or detected by the internal control system.", "The risk of a business venture failing."], a: 2, exp: "Control risk is the probability that the organization's implemented controls fail to do their job.", rule: "Control Risk = The controls are broken/ineffective.", analogy: "You lock your front door. The 'Control Risk' is the chance that a thief can pick the lock anyway." },
+            { id: 26, topic: "Risk Assessment", q: "An IS auditor is evaluating a newly proposed IT project. The MOST important factor for the auditor to verify is that the project:", options: ["Uses the latest agile development methodologies.", "Is aligned with the organization's strategic business goals.", "Has the lowest possible vendor cost.", "Will be completed within six months."], a: 1, exp: "IT projects only hold value if they align with and support business goals.", rule: "IT Strategy MUST align with Business Strategy.", analogy: "Buying a high-tech $10,000 espresso machine is useless if your business is a shoe store." },
+            { id: 27, topic: "Risk Assessment", q: "The FIRST step in developing a risk management program is to:", options: ["Implement security controls.", "Identify the assets and their value to the business.", "Conduct a vulnerability scan.", "Calculate the Annualized Loss Expectancy (ALE)."], a: 1, exp: "You cannot protect what you don't know you have. Asset identification and valuation is always step one.", rule: "FIRST step in Risk = Asset Identification.", analogy: "You can't buy home insurance without telling the insurance company what is inside the house." },
+            { id: 28, topic: "Risk Assessment", q: "During a risk-based audit, an IS auditor discovers a specific control is missing, but the business impact of a failure is negligible. The auditor should:", options: ["Report it as a critical finding immediately.", "Recommend implementing the control regardless of cost.", "Report the observation so management can formally accept the risk.", "Halt the audit until the control is added."], a: 2, exp: "If the impact is negligible, the risk may be within the acceptable risk appetite. The auditor reports it so management can formally accept it.", rule: "Risk is evaluated by Business Impact, and accepted by Management.", analogy: "You noticed your kid's piggy bank doesn't have a titanium lock. It only holds $2. You tell your spouse, and they accept the risk instead of buying a $500 lock." },
+            { id: 29, topic: "Risk Assessment", q: "Which of the following BEST describes a vulnerability?", options: ["A hacker attempting to breach the network.", "A natural disaster like a flood.", "A weakness in the system design or implementation.", "The financial loss resulting from a breach."], a: 2, exp: "A vulnerability is a weakness. A threat (hacker/flood) exploits a vulnerability to cause an impact.", rule: "Risk = Threat x Vulnerability x Impact.", analogy: "Leaving your car window rolled down is a Vulnerability. The car thief is the Threat." },
+            { id: 30, topic: "Risk Assessment", q: "In a risk assessment, the value of an information asset should be determined PRIMARILY by:", options: ["The original cost to purchase the hardware and software.", "The IT department's estimate of its technical importance.", "The impact its loss would have on the business operations.", "The cost to replace the asset with a newer version."], a: 2, exp: "An old $50 server might hold $5 million worth of customer data. The business impact determines the true value.", rule: "Asset value = Business Impact.", analogy: "A thumb drive costs $5. But if the nuclear launch codes are on it, the value is infinite." },
+            { id: 31, topic: "Risk Assessment", q: "Which of the following is the BEST method for determining the frequency of IS audits?", options: ["Auditing all systems annually.", "Following the schedule of the previous year.", "Basing the frequency on a comprehensive risk assessment.", "Auditing based on the availability of audit staff."], a: 2, exp: "High-risk systems should be audited more frequently than low-risk systems. Risk dictates the schedule.", rule: "Risk Assessment drives the Audit Plan.", analogy: "You wash your hands (high risk) 10 times a day, but you only wash your car (low risk) once a month." },
+            { id: 32, topic: "Risk Assessment", q: "When developing a risk-based audit plan, the IS auditor should evaluate risk based on:", options: ["Inherent risk and Control risk.", "Detection risk and Audit risk.", "Business risk and Vendor risk.", "Financial risk and Operational risk."], a: 0, exp: "The auditor evaluates Inherent Risk (raw risk) and Control Risk (controls failing) to determine how much testing they need to do.", rule: "Audit Planning relies on Inherent + Control risk.", analogy: "Before crossing the street, you look at the speed of the cars (Inherent risk) and whether the traffic light is working (Control risk)." },
+            { id: 33, topic: "Risk Assessment", q: "A company implements a strict password policy and a firewall to reduce the likelihood of a breach. This is an example of risk:", options: ["Avoidance", "Acceptance", "Mitigation", "Transfer"], a: 2, exp: "Mitigation (or reduction) involves implementing controls to lessen the probability or impact of a threat.", rule: "Controls = Risk Mitigation.", analogy: "Wearing a seatbelt doesn't stop the crash (avoidance), but it mitigates the damage to your body." },
+            { id: 34, topic: "Risk Assessment", q: "Which formula accurately describes the components of an IT risk?", options: ["Risk = Threat x Vulnerability x Impact", "Risk = Asset Value x Control effectiveness", "Risk = Inherent Risk x Detection Risk", "Risk = Probability + Mitigation"], a: 0, exp: "Risk requires a Threat actor exploiting a Vulnerability, resulting in a business Impact.", rule: "Risk = Threat x Vuln x Impact.", analogy: "A thief (Threat) finds an unlocked door (Vulnerability) and steals the TV (Impact)." },
+            { id: 35, topic: "Risk Assessment", q: "What is the PRIMARY purpose of establishing a 'Risk Appetite'?", options: ["To eliminate all IT risks.", "To dictate the exact budget for IT security.", "To define the amount of risk management is willing to accept in pursuit of its goals.", "To guarantee compliance with all local laws."], a: 2, exp: "Risk appetite provides the threshold. If a risk is below the appetite, management accepts it. If it's above, they mitigate it.", rule: "Risk Appetite = Acceptable boundary of risk.", analogy: "Knowing exactly how spicy you like your food before you order at a Thai restaurant." },
+
+            // PART 3: Internal Controls & CSA
+            { id: 36, topic: "Internal Controls & CSA", q: "An IS auditor notes that failed login attempts to a core financial system are automatically logged and retained for a year. This logging is:", options: ["An effective preventive control.", "A valid detective control.", "Not an adequate control.", "A corrective control."], a: 1, exp: "Logging records events *after* they occur, making it a Detective control. It does not block the attempt.", rule: "Preventive blocks. Detective alerts/logs. Corrective restores.", analogy: "A security camera (Detective) films the burglar. A heavy steel door (Preventive) keeps them out." },
+            { id: 37, topic: "Internal Controls & CSA", q: "A PRIMARY benefit derived for an organization employing control self-assessment (CSA) techniques is that it:", options: ["Can identify high-risk areas that might need a detailed review later.", "Allows IS auditors to independently assess risk.", "Can be used as a replacement for traditional audits.", "Allows management to relinquish responsibility for control."], a: 0, exp: "CSA shifts primary review tasks to line management, identifying high-risk areas quickly without replacing the actual audit.", rule: "In CSA, the auditor is merely a facilitator. Management owns the controls.", analogy: "It’s like asking students to grade their own practice quizzes before the teacher gives the final exam." },
+            { id: 38, topic: "Internal Controls & CSA", q: "A control designed to minimize the impact of an event after it has already occurred is called a:", options: ["Preventive control", "Detective control", "Corrective control", "Directive control"], a: 2, exp: "Corrective controls act after detection to restore the system (e.g., backups, patching, DRP).", rule: "Corrective controls fix the damage.", analogy: "The car airbag (Corrective) deploys only after the crash happens to minimize your injury." },
+            { id: 39, topic: "Internal Controls & CSA", q: "A primary control is deemed too expensive to implement. Management implements an alternative control that mitigates the risk to an acceptable level. This is known as a:", options: ["Directive control", "Detective control", "Compensating control", "Corrective control"], a: 2, exp: "A compensating control is used when a primary control is unfeasible, too costly, or fails.", rule: "Compensating control = The Backup Plan for a primary control.", analogy: "You can't afford a $2000 smart security system (Primary), so you buy a large guard dog instead (Compensating)." },
+            { id: 40, topic: "Internal Controls & CSA", q: "Which of the following is the BEST example of a detective control?", options: ["Data validation edits", "Segregation of duties", "Review of system access logs", "Restoring from a backup tape"], a: 2, exp: "Log reviews detect unauthorized actions after they have occurred.", rule: "Logs, Alerts, and Reviews are Detective.", analogy: "Looking at your credit card statement at the end of the month to catch fraudulent charges." },
+            { id: 41, topic: "Internal Controls & CSA", q: "The PRIMARY objective of Segregation of Duties (SoD) is to:", options: ["Increase operational efficiency.", "Prevent a single individual from committing and concealing fraud/errors.", "Reduce the number of IT staff needed.", "Automate manual accounting processes."], a: 1, exp: "SoD splits critical tasks so no one person has end-to-end control, reducing the risk of hidden fraud.", rule: "SoD = Fraud prevention through divided power.", analogy: "It takes two separate keys, turned by two separate soldiers at the same time, to launch a nuclear missile." },
+            { id: 42, topic: "Internal Controls & CSA", q: "An access control system logically prevents unauthorized users from accessing files. This is an example of what kind of control?", options: ["Preventive", "Detective", "Corrective", "Directive"], a: 0, exp: "Access controls logically prevent unauthorized users from accessing systems or data before an incident happens.", rule: "Access controls (Logical/Physical) are Preventive.", analogy: "A bouncer checking the VIP list at the door of a club." },
+            { id: 43, topic: "Internal Controls & CSA", q: "Who should be responsible for designing and implementing internal controls?", options: ["The IS Auditor", "External Regulators", "Operational Management", "The Audit Committee"], a: 2, exp: "Management owns the processes and is responsible for designing and maintaining the controls.", rule: "Management designs/owns controls. Auditors evaluate them.", analogy: "The Bank Manager builds the vault. The Auditor just checks if the vault is locked." },
+            { id: 44, topic: "Internal Controls & CSA", q: "Which entity is ULTIMATELY responsible for the organization's system of internal controls?", options: ["The IS Auditor", "Executive Management / Board of Directors", "The IT Department", "External Auditors"], a: 1, exp: "Executive management and the board bear the ultimate responsibility for ensuring internal controls exist and are effective.", rule: "Management owns the controls.", analogy: "The CEO of an airline is ultimately responsible if planes crash due to bad maintenance, not the guy checking the tires." },
+            { id: 45, topic: "Internal Controls & CSA", q: "An organization uses a badge swipe system to enter the server room, but employees often tailgate. What is the BEST preventive control to fix this?", options: ["Review badge logs daily.", "Install a security camera.", "Install a mantrap / deadcoded door.", "Issue a policy warning against tailgating."], a: 2, exp: "A mantrap physically prevents more than one person from entering at a time. Cameras and logs are detective.", rule: "Preventive physically stops the action.", analogy: "A turnstile at a subway station physically stops two people from walking through on one ticket." },
+            { id: 46, topic: "Internal Controls & CSA", q: "Which of the following is an example of a Compensating Control?", options: ["A firewall blocking unauthorized IP addresses.", "A daily review of exception logs because duties cannot be adequately segregated.", "A policy document requiring strong passwords.", "A data backup used to restore a crashed server."], a: 1, exp: "Because Segregation of Duties (the primary control) cannot be achieved, a daily manual review (the compensating control) is added.", rule: "Compensating Control offsets a weak primary control.", analogy: "A knight doesn't have a shield (Primary), so he wears extra thick chainmail (Compensating)." },
+            { id: 47, topic: "Internal Controls & CSA", q: "In a Control Self-Assessment (CSA), what is the PRIMARY role of the IS auditor?", options: ["To design the controls being assessed.", "To act as a facilitator and guide management in the assessment.", "To punish departments that fail the assessment.", "To take over the operational risk management function."], a: 1, exp: "In CSA, management does the assessing. The auditor simply provides the methodology and facilitates the workshop.", rule: "CSA Auditor = Facilitator.", analogy: "The auditor is the referee blowing the whistle, but the management team are the ones actually playing the game." },
+            { id: 48, topic: "Internal Controls & CSA", q: "Which of the following controls is MOST effective in preventing a payroll clerk from modifying their own salary?", options: ["Regular review of payroll logs.", "Segregation of duties in the payroll application.", "Mandatory vacations for payroll clerks.", "Data encryption of the payroll database."], a: 1, exp: "Segregation of duties physically prevents the clerk from having the necessary access rights to authorize their own changes.", rule: "SoD is the ultimate preventive control against internal fraud.", analogy: "The bank teller takes your money, but only the vault manager has the combination to the safe." },
+            { id: 49, topic: "Internal Controls & CSA", q: "What is the PRIMARY advantage of a Control Self-Assessment (CSA) program?", options: ["It replaces the need for an internal audit function.", "It shifts the responsibility of risk management entirely to the auditor.", "It increases line management's awareness and ownership of internal controls.", "It guarantees 100% compliance with external regulations."], a: 2, exp: "By forcing management to assess their own controls, they become more aware of risks and take ownership of the solutions.", rule: "CSA = Management Ownership.", analogy: "Having an employee wash their own car makes them much more careful about getting it dirty next time." },
+            { id: 50, topic: "Internal Controls & CSA", q: "Which of the following is considered an administrative (directive) control?", options: ["Biometric scanner", "Intrusion Prevention System (IPS)", "Information Security Policy", "Data Backup"], a: 2, exp: "Policies, procedures, and guidelines are administrative controls that direct employee behavior.", rule: "Policies = Directive/Administrative controls.", analogy: "A 'No Smoking' sign is a directive control. It doesn't physically put out the cigarette, it relies on humans reading and obeying." },
+            { id: 51, topic: "Internal Controls & CSA", q: "A bank requires a teller to enter a transaction, and a manager to approve any transaction over $5,000. This is an example of:", options: ["Compensating control", "Detective control", "Segregation of Duties", "Continuous auditing"], a: 2, exp: "Splitting the task (entry vs. approval) between two people is classic Segregation of Duties to prevent fraud.", rule: "Maker/Checker = Segregation of Duties.", analogy: "One person writes the check, another person signs it. If one goes rogue, the other stops the theft." },
+            { id: 52, topic: "Internal Controls & CSA", q: "Which of the following is the BEST reason to automate internal controls?", options: ["To reduce the need for an IS auditor.", "To eliminate all inherent risks.", "To ensure controls are applied consistently without human error.", "To decrease the initial cost of system deployment."], a: 2, exp: "Automated controls do not get tired, do not forget, and cannot be socially engineered. They apply the rule 100% of the time.", rule: "Automated controls > Manual controls (Consistency).", analogy: "A human security guard might fall asleep at 3 AM. A digital keypad lock never sleeps." },
+            { id: 53, topic: "Internal Controls & CSA", q: "Management has implemented a policy requiring all employees to change their passwords every 90 days. This is a:", options: ["Detective control", "Directive (Administrative) control", "Corrective control", "Physical control"], a: 1, exp: "A policy is a written rule directing behavior. (Note: The system forcing the change would be a logical preventive control).", rule: "Policies/Rules = Directive Controls.", analogy: "The Speed Limit sign on the highway is a Directive control. It tells you what to do, but doesn't physically stop your car." },
+            { id: 54, topic: "Internal Controls & CSA", q: "During a compliance audit, the IS auditor finds that an IT employee has access to both the development and production environments. The auditor should FIRST:", options: ["Revoke the employee's access to production immediately.", "Report it as a high risk to the Audit Committee.", "Review the access logs to determine if unauthorized changes were made.", "Recommend implementing a mantrap at the data center."], a: 2, exp: "Before escalating or recommending fixes, the auditor must determine the impact. Reviewing logs shows if the vulnerability was exploited.", rule: "Determine impact/extent before acting.", analogy: "If you find the safe door unlocked, you first check if any money is missing before you buy a new lock." },
+            { id: 55, topic: "Internal Controls & CSA", q: "Which of the following BEST represents a logical preventive control?", options: ["A smoke detector.", "A biometric fingerprint scanner on a server room door.", "A firewall blocking unauthorized ports.", "A fire suppression sprinkler system."], a: 2, exp: "A firewall is a logical (software/network) control that prevents unauthorized access. Biometrics are physical preventive.", rule: "Logical controls = Software/Networks. Physical = Tangible.", analogy: "A firewall is like a digital bouncer. A mantrap is a physical bouncer." },
+
+            // PART 4: Audit Evidence & Sampling
+            { id: 56, topic: "Audit Evidence & Sampling", q: "Which of the following forms of evidence would an IS auditor consider the MOST reliable?", options: ["An oral statement from the auditee", "The results of a test that is performed by an external IS auditor", "An internally generated computer accounting report", "A confirmation letter that is received from an outside source"], a: 1, exp: "Direct observation and tests performed independently by the auditor are the most reliable forms of evidence.", rule: "Hierarchy: Auditor Generated > External 3rd Party > Internal System > Oral.", analogy: "Seeing it rain yourself is more reliable than the weatherman telling you it's raining." },
+            { id: 57, topic: "Audit Evidence & Sampling", q: "Which testing method involves an auditor checking a sample of items to verify that a specific control is operating as designed?", options: ["Substantive testing", "Compliance testing", "Analytical procedures", "Stop-and-go testing"], a: 1, exp: "Compliance testing checks if a control is present and working (Attribute). Substantive testing checks data integrity (Variable).", rule: "Compliance = Checking the Control. Substantive = Checking the Data/Math.", analogy: "Compliance is checking if the bouncer is checking IDs at the club door. Substantive is counting the cash in the register." },
+            { id: 58, topic: "Audit Evidence & Sampling", q: "What is the PRIMARY benefit of implementing continuous auditing?", options: ["It eliminates the need for external auditors.", "It allows for real-time or near real-time identification of anomalies.", "It reduces the overall cost of the IT infrastructure.", "It automatically corrects errors in financial transactions."], a: 1, exp: "Continuous auditing uses automated tools to constantly monitor systems for anomalies so they can be addressed immediately.", rule: "Continuous Auditing = Real-time anomaly detection by the auditor.", analogy: "It's like a heart monitor in a hospital that beeps instantly if the heart rate drops, instead of waiting for a yearly checkup." },
+            { id: 59, topic: "Audit Evidence & Sampling", q: "An IS auditor uses statistical sampling to test a population of purchase orders. If the auditor wants to decrease the margin of error, they should:", options: ["Decrease the sample size.", "Increase the sample size.", "Use non-statistical sampling instead.", "Increase the tolerable error rate."], a: 1, exp: "A larger sample size provides a more accurate mathematical representation of the population, reducing the margin of error.", rule: "Higher confidence / lower error margin requires a larger sample.", analogy: "If you want to know if soup is salty, tasting one spoonful is okay. Tasting three spoonfuls guarantees you know exactly how salty it is." },
+            { id: 60, topic: "Audit Evidence & Sampling", q: "What sampling technique is BEST used when an auditor suspects fraud and wants to find at least one exception in a population?", options: ["Variable sampling", "Stop-and-go sampling", "Discovery sampling", "Stratified sampling"], a: 2, exp: "Discovery sampling is used when the expected error rate is near zero, and finding just ONE exception is critical (like fraud).", rule: "Fraud / Irregularities = Discovery Sampling.", analogy: "It's like hunting for a mouse in your house. You aren't trying to count them (Variable), you just need to find ONE to prove you have a problem." },
+            { id: 61, topic: "Audit Evidence & Sampling", q: "An auditor is testing whether employees are signing the AUP. The auditor expects very few errors. Which sampling method MINIMIZES the sample size?", options: ["Discovery sampling", "Variable sampling", "Stop-and-go sampling", "Random sampling"], a: 2, exp: "Stop-and-go sampling allows the auditor to stop testing early if no errors are found in the initial small sample, minimizing audit time.", rule: "Minimize testing time = Stop-and-go sampling.", analogy: "Eating grapes. If the first 3 are sweet, you stop testing and assume the whole bunch is sweet." },
+            { id: 62, topic: "Audit Evidence & Sampling", q: "When using Generalized Audit Software (GAS), what is the PRIMARY advantage for the IS auditor?", options: ["It automatically fixes errors in the database.", "It allows the auditor to independently run queries and access data.", "It eliminates the need for risk assessments.", "It replaces the need for substantive testing."], a: 1, exp: "GAS provides the auditor with independence. They don't have to ask the IT department to pull reports (which could be manipulated).", rule: "GAS/CAATs = Auditor Independence in data gathering.", analogy: "Instead of asking the chef what's in the fridge (they might lie), you use your own key (GAS) to open the fridge and look yourself." },
+            { id: 63, topic: "Audit Evidence & Sampling", q: "Which testing technique allows an auditor to submit test data through the actual live production system to verify processing logic?", options: ["Parallel simulation", "Integrated Test Facility (ITF)", "Generalized Audit Software", "Snapshot technique"], a: 1, exp: "An ITF sets up a 'dummy' entity in the live production system so the auditor can run test transactions alongside real data.", rule: "ITF = Testing in Live Production with dummy entities.", analogy: "A 'Mystery Shopper' buying real items at a real store using fake corporate money to test the cashier." },
+            { id: 64, topic: "Audit Evidence & Sampling", q: "Which of the following is an attribute sampling application?", options: ["Estimating the total monetary value of inventory.", "Testing the approval signatures on purchase orders.", "Calculating the average downtime of servers.", "Determining the financial impact of a breach."], a: 1, exp: "Attribute sampling deals with binary Yes/No conditions (e.g., Is the signature there or not?).", rule: "Attribute = Compliance (Yes/No). Variable = Substantive (Numbers/Money).", analogy: "Attribute: Checking if the lightbulb is ON or OFF. Variable: Measuring exactly how many watts it is pulling." },
+            { id: 65, topic: "Audit Evidence & Sampling", q: "An auditor notes that a system calculation is failing. To independently verify the calculation logic, the auditor writes a script to re-process the data and compares the results. This is known as:", options: ["Integrated Test Facility (ITF)", "Parallel Simulation", "Snapshots", "Continuous Auditing"], a: 1, exp: "Parallel simulation takes live data and runs it through the auditor's own software to see if the output matches the client's output.", rule: "Parallel Simulation = Auditor Software + Live Data.", analogy: "The cashier rings up your groceries. You pull out your phone calculator and do the math at the same time to see if they match." },
+            { id: 66, topic: "Audit Evidence & Sampling", q: "In audit sampling, the 'Tolerable Error Rate' represents:", options: ["The number of mistakes the auditor is allowed to make.", "The maximum error rate in the population that the auditor is willing to accept.", "The guaranteed accuracy of the sample.", "The percentage of the population that must be tested."], a: 1, exp: "Tolerable error is the threshold. If errors exceed this rate, the control is deemed ineffective.", rule: "Tolerable Error = Max acceptable failure rate.", analogy: "A pizza factory allows up to 2 burnt pizzas per 100. The 'Tolerable Error' is 2%." },
+            { id: 67, topic: "Audit Evidence & Sampling", q: "When using continuous auditing, what is the PRIMARY role of the IS auditor?", options: ["To review the alerts and anomalies generated by the automated tools.", "To write the application code for the business.", "To fix the transaction errors identified by the system.", "To approve the daily financial ledgers."], a: 0, exp: "In continuous auditing, tools flag anomalies, and the auditor's job is to investigate those specific flags.", rule: "Auditor investigates anomalies; management fixes errors.", analogy: "The metal detector beeps. The auditor's job is to pat down the passenger, not to build the metal detector." },
+            { id: 68, topic: "Audit Evidence & Sampling", q: "A 'Confidence Level' of 95% in statistical sampling implies:", options: ["95% of the population was tested.", "There is a 5% risk that the sample does not accurately represent the population.", "The controls are 95% effective.", "The auditor is 95% finished with the testing phase."], a: 1, exp: "A 95% confidence level means you accept a 5% sampling risk (the risk the sample is a statistical fluke).", rule: "Confidence Level + Sampling Risk = 100%.", analogy: "I am 95% sure it will rain today. Which means there is a 5% chance I am totally wrong." },
+            { id: 69, topic: "Audit Evidence & Sampling", q: "An IS auditor is reviewing firewall rules. Instead of checking all 5,000 rules, the auditor uses a statistical sample. The risk that the sample does not reflect the entire rule set is called:", options: ["Inherent risk", "Control risk", "Sampling risk", "Detection risk"], a: 2, exp: "Sampling risk is the statistical probability that the sample chosen does not accurately reflect the actual population.", rule: "Sampling Risk = Fluke sample.", analogy: "You ask 3 people in Texas what their favorite sport is, and they all say Football. You assume 100% of Americans love Football. That's sampling risk." },
+            { id: 70, topic: "Audit Evidence & Sampling", q: "When evaluating the reliability of audit evidence, which of the following is considered the LEAST reliable?", options: ["Evidence obtained directly by the auditor.", "Evidence provided by an independent third party.", "Evidence generated automatically by the IT system.", "Evidence provided orally by the IT manager."], a: 3, exp: "Oral evidence leaves no paper trail and is highly subjective.", rule: "Oral evidence is ALWAYS the weakest form of evidence.", analogy: "Hearsay in a court of law. 'He said he didn't do it' is the weakest defense." },
+            { id: 71, topic: "Audit Evidence & Sampling", q: "An IS auditor is checking if invoices over $10,000 have the required manager signature. Which sampling method should be used?", options: ["Variable sampling", "Attribute sampling", "Stratified sampling", "Substantive sampling"], a: 1, exp: "Checking for a signature is a binary 'Yes/No' test of compliance, which requires Attribute sampling.", rule: "Attribute = Yes/No (Compliance).", analogy: "A bouncer checking IDs. He just wants to know: Are you 21? Yes or No." },
+            { id: 72, topic: "Audit Evidence & Sampling", q: "When using Generalized Audit Software (GAS) to test a database, the IS auditor is performing:", options: ["Compliance testing", "Substantive testing", "Control design walkthrough", "Attribute sampling"], a: 1, exp: "Using GAS to query the actual database to look for errors, duplicates, or anomalies is testing the substance (data) itself.", rule: "GAS queries data = Substantive testing.", analogy: "Using a magnifying glass to look at the actual fingerprints on a weapon." },
+            { id: 73, topic: "Audit Evidence & Sampling", q: "An auditor is using a sample to estimate the total monetary value of errors in an accounts receivable database. This is called:", options: ["Attribute sampling", "Variable sampling", "Stop-and-go sampling", "Discovery sampling"], a: 1, exp: "Variable sampling is used to estimate numerical values (like dollars, weights, or time).", rule: "Variable = Value/Numbers.", analogy: "Weighing 10 bags of flour to estimate the total weight of the truckload." },
+            { id: 74, topic: "Audit Evidence & Sampling", q: "If an auditor wants to decrease the risk of drawing an incorrect conclusion from a sample (decrease sampling risk), they must:", options: ["Decrease the sample size.", "Increase the sample size.", "Change from statistical to judgmental sampling.", "Only audit the largest transactions."], a: 1, exp: "A larger sample provides more precision and reduces the risk that the sample doesn't represent the population.", rule: "Larger Sample = Less Sampling Risk = Higher Confidence.", analogy: "Flipping a coin 2 times might give you 100% heads. Flipping it 1,000 times ensures you see the true 50/50 reality." },
+            { id: 75, topic: "Audit Evidence & Sampling", q: "When using the Integrated Test Facility (ITF) approach, what is the MOST critical step for the auditor?", options: ["Ensuring test data is permanently added to the production database.", "Ensuring the test transactions are removed from the system after testing.", "Running the test during peak business hours.", "Using Generalized Audit Software to create the data."], a: 1, exp: "If dummy test data is left in the live production system, it will corrupt the company's actual financial records.", rule: "ITF requires strict removal of test data.", analogy: "Using a crash test dummy in a real car. If you forget to take the dummy out before selling the car, the customer will be very confused." },
+            { id: 76, topic: "Audit Evidence & Sampling", q: "When evaluating audit evidence, 'Appropriateness' refers to the evidence being:", options: ["Sufficient in quantity.", "Relevant and reliable to the audit objective.", "Approved by management.", "Generated by an automated system."], a: 1, exp: "'Sufficiency' refers to quantity. 'Appropriateness' refers to quality (relevance and reliability).", rule: "Appropriate = Quality/Relevant. Sufficient = Quantity.", analogy: "Bringing 1,000 blurry photos (Sufficient) to court doesn't help. Bringing 1 crystal-clear 4K video (Appropriate) wins the case." },
+            { id: 77, topic: "Audit Evidence & Sampling", q: "The risk that the IS auditor will reach an invalid conclusion based on the test results of a sample is called:", options: ["Inherent risk", "Audit risk", "Sampling risk", "Business risk"], a: 2, exp: "Sampling risk occurs because the auditor did not test 100% of the population, leaving a chance the sample was unrepresentative.", rule: "Sampling Risk = Sample doesn't match population.", analogy: "Watching the first 5 minutes of a terrible movie and assuming the ending is bad too. You sampled it, but your conclusion might be wrong." },
+            { id: 78, topic: "Audit Evidence & Sampling", q: "If an auditor is testing the effectiveness of a control over a period of time, they are performing:", options: ["Substantive testing", "Compliance testing", "A walkthrough", "Data analytics"], a: 1, exp: "Compliance testing checks if a control operated effectively and consistently over the audit period.", rule: "Control effectiveness = Compliance Testing.", analogy: "Checking the logbook every week for a year to ensure the security guard actually did his rounds." },
+            { id: 79, topic: "Audit Evidence & Sampling", q: "When using CAATs to extract data for substantive testing, what is the auditor's PRIMARY concern?", options: ["Ensuring the data is encrypted during analysis.", "Ensuring the extracted data matches the original data in the live system.", "Ensuring management signs off on the script.", "Minimizing CPU usage on the production server."], a: 1, exp: "If the extracted data loses its integrity (doesn't match production), any conclusions drawn from it are completely invalid.", rule: "Evidence must be verified for accuracy and completeness before analysis.", analogy: "Before you analyze a blood sample, you must verify the label has the correct patient's name." },
+            { id: 80, topic: "Audit Evidence & Sampling", q: "An auditor is reviewing an organization's network. Instead of looking at device configurations, the auditor asks the network administrator if the firewalls are configured correctly. The administrator says 'Yes'. The auditor notes this as a passing control. What rule did the auditor violate?", options: ["Sampling risk", "Trust, but Verify (Appropriate Evidence)", "Segregation of Duties", "Parallel Simulation"], a: 1, exp: "Oral evidence is the weakest form of evidence. The auditor must independently verify the configuration rather than trusting the auditee's word.", rule: "Never base a conclusion solely on oral evidence.", analogy: "A teacher asks a student if they did their homework. The student says 'yes'. The teacher gives them an A without looking at the paper." },
+
+            // PART 5: Reporting & Follow-up
+            { id: 81, topic: "Reporting & Follow-up", q: "When preparing an audit report, the IS auditor should ensure that the results are supported by:", options: ["Statements from IS management", "Work papers of other auditors", "An organizational control self-assessment", "Sufficient and appropriate audit evidence"], a: 3, exp: "Every finding in an audit report MUST be backed by sufficient and appropriate evidence gathered during fieldwork.", rule: "Opinions require concrete evidence.", analogy: "A lawyer cannot convict a criminal in court just by saying 'I think he did it'. They need the fingerprints (evidence)." },
+            { id: 82, topic: "Reporting & Follow-up", q: "Which of the following is the BEST indicator of the effectiveness of an IS audit function?", options: ["The number of high-risk findings reported.", "The percentage of audit recommendations implemented by management.", "Completion of the annual audit plan within budget.", "The frequency of audit reports issued."], a: 1, exp: "Audits only add value to a business if the recommendations are actually implemented by management to fix the vulnerabilities.", rule: "Audit value is realized through management action (remediation).", analogy: "A doctor's advice is useless unless the patient actually takes the medicine." },
+            { id: 83, topic: "Reporting & Follow-up", q: "During a follow-up audit, the IS auditor's PRIMARY responsibility is to:", options: ["Re-audit the entire business process.", "Verify that management has implemented the agreed-upon corrective actions.", "Report the original findings to the regulatory authorities.", "Evaluate new emerging risks in the department."], a: 1, exp: "Follow-up audits have a narrow scope: checking if management actually fixed what they promised to fix in the previous audit.", rule: "Follow-up = Verify Remediation.", analogy: "A health inspector told a restaurant to clean the floors. The follow-up visit is just to check the floors, not to inspect the whole kitchen again." },
+            { id: 84, topic: "Reporting & Follow-up", q: "What is the MAIN purpose of the exit interview at the end of an audit?", options: ["To negotiate the severity of the findings.", "To ensure the facts presented in the report are accurate and agreed upon.", "To deliver the final printed audit report.", "To evaluate the performance of the audit team."], a: 1, exp: "The exit interview ensures there are no surprises and confirms factual accuracy with management before the report is finalized.", rule: "Exit Interview = Factual Accuracy & No Surprises.", analogy: "Reading the bill at a restaurant before you pay it, to make sure they didn't charge you for something you didn't order." },
+            { id: 85, topic: "Reporting & Follow-up", q: "If an IS auditor uncovers a critical security vulnerability that is actively being exploited, they should:", options: ["Wait until the final report to document it.", "Fix the vulnerability themselves immediately.", "Communicate it to management immediately.", "Exclude it from the scope if it wasn't in the original plan."], a: 2, exp: "Critical, active threats must be reported to management immediately so they can stop the bleeding. Do not wait for the final report.", rule: "Imminent danger = Immediate communication.", analogy: "If a fire alarm goes off during a math test, you don't wait to finish the test before telling the principal. You yell 'FIRE!' immediately." },
+            { id: 86, topic: "Reporting & Follow-up", q: "What should be included in the management response section of an IS audit report?", options: ["The auditor's opinion on management's performance.", "A detailed timeline and action plan from management to address the findings.", "A request for a larger audit budget.", "The names of employees who caused the errors."], a: 1, exp: "Management's response should acknowledge the finding and provide a concrete action plan and target date for remediation.", rule: "Management Response = Action Plan + Timeline.", analogy: "If you tell your kid their room is a mess, their response should be 'I will clean it by 5 PM', not just 'Okay'." },
+            { id: 87, topic: "Reporting & Follow-up", q: "If management disagrees with an audit finding during the exit interview, the IS auditor should:", options: ["Remove the finding from the report.", "Include the finding and document management's disagreement in the report.", "Escalate immediately to external regulators.", "Modify the evidence to convince management."], a: 1, exp: "If evidence supports the finding, it stays in the report. Management's disagreement is formally noted in their response section.", rule: "Never alter factual findings based on management pressure.", analogy: "A referee calls a foul. The coach screams that it wasn't a foul. The referee keeps the penalty but notes the coach's complaint." },
+            { id: 88, topic: "Reporting & Follow-up", q: "An auditor finds a minor compliance issue that does not impact security or financial reporting. The auditor should:", options: ["Ignore it to save time.", "Report it to the Board of Directors immediately.", "Include it in the report as a minor observation/recommendation.", "Demand the system be taken offline."], a: 2, exp: "All findings should be documented, but minor issues are reported as observations to local management, not escalated to the Board.", rule: "Report findings based on Materiality.", analogy: "If you notice a typo on a menu, you tell the waiter, you don't call the CEO of the restaurant chain." },
+            { id: 89, topic: "Reporting & Follow-up", q: "After issuing the final audit report, the IS auditor's involvement with the auditee should:", options: ["End completely until the next annual audit.", "Continue through formal follow-up procedures to verify remediation.", "Shift to helping the auditee implement the fixes.", "Involve daily operational monitoring of the department."], a: 1, exp: "The audit lifecycle includes follow-up to ensure management actually mitigated the reported risks.", rule: "The audit is not truly complete until follow-up verifies remediation.", analogy: "A doctor gives you a prescription, but you have a follow-up appointment next week to make sure the infection actually went away." },
+            { id: 90, topic: "Reporting & Follow-up", q: "An IS auditor finds a significant flaw in the financial reporting system during fieldwork. The FIRST action the auditor should take is to:", options: ["Include it in the final audit report.", "Inform the external financial auditors.", "Validate the finding and communicate it to IT management.", "Implement a temporary patch to fix the flaw."], a: 2, exp: "Before escalating to final reports, the auditor must validate the fact and inform the relevant management so they are aware.", rule: "Validate facts and communicate locally before escalating.", analogy: "If you smell smoke in a hotel room, you check the hallway (validate) and tell the front desk (local management) before calling the national news." },
+            { id: 91, topic: "Reporting & Follow-up", q: "Management agreed to fix a finding by Q3. During the Q4 follow-up, the fix was not implemented. The auditor should FIRST:", options: ["Report the failure to the Board of Directors.", "Determine the reason for the delay and the current risk level.", "Revoke the IT department's operational budget.", "Close the issue and plan to review it next year."], a: 1, exp: "Before escalating, the auditor must understand WHY it wasn't fixed and what the residual risk currently is.", rule: "Investigate the root cause before escalating.", analogy: "If someone is late to a meeting, you ask them if there was traffic before you yell at them." },
+            { id: 92, topic: "Reporting & Follow-up", q: "The PRIMARY objective of an audit exit interview is to:", options: ["Present the final printed report to the Board.", "Ensure the auditee agrees with the factual accuracy of the findings.", "Negotiate the severity level of the risks.", "Demand immediate remediation of all findings."], a: 1, exp: "The exit interview ensures there are no factual misunderstandings between the auditor and management before the report is finalized.", rule: "Exit Interview = Confirm Facts.", analogy: "A tailor having you try on the suit one last time before they permanently stitch the seams." },
+            { id: 93, topic: "Reporting & Follow-up", q: "If management decides NOT to address a severe audit finding because of budget constraints, what is the auditor's responsibility?", options: ["Accept the risk on behalf of the company.", "Report the decision to the Board of Directors or Audit Committee.", "Force the IT department to fix it anyway.", "Remove the finding from the final report."], a: 1, exp: "Management can accept risk, but if the auditor believes the risk is too high for the business, they must escalate it to the Board.", rule: "Escalate unacceptable risk to the Board.", analogy: "If the ship captain ignores a massive hole in the hull to save money, you report it directly to the Admiral." },
+            { id: 94, topic: "Reporting & Follow-up", q: "During an audit, the auditor finds that a control is operating effectively, but it is not documented in any formal procedure. The auditor should:", options: ["Ignore the issue since the control is working.", "Report a finding regarding the lack of documentation.", "Write the procedure document for the IT team.", "Fail the entire audit."], a: 1, exp: "If it's not documented, it's not repeatable, and knowledge is lost if the employee leaves. It must be reported.", rule: "Undocumented controls = Audit finding.", analogy: "A chef cooking a brilliant meal purely from memory. If he gets hit by a bus, the restaurant loses the recipe forever. It must be written down." },
+            { id: 95, topic: "Reporting & Follow-up", q: "The IS auditor should structure the audit report to PRIMARILY address the needs of:", options: ["The IT operational staff.", "The external regulatory auditors.", "Senior management and the Audit Committee.", "The Chief Information Security Officer (CISO)."], a: 2, exp: "The report must be written so that senior management and the board (the ultimate decision-makers) can understand the business impact.", rule: "Write reports for Senior Management.", analogy: "A CEO doesn't want to read 40 pages of Python code. They want a 2-page summary explaining how much money they might lose." },
+            { id: 96, topic: "Reporting & Follow-up", q: "During an audit, an IS auditor discovers that a previous audit finding was closed by management, but the implemented fix is completely ineffective. The auditor should:", options: ["Reopen the old finding and escalate to the Audit Committee.", "Report the ineffective fix as a new finding in the current audit.", "Ignore it, as the previous auditor signed off on it.", "Fix the issue manually to protect the company."], a: 1, exp: "It is a current control deficiency. It should be documented as a finding in the current audit report with references to the failed remediation.", rule: "Current failures are reported as current findings.", analogy: "If the plumber fixed a leak yesterday, but it's leaking again today, you write a new ticket for today's leak." },
+            { id: 97, topic: "Reporting & Follow-up", q: "When an auditor writes a recommendation in the final report, it should be:", options: ["Highly technical so the IT team knows exactly which code to change.", "Focused on addressing the root cause of the finding.", "Dictating the exact vendor software management must buy.", "Vague so management has maximum flexibility."], a: 1, exp: "Recommendations should target the root cause of the vulnerability. They should NOT dictate specific technologies.", rule: "Recommendations fix the Root Cause, not the symptom.", analogy: "Telling a patient they need to eat healthier to lower blood pressure, instead of forcing them to buy a specific brand of organic broccoli." },
+            { id: 98, topic: "Reporting & Follow-up", q: "What determines the scope and timeline of the auditor's follow-up activities?", options: ["The ISACA standards.", "The availability of the audit staff.", "The risk rating of the original findings and management's agreed remediation dates.", "The external auditor's schedule."], a: 2, exp: "Follow-ups are prioritized based on how severe the original risk was, and they are scheduled based on when management promised to fix it.", rule: "Follow-up schedule is driven by Risk and Target Dates.", analogy: "If a bridge is collapsing (High Risk), the city inspector follows up tomorrow. If a park bench is squeaky (Low Risk), they follow up next month." },
+            { id: 99, topic: "Reporting & Follow-up", q: "Before relying on a third-party audit report (such as a SOC 2 report from a cloud provider), the IS auditor MUST FIRST:", options: ["Include the SOC 2 report in their own working papers as absolute proof of security.", "Verify the independence and qualifications of the third-party auditor.", "Request that their own IT department re-audit the cloud provider.", "Ask the cloud provider to reduce their monthly fee."], a: 1, exp: "The auditor must ensure the third-party who conducted the audit was qualified and independent before relying on their conclusions.", rule: "Verify the independence and competence of third-party reviewers.", analogy: "Before you accept a doctor's note from an employee, you verify the note came from a real, licensed hospital." },
+            { id: 100, topic: "Reporting & Follow-up", q: "Which of the following documents is used to capture the auditor's testing procedures, evidence obtained, and conclusions reached during the audit?", options: ["The Audit Charter", "The Executive Summary", "Audit Working Papers", "The Management Response"], a: 2, exp: "Working papers are the auditor's official record of the work performed, the evidence gathered, and how conclusions were reached.", rule: "Working papers support the audit report.", analogy: "In math class, working papers are where you 'show your work' to prove how you got the final answer." }
         ];
 
         // ================= STATE MANAGEMENT =================
-        const STORE_KEY = 'cisaD1App_v6_safe'; 
+        const STORE_KEY = 'cisaD1App_v11_perfect'; 
         
         function getInitialState() {
             return {
@@ -970,7 +1081,7 @@
         let examAnswers = []; 
         let timerInterval;
         let secondsElapsed = 0;
-        let examTimeLimit = 90 * 60; // 90 mins (1 hr 30 mins)
+        let examTimeLimit = 90 * 60; // 90 mins
         let quickCurrentId = null;
 
         // ================= INIT =================
@@ -991,9 +1102,11 @@
                 } else {
                     state.streak.count = 0; // Broke streak
                 }
-                document.getElementById('streak-count').textContent = state.streak.count;
+                const sc = document.getElementById('streak-count');
+                if (sc) sc.textContent = state.streak.count;
             } else {
-                document.getElementById('streak-count').textContent = state.streak.count;
+                const sc = document.getElementById('streak-count');
+                if (sc) sc.textContent = state.streak.count;
             }
         }
 
@@ -1002,7 +1115,8 @@
             if(state.streak.lastDate !== today) {
                 state.streak.count += 1;
                 state.streak.lastDate = today;
-                document.getElementById('streak-count').textContent = state.streak.count;
+                const sc = document.getElementById('streak-count');
+                if (sc) sc.textContent = state.streak.count;
                 saveState();
                 showToast("Daily Streak increased! 🔥");
             }
@@ -1012,18 +1126,25 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             
-            document.getElementById(`view-${viewName}`).classList.add('active');
-            document.getElementById(`nav-${viewName}`).classList.add('active');
+            const viewEl = document.getElementById(`view-${viewName}`);
+            if (viewEl) viewEl.classList.add('active');
+            
+            const navEl = document.getElementById(`nav-${viewName}`);
+            if (navEl) navEl.classList.add('active');
             
             if(viewName === 'dash') renderDash();
             if(viewName === 'review') renderErrorLog();
             if(viewName === 'quick') initQuickGrid();
             if(viewName === 'quiz') {
-                document.getElementById('quiz-menu').style.display = 'block';
-                document.getElementById('quiz-engine').classList.remove('active');
+                const qMenu = document.getElementById('quiz-menu');
+                if (qMenu) qMenu.style.display = 'block';
+                const qEng = document.getElementById('quiz-engine');
+                if (qEng) qEng.classList.remove('active');
                 stopTimer();
             }
-            document.getElementById('main-scroll').scrollTo(0,0);
+            
+            const mainScroller = document.getElementById('main-scroll');
+            if(mainScroller) mainScroller.scrollTo(0,0);
         }
 
         function saveState() { 
@@ -1048,14 +1169,13 @@
         // ================= DASHBOARD JOURNEY =================
         function renderDash() {
             try {
-                const total = 100;
+                const total = quizDB.length;
                 const mastered = state.masteredIds.length;
                 const lost = state.lostIds.length;
                 const untouched = total - mastered - lost;
                 
-                const pct = Math.round((mastered / total) * 100);
+                const pct = total === 0 ? 0 : Math.round((mastered / total) * 100);
                 
-                // SVG Circle Math safely
                 const circle = document.getElementById('main-progress-ring');
                 if (circle) {
                     const circumference = 400; 
@@ -1070,7 +1190,6 @@
                     dashPct.style.color = colorClass;
                 }
 
-                // Journey Numbers
                 const elMastered = document.getElementById('stat-mastered');
                 if (elMastered) elMastered.textContent = mastered;
                 const elLost = document.getElementById('stat-lost');
@@ -1078,13 +1197,11 @@
                 const elUntouched = document.getElementById('stat-untouched');
                 if (elUntouched) elUntouched.textContent = untouched;
 
-                // Journey Bars
                 const barMastered = document.getElementById('bar-mastered');
                 if (barMastered) barMastered.style.width = `${(mastered/total)*100}%`;
                 const barLost = document.getElementById('bar-lost');
                 if (barLost) barLost.style.width = `${(lost/total)*100}%`;
 
-                // Subtopic Stats
                 const statsContainer = document.getElementById('domain-stats');
                 if (statsContainer) {
                     statsContainer.innerHTML = '';
@@ -1114,7 +1231,6 @@
         function hardReset() {
             if(confirm("DANGER: This wipes your entire journey, scores, and lost questions. Start fresh?")) {
                 localStorage.removeItem(STORE_KEY);
-                // Immediately refresh the page to completely kill all local variables and start fresh
                 window.location.reload(); 
             }
         }
@@ -1158,16 +1274,16 @@
             }
             
             const btn = document.getElementById('quickSpinBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Selecting...`;
+            if (btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Selecting...`;
             
             let counter = 0, speed = 20, lastHighlight = null;
             const step = () => {
                 if(lastHighlight) {
-                    const oldEl = document.getElementById('quick-grid').children[lastHighlight.id-1];
+                    const oldEl = document.getElementById('quick-grid')?.children[lastHighlight.id-1];
                     if(oldEl) oldEl.classList.remove("highlight");
                 }
                 const randomItem = available[Math.floor(Math.random() * available.length)];
-                const el = document.getElementById('quick-grid').children[randomItem.id-1];
+                const el = document.getElementById('quick-grid')?.children[randomItem.id-1];
                 if(el) el.classList.add("highlight");
                 lastHighlight = randomItem;
                 playSound('tick');
@@ -1178,7 +1294,7 @@
                     setTimeout(() => {
                         if(el) el.classList.remove("highlight"); 
                         openQuickModal(randomItem.id);
-                        btn.innerHTML = `<i class="fa-solid fa-dice"></i> Spin Random Unmastered`;
+                        if (btn) btn.innerHTML = `<i class="fa-solid fa-dice"></i> Spin Random Unmastered`;
                     }, 400);
                 }
             };
@@ -1189,32 +1305,46 @@
             haptic();
             quickCurrentId = id;
             const q = quizDB.find(x => x.id === id);
+            if(!q) return;
             
-            document.getElementById('qm-topic').textContent = q.topic;
-            document.getElementById('qm-num').textContent = `Q #${id}`;
-            document.getElementById('qm-text').innerHTML = q.q.replace(isacaKeywords, "<strong>$&</strong>");
+            const tEl = document.getElementById('qm-topic');
+            if(tEl) tEl.textContent = q.topic;
+            
+            const nEl = document.getElementById('qm-num');
+            if(nEl) nEl.textContent = `Q #${id}`;
+            
+            const txtEl = document.getElementById('qm-text');
+            if(txtEl) txtEl.innerHTML = q.q.replace(isacaKeywords, "<strong>$&</strong>");
             
             const optsContainer = document.getElementById('qm-options-container');
-            optsContainer.innerHTML = '';
+            if(optsContainer) {
+                optsContainer.innerHTML = '';
+                
+                // Forced Attempts
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span class="option-letter">${['A','B','C','D'][idx]}</span> <span>${opt}</span>`;
+                    btn.onclick = () => selectQuickAnswer(idx, btn);
+                    optsContainer.appendChild(btn);
+                });
+            }
             
-            // Render buttons for user to answer
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerHTML = `<span class="option-letter">${['A','B','C','D'][idx]}</span> <span>${opt}</span>`;
-                btn.onclick = () => selectQuickAnswer(idx, btn);
-                optsContainer.appendChild(btn);
-            });
+            const expContainer = document.getElementById('qm-exp');
+            if(expContainer) expContainer.style.display = 'none';
             
-            document.getElementById('qm-exp').style.display = 'none';
-            document.getElementById('qm-done-btn').style.display = 'none';
+            const doneBtn = document.getElementById('qm-done-btn');
+            if(doneBtn) doneBtn.style.display = 'none';
             
-            document.getElementById('quickModalOverlay').classList.add('active');
+            const overlay = document.getElementById('quickModalOverlay');
+            if(overlay) overlay.classList.add('active');
         }
 
         function selectQuickAnswer(selectedIndex, btnElement) {
             haptic(); incrementStreak();
             const q = quizDB.find(x => x.id === quickCurrentId);
+            if(!q) return;
+
             const isCorrect = (selectedIndex === q.a);
             
             if (isCorrect) {
@@ -1226,21 +1356,35 @@
             
             trackAnswer(q.id, isCorrect);
 
-            const buttons = document.getElementById('qm-options-container').querySelectorAll('.option-btn');
-            buttons.forEach((b, idx) => {
-                b.disabled = true;
-                if(idx === q.a) b.classList.add('correct');
-                else if (idx === selectedIndex && !isCorrect) b.classList.add('wrong');
-            });
+            const optsContainer = document.getElementById('qm-options-container');
+            if(optsContainer) {
+                const buttons = optsContainer.querySelectorAll('.option-btn');
+                buttons.forEach((b, idx) => {
+                    b.disabled = true;
+                    if(idx === q.a) b.classList.add('correct');
+                    else if (idx === selectedIndex && !isCorrect) b.classList.add('wrong');
+                });
+            }
 
-            document.getElementById('qm-exp').innerHTML = `${q.exp}<br><div style="margin-top:10px; opacity:0.8; font-size:0.85rem;"><i class="fa-solid fa-lightbulb"></i> ${q.rule}</div>`;
-            document.getElementById('qm-exp').style.display = 'block';
-            document.getElementById('qm-done-btn').style.display = 'flex';
+            const expContainer = document.getElementById('qm-exp');
+            if(expContainer) {
+                expContainer.innerHTML = `
+                    ${q.exp}
+                    <div class="dynamic-rule"><i class="fa-solid fa-gavel"></i> <div><strong>ISACA Rule:</strong> ${q.rule}</div></div>
+                    <div class="analogy-box"><i class="fa-solid fa-lightbulb"></i> <div><strong>Analogy:</strong> ${q.analogy}</div></div>
+                `;
+                expContainer.style.display = 'block';
+            }
+            
+            const doneBtn = document.getElementById('qm-done-btn');
+            if(doneBtn) doneBtn.style.display = 'flex';
         }
 
         function closeQuickModal(e) {
-            if (!e || e.target === document.getElementById('quickModalOverlay')) {
-                document.getElementById('quickModalOverlay').classList.remove('active');
+            const overlay = document.getElementById('quickModalOverlay');
+            if(!overlay) return;
+            if (!e || e.target === overlay) {
+                overlay.classList.remove('active');
                 initQuickGrid();
                 renderDash();
             }
@@ -1267,16 +1411,21 @@
 
             currentQIndex = 0; sessionScore = 0;
             
-            document.getElementById('quiz-menu').style.display = 'none';
-            document.getElementById('quiz-engine').classList.add('active');
+            const qMenu = document.getElementById('quiz-menu');
+            if(qMenu) qMenu.style.display = 'none';
+            
+            const qEng = document.getElementById('quiz-engine');
+            if(qEng) qEng.classList.add('active');
             
             const timerEl = document.getElementById('session-timer');
-            if(isExamMode) {
-                timerEl.classList.add('urgent');
-                startTimer(true); // 90 min countdown
-            } else {
-                timerEl.classList.remove('urgent');
-                startTimer(false); // standard count-up
+            if(timerEl) {
+                if(isExamMode) {
+                    timerEl.classList.add('urgent');
+                    startTimer(true); // 90 min countdown
+                } else {
+                    timerEl.classList.remove('urgent');
+                    startTimer(false); // standard count-up
+                }
             }
             
             loadQuestion();
@@ -1306,10 +1455,13 @@
             const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
             const sc = (s % 60).toString().padStart(2, '0');
             
+            const tEl = document.getElementById('session-timer');
+            if (!tEl) return;
+
             if (h > 0) {
-                document.getElementById('session-timer').innerHTML = `<i class="fa-regular fa-clock"></i> ${h}:${m}:${sc}`;
+                tEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${h}:${m}:${sc}`;
             } else {
-                document.getElementById('session-timer').innerHTML = `<i class="fa-regular fa-clock"></i> ${m}:${sc}`;
+                tEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${m}:${sc}`;
             }
         }
 
@@ -1317,40 +1469,56 @@
 
         function loadQuestion() {
             selectedAnswerIndex = null; hasRevealed = false;
-            document.getElementById('btn-next').style.display = 'none';
-            document.getElementById('btn-finish').style.display = 'none';
-            document.getElementById('explanation').style.display = 'none';
+            
+            const btnNext = document.getElementById('btn-next');
+            if(btnNext) btnNext.style.display = 'none';
+            
+            const btnFinish = document.getElementById('btn-finish');
+            if(btnFinish) btnFinish.style.display = 'none';
+            
+            const exp = document.getElementById('explanation');
+            if(exp) exp.style.display = 'none';
             
             const q = currentQuiz[currentQIndex];
-            document.getElementById('quiz-counter').textContent = `${currentQIndex + 1} / ${currentQuiz.length}`;
-            document.getElementById('quiz-topic').textContent = q.topic;
+            if(!q) return;
+
+            const qc = document.getElementById('quiz-counter');
+            if(qc) qc.textContent = `${currentQIndex + 1} / ${currentQuiz.length}`;
+            
+            const qt = document.getElementById('quiz-topic');
+            if(qt) qt.textContent = q.topic;
             
             const alertBox = document.getElementById('mindset-alert');
-            if(!isExamMode && q.q.match(isacaKeywords)) {
-                alertBox.style.display = 'flex';
-                const kw = q.q.match(isacaKeywords)[0];
-                alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>ISACA TRAP WORD: "<strong>${kw}</strong>"</span>`;
-            } else {
-                alertBox.style.display = 'none';
+            if (alertBox) {
+                if(!isExamMode && q.q.match(isacaKeywords)) {
+                    alertBox.style.display = 'flex';
+                    const kw = q.q.match(isacaKeywords)[0];
+                    alertBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <span>ISACA TRAP WORD: "<strong>${kw}</strong>"</span>`;
+                } else {
+                    alertBox.style.display = 'none';
+                }
             }
 
-            let formattedQ = q.q.replace(isacaKeywords, "<strong style='color:var(--warning)'>$&</strong>");
-            document.getElementById('q-text').innerHTML = formattedQ;
+            const qText = document.getElementById('q-text');
+            if (qText) {
+                let formattedQ = q.q.replace(isacaKeywords, "<strong style='color:var(--warning)'>$&</strong>");
+                qText.innerHTML = formattedQ;
+            }
             
             const optsContainer = document.getElementById('options-container');
-            optsContainer.innerHTML = '';
-            
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                // Only show previously selected answer in Exam mode if going back
-                if (isExamMode && examAnswers[currentQIndex] === idx) {
-                    btn.classList.add('selected');
-                }
-                btn.innerHTML = `<span class="option-letter">${['A','B','C','D'][idx]}</span> <span>${opt}</span>`;
-                btn.onclick = () => handleOptionClick(idx, btn);
-                optsContainer.appendChild(btn);
-            });
+            if (optsContainer) {
+                optsContainer.innerHTML = '';
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    if (isExamMode && examAnswers[currentQIndex] === idx) {
+                        btn.classList.add('selected');
+                    }
+                    btn.innerHTML = `<span class="option-letter">${['A','B','C','D'][idx]}</span> <span>${opt}</span>`;
+                    btn.onclick = () => handleOptionClick(idx, btn);
+                    optsContainer.appendChild(btn);
+                });
+            }
         }
 
         function handleOptionClick(idx, btn) {
@@ -1365,9 +1533,11 @@
                 // Do not grade instantly. Save choice, show Next/Finish button.
                 examAnswers[currentQIndex] = idx;
                 if(currentQIndex < currentQuiz.length - 1) {
-                    document.getElementById('btn-next').style.display = 'flex';
+                    const bN = document.getElementById('btn-next');
+                    if(bN) bN.style.display = 'flex';
                 } else {
-                    document.getElementById('btn-finish').style.display = 'flex';
+                    const bF = document.getElementById('btn-finish');
+                    if(bF) bF.style.display = 'flex';
                 }
             } else {
                 // Practice Mode: Grade instantly and show explanation
@@ -1379,6 +1549,8 @@
         function processPracticeAnswer(idx) {
             incrementStreak();
             const q = currentQuiz[currentQIndex];
+            if(!q) return;
+
             const isCorrect = (idx === q.a);
             
             if (isCorrect) {
@@ -1399,26 +1571,43 @@
             } else {
                 state.errorLog.unshift({
                     id: q.id, topic: q.topic, q: q.q, userAns: q.options[idx], corAns: q.options[q.a],
-                    exp: q.exp, date: new Date().toLocaleDateString()
+                    exp: q.exp, analogy: q.analogy, rule: q.rule, date: new Date().toLocaleDateString()
                 });
                 if(state.errorLog.length > 50) state.errorLog.pop();
             }
             saveState();
 
-            const buttons = document.getElementById('options-container').querySelectorAll('.option-btn');
-            buttons.forEach((b, i) => {
-                if(i === q.a) b.classList.add('correct');
-                else if (i === idx && !isCorrect) b.classList.add('wrong');
-            });
+            const optsContainer = document.getElementById('options-container');
+            if(optsContainer) {
+                const buttons = optsContainer.querySelectorAll('.option-btn');
+                buttons.forEach((b, i) => {
+                    if(i === q.a) b.classList.add('correct');
+                    else if (i === idx && !isCorrect) b.classList.add('wrong');
+                });
+            }
 
             const expBox = document.getElementById('explanation');
-            expBox.innerHTML = `${q.exp} <div class="dynamic-rule"><i class="fa-solid fa-lightbulb"></i> <div>${q.rule}</div></div>`;
-            expBox.style.display = 'block';
+            if (expBox) {
+                expBox.innerHTML = `
+                    ${q.exp} 
+                    <div class="dynamic-rule"><i class="fa-solid fa-gavel"></i> <div><strong>ISACA Rule:</strong> ${q.rule}</div></div>
+                    <div class="analogy-box" style="margin-top: 12px;"><i class="fa-solid fa-lightbulb"></i> <div><strong>Analogy:</strong> ${q.analogy}</div></div>
+                `;
+                expBox.style.display = 'block';
+            }
 
-            if(currentQIndex < currentQuiz.length - 1) document.getElementById('btn-next').style.display = 'flex';
-            else document.getElementById('btn-finish').style.display = 'flex';
+            if(currentQIndex < currentQuiz.length - 1) {
+                const bN = document.getElementById('btn-next');
+                if(bN) bN.style.display = 'flex';
+            } else {
+                const bF = document.getElementById('btn-finish');
+                if(bF) bF.style.display = 'flex';
+            }
             
-            setTimeout(() => { document.getElementById('main-scroll').scrollTo({top: 1000, behavior: 'smooth'}); }, 100);
+            setTimeout(() => { 
+                const ms = document.getElementById('main-scroll');
+                if(ms) ms.scrollTo({top: 1000, behavior: 'smooth'}); 
+            }, 100);
         }
 
         function nextQuestion() {
@@ -1427,7 +1616,8 @@
             }
             currentQIndex++;
             loadQuestion();
-            document.getElementById('main-scroll').scrollTo(0,0);
+            const ms = document.getElementById('main-scroll');
+            if(ms) ms.scrollTo(0,0);
         }
 
         function finishQuiz() {
@@ -1459,7 +1649,7 @@
                             id: q.id, topic: q.topic, q: q.q, 
                             userAns: userAnsIdx !== undefined ? q.options[userAnsIdx] : "Skipped", 
                             corAns: q.options[q.a],
-                            exp: q.exp, date: new Date().toLocaleDateString()
+                            exp: q.exp, analogy: q.analogy, rule: q.rule, date: new Date().toLocaleDateString()
                         });
                         if(state.errorLog.length > 100) state.errorLog.pop();
                     }
@@ -1481,7 +1671,9 @@
                 // Practice Finish
                 renderDash();
                 const pct = Math.round((sessionScore / currentQuiz.length) * 100);
-                let timeStr = document.getElementById('session-timer').innerText;
+                
+                const tEl = document.getElementById('session-timer');
+                let timeStr = tEl ? tEl.innerText : "Unknown";
                 
                 if(pct >= 80) {
                     playSound('success');
@@ -1515,8 +1707,12 @@
                         </div>
                         <div class="err-q">${q.q.replace(isacaKeywords, "<strong>$&</strong>")}</div>
                         <div class="err-cor"><i class="fa-solid fa-check" style="width:15px"></i> Correct: ${q.options[q.a]}</div>
-                        <div style="font-size:0.9rem; color:var(--text-muted); margin-top:10px; padding-top:10px; border-top:1px solid rgba(244,63,94,0.3); line-height: 1.5;">
-                            ${q.exp}
+                        <div class="err-detailed-exp">
+                            <p>${q.exp}</p>
+                            <div class="analogy-box">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <div><strong>Analogy:</strong> ${q.analogy}</div>
+                            </div>
                         </div>
                     </div>
                 `;
